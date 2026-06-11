@@ -1,0 +1,109 @@
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.backLink {
+  font-size: 0.875rem;
+  color: #4f6257;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: #1f6f5b;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #17211b;
+}
+
+.contentSection {
+  margin-top: 1.5rem;
+}
+
+.contentLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4f6257;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.contentText {
+  font-size: 0.9375rem;
+  color: #17211b;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  background-color: #f7faf8;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d7e3dc;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.fieldBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.fieldLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4f6257;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.fieldValue {
+  font-size: 0.9375rem;
+  color: #17211b;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.errorBox {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.errorTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #b42318;
+  margin-bottom: 0.5rem;
+}
+
+.errorDetail {
+  font-size: 0.875rem;
+  color: #4f6257;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 640px) {
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+}

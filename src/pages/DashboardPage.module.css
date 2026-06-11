@@ -1,0 +1,46 @@
+.header {
+  margin-bottom: 2rem;
+}
+
+.welcome {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #17211b;
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: #4f6257;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #17211b;
+  margin-bottom: 0.25rem;
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  color: #4f6257;
+}
+
+.actions {
+  margin-bottom: 2rem;
+}
+
+.emptyText {
+  font-size: 0.875rem;
+  color: #4f6257;
+}

@@ -1,0 +1,207 @@
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.backLink {
+  font-size: 0.875rem;
+  color: #4f6257;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: #1f6f5b;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #17211b;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.sectionHeader .sectionTitle {
+  margin-bottom: 0;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fieldBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.fieldLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4f6257;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.fieldValue {
+  font-size: 0.9375rem;
+  color: #17211b;
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.section {
+  margin-top: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #17211b;
+  margin-bottom: 1rem;
+}
+
+.fileItem {
+  padding: 0.75rem;
+  border-bottom: 1px solid #d7e3dc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fileItem:last-child {
+  border-bottom: none;
+}
+
+.fileName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #17211b;
+}
+
+.fileSize {
+  font-size: 0.75rem;
+  color: #4f6257;
+}
+
+.errorBox {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.errorTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #b42318;
+  margin-bottom: 0.5rem;
+}
+
+.errorDetail {
+  font-size: 0.875rem;
+  color: #4f6257;
+  margin-bottom: 1rem;
+}
+
+.noteItem {
+  padding: 0.75rem;
+  border-bottom: 1px solid #d7e3dc;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.noteItem:hover {
+  background-color: #f7faf8;
+}
+
+.noteItem:last-child {
+  border-bottom: none;
+}
+
+.noteTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #17211b;
+  margin-bottom: 0.125rem;
+}
+
+.noteMeta {
+  font-size: 0.75rem;
+  color: #4f6257;
+}
+
+.viewNoteContent {
+  font-size: 0.875rem;
+  color: #17211b;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.dialogLabel {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4f6257;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.375rem;
+}
+
+.dialogInput {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d7e3dc;
+  font-family: inherit;
+  font-size: 0.875rem;
+  box-sizing: border-box;
+}
+
+.dialogInput:focus {
+  outline: none;
+  border-color: #1f6f5b;
+}
+
+.dialogTextarea {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid #d7e3dc;
+  min-height: 120px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.dialogTextarea:focus {
+  outline: none;
+  border-color: #1f6f5b;
+}

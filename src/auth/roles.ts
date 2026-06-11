@@ -1,0 +1,9 @@
+export const ROLES = {
+  CLINIC_ADMIN: "CLINIC_ADMIN",
+  CLINIC_STAFF: "CLINIC_STAFF",
+  SPECIALIST: "SPECIALIST",
+  PLATFORM_ADMIN: "PLATFORM_ADMIN",
+  PLATFORM_OPERATOR: "PLATFORM_OPERATOR",
+} as const;
+
+export type UserRole = (typeof ROLES)[keyof typeof ROLES];

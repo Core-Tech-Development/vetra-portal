@@ -1,0 +1,119 @@
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.backLink {
+  font-size: 0.875rem;
+  color: #4f6257;
+  text-decoration: none;
+}
+
+.backLink:hover {
+  color: #1f6f5b;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #17211b;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.fieldLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4f6257;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.fieldValue {
+  font-size: 0.875rem;
+  color: #17211b;
+}
+
+.section {
+  margin-top: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #17211b;
+  margin-bottom: 1rem;
+}
+
+.examItem {
+  padding: 0.75rem;
+  border-bottom: 1px solid #d7e3dc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.examItem:last-child {
+  border-bottom: none;
+}
+
+.examInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.examType {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #17211b;
+}
+
+.examDate {
+  font-size: 0.75rem;
+  color: #4f6257;
+}
+
+.errorBox {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.errorTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #b42318;
+  margin-bottom: 0.5rem;
+}
+
+.errorDetail {
+  font-size: 0.875rem;
+  color: #4f6257;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

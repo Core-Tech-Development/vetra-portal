@@ -1,0 +1,85 @@
+.topbar {
+  height: 3.5rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #d7e3dc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  margin-left: 15rem;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.menuButton {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: #17211b;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.pageTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #17211b;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.userName {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #17211b;
+  line-height: 1.25;
+}
+
+.userRole {
+  font-size: 0.75rem;
+  color: #4f6257;
+  line-height: 1.25;
+}
+
+.logoutButton {
+  background: none;
+  border: 1px solid #d7e3dc;
+  border-radius: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4f6257;
+  cursor: pointer;
+  transition: background-color 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.logoutButton:hover {
+  background-color: #eef5f1;
+  color: #17211b;
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    margin-left: 0;
+  }
+
+  .menuButton {
+    display: block;
+  }
+}

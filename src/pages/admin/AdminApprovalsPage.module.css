@@ -1,0 +1,56 @@
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #17211b;
+}
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #17211b;
+  margin-bottom: 1rem;
+}
+
+.approvalItem {
+  padding: 1rem;
+  border-bottom: 1px solid #d7e3dc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.approvalItem:last-child {
+  border-bottom: none;
+}
+
+.approvalInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.approvalName {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #17211b;
+}
+
+.approvalDetail {
+  font-size: 0.8125rem;
+  color: #4f6257;
+}
+
+.emptySection {
+  padding: 1.5rem;
+  text-align: center;
+  color: #4f6257;
+  font-size: 0.875rem;
+}

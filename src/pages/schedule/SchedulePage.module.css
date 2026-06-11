@@ -1,0 +1,110 @@
+.header {
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #17211b;
+}
+
+.subtitle {
+  font-size: 0.9375rem;
+  color: #4f6257;
+  margin-top: 0.25rem;
+}
+
+.addSlotForm {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #eef5f1;
+  border-radius: 0.5rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.fieldGroupLabel {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4f6257;
+}
+
+.fieldGroupInput {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d7e3dc;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.slotItem {
+  padding: 1rem;
+  border-bottom: 1px solid #d7e3dc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.slotItem:last-child {
+  border-bottom: none;
+}
+
+.slotTime {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.slotLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #17211b;
+}
+
+.slotDate {
+  font-size: 0.75rem;
+  color: #4f6257;
+}
+
+.slotActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.pageInfo {
+  font-size: 0.875rem;
+  color: #4f6257;
+}
+
+.errorBox {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.errorTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #b42318;
+  margin-bottom: 0.5rem;
+}
+
+.errorDetail {
+  font-size: 0.875rem;
+  color: #4f6257;
+  margin-bottom: 1rem;
+}
