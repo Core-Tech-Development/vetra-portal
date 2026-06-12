@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
+import { filterAppRoles, getRoleLabel } from "../../auth/roles";
 import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopBar";
 import { PageContainer } from "./PageContainer";
@@ -15,7 +16,8 @@ export function AppLayout({ pageTitle = "Dashboard" }: AppLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const displayName = user?.name ?? user?.preferredUsername ?? "User";
-  const displayRole = roles.length > 0 ? roles[0].replace(/_/g, " ") : "User";
+  const appRoles = filterAppRoles(roles);
+  const displayRole = appRoles.length > 0 ? getRoleLabel(appRoles[0]) : "Usuário";
 
   return (
     <div className={styles.layout}>
