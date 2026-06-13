@@ -1,10 +1,10 @@
-import { useState, useRef, useCallback, cloneElement } from "react";
-import type { ReactElement } from "react";
+import { useState, useRef, useCallback, useId } from "react";
+import type { ReactNode } from "react";
 import styles from "./Tooltip.module.css";
 
 interface TooltipProps {
   content: string;
-  children: ReactElement;
+  children: ReactNode;
   position?: "top" | "bottom" | "left" | "right";
   delay?: number;
 }
@@ -17,6 +17,7 @@ export function Tooltip({
 }: TooltipProps) {
   const [visible, setVisible] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tooltipId = useId();
 
   const showTooltip = useCallback(() => {
     timeoutRef.current = setTimeout(() => {
@@ -41,14 +42,13 @@ export function Tooltip({
       onMouseLeave={hideTooltip}
       onFocus={showTooltip}
       onBlur={hideTooltip}
+      aria-describedby={visible ? tooltipId : undefined}
     >
-      {cloneElement(children, {
-        "aria-describedby": visible ? "tooltip" : undefined,
-      })}
+      {children}
       {visible && (
         <div
           role="tooltip"
-          id="tooltip"
+          id={tooltipId}
           className={`${styles.tooltip} ${positionClass}`}
         >
           {content}
