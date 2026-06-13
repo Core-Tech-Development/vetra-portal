@@ -1,0 +1,164 @@
+/*
+ * Vetra Design Tokens — CSS Custom Properties
+ *
+ * 3-layer architecture:
+ *   1. PRIMITIVE — raw values (colors, sizes, weights)
+ *   2. SEMANTIC  — purpose-based aliases (text, background, status)
+ *   3. COMPONENT — scoped to specific UI components
+ *
+ * Palette: Sage Clinical
+ * Source of truth for all styling. TypeScript constants in tokens.ts
+ * mirror these values for programmatic use only.
+ */
+
+:root {
+  /* ===== PRIMITIVE TOKENS ===== */
+
+  /* Colors - Sage palette */
+  --color-sage-50: #F7FAF8;
+  --color-sage-100: #EEF5F1;
+  --color-sage-200: #D7E3DC;
+  --color-sage-400: #7CA982;
+  --color-sage-600: #4F6257;
+  --color-sage-700: #1F6F5B;
+  --color-sage-800: #185746;
+  --color-sage-900: #17211B;
+
+  /* Colors - Status */
+  --color-green-600: #2E7D32;
+  --color-green-50: #E8F5E9;
+  --color-amber-600: #B7791F;
+  --color-amber-50: #FFF8E1;
+  --color-red-700: #921D14;
+  --color-red-600: #B42318;
+  --color-red-50: #FCE8E6;
+  --color-blue-600: #2563EB;
+  --color-blue-50: #E3F2FD;
+
+  /* Colors - Neutral */
+  --color-white: #FFFFFF;
+
+  /* Typography - Sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+
+  /* Typography - Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Typography - Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+
+  /* Typography - Font Family */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Spacing (4px base) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(23, 33, 27, 0.06);
+  --shadow-md: 0 4px 6px rgba(23, 33, 27, 0.07), 0 2px 4px rgba(23, 33, 27, 0.06);
+  --shadow-lg: 0 10px 15px rgba(23, 33, 27, 0.08), 0 4px 6px rgba(23, 33, 27, 0.05);
+
+  /* Motion */
+  --duration-fast: 120ms;
+  --duration-normal: 180ms;
+  --duration-slow: 240ms;
+  --easing-default: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Z-index scale */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+
+  /* ===== SEMANTIC TOKENS ===== */
+
+  /* Backgrounds */
+  --color-background: var(--color-sage-50);
+  --color-surface: var(--color-white);
+  --color-surface-muted: var(--color-sage-100);
+
+  /* Text */
+  --color-text-primary: var(--color-sage-900);
+  --color-text-secondary: var(--color-sage-600);
+  --color-text-inverse: var(--color-white);
+
+  /* Brand */
+  --color-primary: var(--color-sage-700);
+  --color-primary-hover: var(--color-sage-800);
+  --color-accent: var(--color-sage-400);
+
+  /* Borders */
+  --color-border: var(--color-sage-200);
+  --color-border-hover: var(--color-sage-400);
+
+  /* Status */
+  --color-success: var(--color-green-600);
+  --color-success-light: var(--color-green-50);
+  --color-warning: var(--color-amber-600);
+  --color-warning-light: var(--color-amber-50);
+  --color-danger: var(--color-red-600);
+  --color-danger-hover: var(--color-red-700);
+  --color-danger-light: var(--color-red-50);
+  --color-info: var(--color-blue-600);
+  --color-info-light: var(--color-blue-50);
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-primary);
+
+  /* ===== COMPONENT TOKENS ===== */
+
+  /* Layout */
+  --sidebar-width: 15rem;
+  --sidebar-width-collapsed: 4rem;
+  --topbar-height: 3.5rem;
+  --page-max-width: 72rem;
+
+  /* Button */
+  --button-radius: var(--radius-md);
+  --button-font-weight: var(--font-weight-semibold);
+
+  /* Input */
+  --input-radius: var(--radius-md);
+  --input-border: var(--color-border);
+  --input-focus-ring: var(--color-primary);
+
+  /* Card */
+  --card-radius: var(--radius-md);
+  --card-shadow: var(--shadow-sm);
+  --card-border: var(--color-border);
+  --card-padding: var(--space-6);
+
+  /* Toast */
+  --toast-border-success: #C8E6C9;
+  --toast-border-danger: #F5C6CB;
+  --toast-border-warning: #FFECB3;
+  --toast-border-info: #BBDEFB;
+}

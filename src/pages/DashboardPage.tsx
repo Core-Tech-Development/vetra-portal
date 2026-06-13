@@ -1,8 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../auth/useAuth";
-import { ROLES } from "../auth/roles";
-import { Card, Button, Spinner } from "../components/ui";
+import { ROLES, filterAppRoles, getRoleLabel } from "../auth/roles";
+import { Card, Button } from "../components/ui";
+import { PageHeader, StatCard } from "../components/patterns";
+import {
+  Calendar,
+  FileText,
+  ClipboardCheck,
+  Stethoscope,
+  Clock,
+  Building2,
+  Users,
+} from "lucide-react";
 import { listAppointments } from "../api/appointments";
 import { getDashboard } from "../api/admin";
 import styles from "./DashboardPage.module.css";
@@ -19,26 +29,34 @@ function ClinicDashboard() {
 
   return (
     <>
-      <div className={styles.grid}>
-        <Card>
-          <div className={styles.statValue}>
-            {isLoading ? <Spinner size="sm" /> : upcomingCount}
-          </div>
-          <div className={styles.statLabel}>Upcoming appointments</div>
-        </Card>
-        <Card>
-          <div className={styles.statValue}>--</div>
-          <div className={styles.statLabel}>Pending reports</div>
-        </Card>
-        <Card>
-          <div className={styles.statValue}>--</div>
-          <div className={styles.statLabel}>Active exam requests</div>
-        </Card>
+      <div className={styles.statsGrid}>
+        <StatCard
+          icon={<Calendar size={20} />}
+          value={upcomingCount}
+          label="Upcoming appointments"
+          isLoading={isLoading}
+          href="/appointments"
+        />
+        <StatCard
+          icon={<FileText size={20} />}
+          value="--"
+          label="Pending reports"
+          href="/reports"
+        />
+        <StatCard
+          icon={<ClipboardCheck size={20} />}
+          value="--"
+          label="Active exam requests"
+          href="/exam-requests"
+        />
       </div>
 
-      <div className={styles.actions}>
+      <div className={styles.quickActions}>
         <Button onClick={() => navigate("/exam-requests/new")}>
           New exam request
+        </Button>
+        <Button variant="secondary" onClick={() => navigate("/appointments")}>
+          View schedule
         </Button>
       </div>
 
@@ -64,24 +82,29 @@ function SpecialistDashboard() {
 
   return (
     <>
-      <div className={styles.grid}>
-        <Card>
-          <div className={styles.statValue}>
-            {isLoading ? <Spinner size="sm" /> : todayCount}
-          </div>
-          <div className={styles.statLabel}>Today's appointments</div>
-        </Card>
-        <Card>
-          <div className={styles.statValue}>--</div>
-          <div className={styles.statLabel}>Pending requests</div>
-        </Card>
-        <Card>
-          <div className={styles.statValue}>--</div>
-          <div className={styles.statLabel}>Reports to issue</div>
-        </Card>
+      <div className={styles.statsGrid}>
+        <StatCard
+          icon={<Stethoscope size={20} />}
+          value={todayCount}
+          label="Today's appointments"
+          isLoading={isLoading}
+          href="/appointments"
+        />
+        <StatCard
+          icon={<Clock size={20} />}
+          value="--"
+          label="Pending requests"
+          href="/exam-requests"
+        />
+        <StatCard
+          icon={<FileText size={20} />}
+          value="--"
+          label="Reports to issue"
+          href="/reports"
+        />
       </div>
 
-      <div className={styles.actions}>
+      <div className={styles.quickActions}>
         <Button onClick={() => navigate("/schedule")}>View schedule</Button>
       </div>
 
@@ -96,8 +119,6 @@ function SpecialistDashboard() {
 }
 
 function AdminDashboard() {
-  const navigate = useNavigate();
-
   const { data: dashboardData, isLoading } = useQuery({
     queryKey: ["admin", "dashboard"],
     queryFn: getDashboard,
@@ -105,54 +126,38 @@ function AdminDashboard() {
 
   return (
     <>
-      <div className={styles.grid}>
-        <Card>
-          <div className={styles.statValue}>
-            {isLoading ? (
-              <Spinner size="sm" />
-            ) : (
-              dashboardData?.totalClinics ?? 0
-            )}
-          </div>
-          <div className={styles.statLabel}>Total clinics</div>
-        </Card>
-        <Card>
-          <div className={styles.statValue}>
-            {isLoading ? (
-              <Spinner size="sm" />
-            ) : (
-              dashboardData?.totalSpecialists ?? 0
-            )}
-          </div>
-          <div className={styles.statLabel}>Total specialists</div>
-        </Card>
-        <Card>
-          <div className={styles.statValue}>
-            {isLoading ? (
-              <Spinner size="sm" />
-            ) : (
-              (dashboardData?.pendingClinicApprovals ?? 0) +
-              (dashboardData?.pendingSpecialistApprovals ?? 0)
-            )}
-          </div>
-          <div className={styles.statLabel}>Pending approvals</div>
-        </Card>
-        <Card>
-          <div className={styles.statValue}>
-            {isLoading ? (
-              <Spinner size="sm" />
-            ) : (
-              dashboardData?.totalActiveAppointments ?? 0
-            )}
-          </div>
-          <div className={styles.statLabel}>Active appointments</div>
-        </Card>
-      </div>
-
-      <div className={styles.actions}>
-        <Button onClick={() => navigate("/admin/approvals")}>
-          View approvals
-        </Button>
+      <div className={styles.statsGrid}>
+        <StatCard
+          icon={<Building2 size={20} />}
+          value={dashboardData?.totalClinics ?? 0}
+          label="Total clinics"
+          isLoading={isLoading}
+          href="/clinics"
+        />
+        <StatCard
+          icon={<Users size={20} />}
+          value={dashboardData?.totalSpecialists ?? 0}
+          label="Total specialists"
+          isLoading={isLoading}
+          href="/specialists"
+        />
+        <StatCard
+          icon={<ClipboardCheck size={20} />}
+          value={
+            (dashboardData?.pendingClinicApprovals ?? 0) +
+            (dashboardData?.pendingSpecialistApprovals ?? 0)
+          }
+          label="Pending approvals"
+          isLoading={isLoading}
+          href="/admin/approvals"
+        />
+        <StatCard
+          icon={<Calendar size={20} />}
+          value={dashboardData?.totalActiveAppointments ?? 0}
+          label="Active appointments"
+          isLoading={isLoading}
+          href="/appointments"
+        />
       </div>
 
       <Card title="Platform overview">
@@ -169,7 +174,9 @@ export function DashboardPage() {
   const { user, roles } = useAuth();
 
   const displayName = user?.name ?? user?.preferredUsername ?? "User";
-  const displayRole = roles.length > 0 ? roles[0].replace(/_/g, " ") : "User";
+  const appRoles = filterAppRoles(roles);
+  const displayRole =
+    appRoles.length > 0 ? getRoleLabel(appRoles[0]) : "User";
 
   const isAdmin =
     roles.includes(ROLES.PLATFORM_ADMIN) ||
@@ -178,10 +185,10 @@ export function DashboardPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.welcome}>Welcome, {displayName}</h2>
-        <p className={styles.subtitle}>Role: {displayRole}</p>
-      </div>
+      <PageHeader
+        title={`Welcome, ${displayName}`}
+        subtitle={displayRole}
+      />
 
       {isAdmin && <AdminDashboard />}
       {!isAdmin && isSpecialist && <SpecialistDashboard />}

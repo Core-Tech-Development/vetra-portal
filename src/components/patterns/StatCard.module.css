@@ -1,0 +1,121 @@
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* Link wrapper — resets anchor/link decoration */
+.link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.link:focus-visible {
+  outline: none;
+}
+
+.link:focus-visible .cardWrapper {
+  box-shadow: var(--focus-ring);
+}
+
+/* Card hover effect for interactive (linked) variant */
+.cardWrapper {
+  transition:
+    box-shadow var(--duration-normal) var(--easing-default),
+    border-color var(--duration-normal) var(--easing-default);
+}
+
+.link .cardWrapper {
+  cursor: pointer;
+}
+
+.link:hover .cardWrapper {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-hover);
+}
+
+/* Icon circle */
+.iconCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-muted);
+  color: var(--color-primary);
+}
+
+/* Text content */
+.content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.value {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+  margin-top: var(--space-1);
+}
+
+/* Value row: value + optional trend on same line */
+.valueRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+/* Trend indicator */
+.trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+}
+
+.trendUp {
+  color: var(--color-success);
+}
+
+.trendDown {
+  color: var(--color-danger);
+}
+
+.trendNeutral {
+  color: var(--color-text-secondary);
+}
+
+/* Skeleton placeholders for loading state */
+.valueSkeleton {
+  height: 1.5rem;
+  width: 4rem;
+  border-radius: var(--radius-sm);
+}
+
+.labelSkeleton {
+  height: 0.875rem;
+  width: 6rem;
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-1);
+}
+
+/* Responsive: stack vertically on very narrow containers */
+@media (max-width: 20rem) {
+  .root {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

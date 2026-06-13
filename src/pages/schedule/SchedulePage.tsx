@@ -8,6 +8,7 @@ import {
   EmptyState,
   StatusBadge,
 } from "../../components/ui";
+import { PageHeader } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
 import styles from "./SchedulePage.module.css";
 
@@ -72,12 +73,10 @@ export function SchedulePage() {
   if (!specialistId) {
     return (
       <div>
-        <div className={styles.header}>
-          <h2 className={styles.title}>Schedule</h2>
-          <p className={styles.subtitle}>
-            Manage your availability slots for appointments.
-          </p>
-        </div>
+        <PageHeader
+          title="Schedule"
+          subtitle="Manage your availability slots for appointments."
+        />
         <Card>
           <EmptyState
             title="Specialist not configured"
@@ -90,12 +89,10 @@ export function SchedulePage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Schedule</h2>
-        <p className={styles.subtitle}>
-          Manage your availability slots for appointments.
-        </p>
-      </div>
+      <PageHeader
+        title="Schedule"
+        subtitle="Manage your availability slots for appointments."
+      />
 
       {/* Add Slot Form */}
       <div className={styles.addSlotForm}>
@@ -135,7 +132,7 @@ export function SchedulePage() {
       {/* Slots List */}
       <Card noPadding>
         {isLoading && (
-          <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
+          <div className={styles.loadingContainer}>
             <Spinner size="lg" />
           </div>
         )}

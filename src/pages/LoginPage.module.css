@@ -1,44 +1,78 @@
+/* ── Animation ── */
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-4));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Page: split-panel shell ── */
+
 .page {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── LEFT: branding panel (desktop only) ── */
+
+.brandingPanel {
+  display: none;
+}
+
+/* ── RIGHT: form panel ── */
+
+.formPanel {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  padding: 1.5rem;
-  background-color: #f7faf8;
+  padding: var(--space-6);
+  background-color: var(--color-surface);
 }
 
-.card {
-  background-color: #ffffff;
-  border: 1px solid #d7e3dc;
-  border-radius: 0.75rem;
-  padding: 3rem;
+/* ── Form card wrapper ── */
+
+.formCard {
   width: 100%;
-  max-width: 26rem;
-  box-shadow: 0 4px 16px rgba(23, 33, 27, 0.1);
+  max-width: 24rem;
+  animation: fadeSlideUp var(--duration-slow) var(--easing-default) both;
 }
 
-/* ── Logo area ── */
+/* ── Logo (mobile only) ── */
 
-.logoPlaceholder {
+.mobileLogo {
   display: flex;
   justify-content: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-8);
 }
 
 .logoImg {
-  height: 3.5rem;
+  height: 3rem;
   width: auto;
   object-fit: contain;
 }
 
-/* ── Subtitle ── */
+/* ── Headings ── */
+
+.heading {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-1);
+}
 
 .subtitle {
-  font-size: 0.9375rem;
-  color: #4f6257;
-  margin-bottom: 2.5rem;
-  line-height: 1.5;
-  text-align: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-normal);
+  margin-bottom: var(--space-8);
 }
 
 /* ── Form ── */
@@ -46,70 +80,144 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--space-5);
 }
 
 .submitButton {
-  margin-top: 0.5rem;
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
-  font-size: 0.9375rem;
+  margin-top: var(--space-2);
 }
 
-/* ── Error banner ── */
+/* ── Forgot password link ── */
 
-.errorBanner {
-  padding: 0.75rem 1rem;
-  background-color: #fef2f2;
-  border: 1px solid rgba(180, 35, 24, 0.15);
-  border-radius: 0.5rem;
-  color: #b42318;
-  font-size: 0.875rem;
-  line-height: 1.5;
+.forgotLink {
+  display: inline-block;
+  margin-top: var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  text-decoration: none;
+  text-align: center;
+  transition: color var(--duration-fast) var(--easing-default);
 }
 
-/* ── Divider ── */
-
-.divider {
-  height: 1px;
-  background-color: #d7e3dc;
-  margin: 2rem 0 0;
+.forgotLink:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
 }
 
 /* ── Footer ── */
 
+.divider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin-top: var(--space-8);
+}
+
 .footer {
-  margin-top: 1rem;
-  font-size: 0.75rem;
-  color: #4f6257;
+  margin-top: var(--space-4);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-secondary);
   text-align: center;
   opacity: 0.7;
 }
 
-/* ── Responsive: small screens ── */
+/* ── Desktop: split-panel ── */
 
-@media (max-width: 480px) {
-  .page {
-    padding: 1rem;
-    align-items: flex-start;
-    padding-top: 3rem;
+@media (min-width: 768px) {
+  .brandingPanel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 45%;
+    min-height: 100vh;
+    padding: var(--space-16);
+    background: linear-gradient(
+      160deg,
+      var(--color-primary) 0%,
+      var(--color-sage-800) 100%
+    );
+    color: var(--color-text-inverse);
+    text-align: center;
   }
 
-  .card {
-    padding: 2rem 1.5rem;
-    box-shadow: 0 2px 8px rgba(23, 33, 27, 0.08);
-    border-radius: 0.625rem;
+  .brandingLogo {
+    height: 4rem;
+    width: auto;
+    object-fit: contain;
+    margin-bottom: var(--space-10);
+    /* Make logo white via filter for dark bg */
+    filter: brightness(0) invert(1);
   }
 
-  .subtitle {
-    margin-bottom: 2rem;
+  .brandingTagline {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text-inverse);
+    margin-bottom: var(--space-4);
+    max-width: 22rem;
+  }
+
+  .brandingDescription {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-inverse);
+    opacity: 0.85;
+    max-width: 20rem;
+  }
+
+  .formPanel {
+    width: 55%;
+    background-color: var(--color-surface);
+  }
+
+  /* Hide mobile logo on desktop */
+  .mobileLogo {
+    display: none;
   }
 }
 
-/* ── Responsive: tall/large screens ── */
+/* ── Mobile: small screens ── */
 
-@media (min-height: 700px) and (min-width: 481px) {
-  .card {
-    padding: 3rem 2.5rem;
+@media (max-width: 767px) {
+  .formPanel {
+    padding: var(--space-6) var(--space-4);
+    background-color: var(--color-background);
+  }
+
+  .formCard {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8) var(--space-6);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .formPanel {
+    padding: var(--space-12) var(--space-4) var(--space-6);
+    align-items: flex-start;
+  }
+
+  .formCard {
+    padding: var(--space-6) var(--space-4);
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .heading {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* ── Reduced motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .formCard {
+    animation: none;
   }
 }

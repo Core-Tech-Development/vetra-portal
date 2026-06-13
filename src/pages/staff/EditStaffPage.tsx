@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getClinicStaff, updateClinicStaff } from "../../api/clinicStaff";
-import { Button, Card, Input, Select, Spinner } from "../../components/ui";
+import { Card, Input, Select, Spinner, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
+import { PageHeader, FormSection, FormActions } from "../../components/patterns";
 import styles from "./CreateStaffPage.module.css";
 
 const editStaffSchema = z.object({
@@ -85,10 +86,11 @@ export function EditStaffPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Edit collaborator</h2>
-        <p className={styles.subtitle}>Update collaborator information.</p>
-      </div>
+      <PageHeader
+        title="Edit collaborator"
+        subtitle="Update collaborator information."
+        backLink={{ label: "Back to staff", to: "/staff" }}
+      />
 
       <Card>
         <form
@@ -96,68 +98,65 @@ export function EditStaffPage() {
           onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
-          {apiError && <div className={styles.errorBanner}>{apiError}</div>}
+          {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <Input
-            label="Full name"
-            placeholder="e.g. Maria Silva"
-            error={errors.name?.message}
-            {...register("name")}
-          />
-
-          <div className={styles.row}>
-            <div>
-              <span
-                style={{
-                  display: "block",
-                  fontSize: "0.875rem",
-                  fontWeight: 500,
-                  color: "#17211B",
-                  marginBottom: "0.375rem",
-                }}
-              >
-                Email
-              </span>
-              <span
-                style={{
-                  display: "block",
-                  fontSize: "0.875rem",
-                  color: "#4F6257",
-                  padding: "0.5rem 0",
-                }}
-              >
-                {staff?.email ?? "-"}
-              </span>
-            </div>
+          <FormSection title="Personal information">
             <Input
-              label="Phone"
-              type="tel"
-              placeholder="(11) 99999-9999"
-              error={errors.phone?.message}
-              {...register("phone")}
+              label="Full name"
+              placeholder="e.g. Maria Silva"
+              error={errors.name?.message}
+              {...register("name")}
             />
-          </div>
 
-          <Select
-            label="Role"
-            error={errors.role?.message}
-            {...register("role")}
-          >
-            <option value="">Select role</option>
-            <option value="VETERINARIAN">Veterinarian</option>
-            <option value="SECRETARY">Secretary</option>
-          </Select>
+            <div className={styles.row}>
+              <div>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: "var(--font-size-sm)",
+                    fontWeight: 500,
+                    color: "var(--color-text-primary)",
+                    marginBottom: "0.375rem",
+                  }}
+                >
+                  Email
+                </span>
+                <span
+                  style={{
+                    display: "block",
+                    fontSize: "var(--font-size-sm)",
+                    color: "var(--color-text-secondary)",
+                    padding: "0.5rem 0",
+                  }}
+                >
+                  {staff?.email ?? "-"}
+                </span>
+              </div>
+              <Input
+                label="Phone"
+                type="tel"
+                placeholder="(11) 99999-9999"
+                error={errors.phone?.message}
+                {...register("phone")}
+              />
+            </div>
 
-          <div className={styles.actions}>
-            <Link to="/staff">
-              <Button type="button" variant="secondary">
-                Cancel
-              </Button>
-            </Link>
-            <Button type="submit" isLoading={mutation.isPending}>
-              Save changes
-            </Button>
-          </div>
+            <Select
+              label="Role"
+              error={errors.role?.message}
+              {...register("role")}
+            >
+              <option value="">Select role</option>
+              <option value="VETERINARIAN">Veterinarian</option>
+              <option value="SECRETARY">Secretary</option>
+            </Select>
+          </FormSection>
+
+          <FormActions
+            onCancel={() => navigate("/staff")}
+            submitLabel="Save changes"
+            isSubmitting={mutation.isPending}
+          />
         </form>
       </Card>
     </div>

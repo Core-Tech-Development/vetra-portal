@@ -4,12 +4,13 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getClinicStaff, deactivateClinicStaff } from "../../api/clinicStaff";
 import {
   Button,
-  Card,
   Spinner,
   Badge,
   StatusBadge,
   Dialog,
 } from "../../components/ui";
+import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
+import { Pencil, Trash2 } from "lucide-react";
 import styles from "./StaffDetailPage.module.css";
 
 function getRoleLabel(role: string): string {
@@ -65,13 +66,7 @@ export function StaffDetailPage() {
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          padding: "3rem",
-        }}
-      >
+      <div className={styles.loadingContainer}>
         <Spinner size="lg" />
       </div>
     );
@@ -84,13 +79,7 @@ export function StaffDetailPage() {
         <p className={styles.errorDetail}>
           The collaborator could not be found or an error occurred.
         </p>
-        <div
-          style={{
-            display: "flex",
-            gap: "0.75rem",
-            justifyContent: "center",
-          }}
-        >
+        <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
             Retry
           </Button>
@@ -104,64 +93,46 @@ export function StaffDetailPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <Link to="/staff" className={styles.backLink}>
-            &larr; Back to staff
-          </Link>
-          <h2 className={styles.title}>{staff.name}</h2>
-        </div>
-        <div style={{ display: "flex", gap: "0.75rem" }}>
-          <Link to={`/staff/${id}/edit`}>
-            <Button variant="secondary">Edit</Button>
-          </Link>
-          <Button
-            variant="danger"
-            onClick={() => setShowDeactivateDialog(true)}
-          >
-            Deactivate
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title={staff.name}
+        backLink={{ label: "Back to staff", to: "/staff" }}
+        actions={
+          <div className={styles.headerActions}>
+            <Link to={`/staff/${id}/edit`}>
+              <Button variant="secondary" leftIcon={<Pencil size={16} />}>Edit</Button>
+            </Link>
+            <Button
+              variant="danger"
+              leftIcon={<Trash2 size={16} />}
+              onClick={() => setShowDeactivateDialog(true)}
+            >
+              Deactivate
+            </Button>
+          </div>
+        }
+      />
 
-      <Card title="Collaborator information">
-        <div className={styles.grid}>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Name</span>
-            <span className={styles.fieldValue}>{staff.name}</span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Email</span>
-            <span className={styles.fieldValue}>{staff.email}</span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Phone</span>
-            <span className={styles.fieldValue}>
-              {staff.phone ?? "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Role</span>
-            <span className={styles.fieldValue}>
-              <Badge variant={getRoleBadgeVariant(staff.role)}>
-                {getRoleLabel(staff.role)}
-              </Badge>
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Status</span>
-            <span className={styles.fieldValue}>
-              <StatusBadge status={staff.status} />
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Registered</span>
-            <span className={styles.fieldValue}>
-              {new Date(staff.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-        </div>
-      </Card>
+      <DetailSection title="Collaborator information" columns={3}>
+        <FieldDisplay label="Name" value={staff.name} />
+        <FieldDisplay label="Email" value={staff.email} />
+        <FieldDisplay label="Phone" value={staff.phone ?? "-"} />
+        <FieldDisplay
+          label="Role"
+          value={
+            <Badge variant={getRoleBadgeVariant(staff.role)}>
+              {getRoleLabel(staff.role)}
+            </Badge>
+          }
+        />
+        <FieldDisplay
+          label="Status"
+          value={<StatusBadge status={staff.status} />}
+        />
+        <FieldDisplay
+          label="Registered"
+          value={new Date(staff.createdAt).toLocaleDateString()}
+        />
+      </DetailSection>
 
       {showDeactivateDialog && (
         <Dialog
@@ -174,14 +145,7 @@ export function StaffDetailPage() {
             <strong>{staff.name}</strong>?
             They will no longer be able to access the platform.
           </p>
-          <div
-            style={{
-              display: "flex",
-              gap: "0.75rem",
-              justifyContent: "flex-end",
-              marginTop: "1.5rem",
-            }}
-          >
+          <div className={styles.dialogActions}>
             <Button
               variant="secondary"
               onClick={() => setShowDeactivateDialog(false)}

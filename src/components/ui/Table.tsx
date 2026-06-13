@@ -15,6 +15,9 @@ interface TableProps<T> {
   sortColumn?: string;
   sortDirection?: "asc" | "desc";
   onSort?: (columnKey: string) => void;
+  isLoading?: boolean;
+  loadingRows?: number;
+  emptyState?: ReactNode;
 }
 
 export function Table<T>({
@@ -24,6 +27,9 @@ export function Table<T>({
   sortColumn,
   sortDirection,
   onSort,
+  isLoading = false,
+  loadingRows = 5,
+  emptyState,
 }: TableProps<T>) {
   return (
     <div className={styles.wrapper}>
@@ -58,13 +64,31 @@ export function Table<T>({
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => (
-            <tr key={keyExtractor(row)}>
-              {columns.map((col) => (
-                <td key={col.key}>{col.render(row)}</td>
-              ))}
+          {isLoading &&
+            Array.from({ length: loadingRows }).map((_, i) => (
+              <tr key={`skeleton-${i}`} className={styles.skeletonRow}>
+                {columns.map((col) => (
+                  <td key={col.key} className={styles.cell}>
+                    <div className={styles.skeletonBlock} />
+                  </td>
+                ))}
+              </tr>
+            ))}
+          {!isLoading &&
+            data.map((row) => (
+              <tr key={keyExtractor(row)}>
+                {columns.map((col) => (
+                  <td key={col.key}>{col.render(row)}</td>
+                ))}
+              </tr>
+            ))}
+          {!isLoading && data.length === 0 && emptyState && (
+            <tr>
+              <td colSpan={columns.length} className={styles.emptyCell}>
+                {emptyState}
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>

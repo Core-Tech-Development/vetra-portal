@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { Spinner } from "./Spinner";
+import { colors } from "../../styles/tokens";
 import styles from "./Button.module.css";
 
 type ButtonVariant = "primary" | "secondary" | "outline" | "danger" | "ghost";
@@ -10,6 +11,9 @@ interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "siz
   size?: ButtonSize;
   isLoading?: boolean;
   fullWidth?: boolean;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
+  iconOnly?: boolean;
   children: ReactNode;
 }
 
@@ -18,6 +22,9 @@ export function Button({
   size = "md",
   isLoading = false,
   fullWidth = false,
+  leftIcon,
+  rightIcon,
+  iconOnly = false,
   children,
   disabled,
   className,
@@ -29,6 +36,7 @@ export function Button({
     styles[size],
     isLoading ? styles.loading : "",
     fullWidth ? styles.fullWidth : "",
+    iconOnly ? styles.iconOnly : "",
     className ?? "",
   ]
     .filter(Boolean)
@@ -41,15 +49,18 @@ export function Button({
       aria-busy={isLoading || undefined}
       {...rest}
     >
-      {children}
       {isLoading && (
         <span className={styles.spinnerWrapper}>
           <Spinner
             size="sm"
-            color={variant === "primary" || variant === "danger" ? "#ffffff" : undefined}
+            color={variant === "primary" || variant === "danger" ? colors.surface : undefined}
           />
         </span>
       )}
+      {leftIcon && <span className={styles.iconLeft}>{leftIcon}</span>}
+      {!iconOnly && <span className={styles.label}>{children}</span>}
+      {iconOnly && children}
+      {rightIcon && <span className={styles.iconRight}>{rightIcon}</span>}
     </button>
   );
 }

@@ -1,109 +1,81 @@
-.header {
+/* LaudoDetailPage — CSS Modules */
+
+.headerActions {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-  gap: 1rem;
+  gap: var(--space-3);
 }
 
-.headerLeft {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.section {
+  margin-top: var(--space-6);
 }
 
-.backLink {
-  font-size: 0.875rem;
-  color: #4f6257;
+.tableLink {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
   text-decoration: none;
 }
 
-.backLink:hover {
-  color: #1f6f5b;
+.tableLink:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
 }
 
-.title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #17211b;
-}
-
-.contentSection {
-  margin-top: 1.5rem;
-}
-
-.contentLabel {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #4f6257;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
-}
-
-.contentText {
-  font-size: 0.9375rem;
-  color: #17211b;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  background-color: #f7faf8;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid #d7e3dc;
-}
-
-.infoGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-.fieldBlock {
+.actionRow {
   display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-6);
 }
 
-.fieldLabel {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #4f6257;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.fieldValue {
-  font-size: 0.9375rem;
-  color: #17211b;
-}
-
-.actions {
+/* Loading state */
+.loadingContainer {
   display: flex;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  justify-content: center;
+  padding: var(--space-12);
 }
 
+/* Error state */
 .errorBox {
   text-align: center;
-  padding: 3rem 1.5rem;
+  padding: var(--space-12) var(--space-6);
 }
 
 .errorTitle {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #b42318;
-  margin-bottom: 0.5rem;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-danger);
+  margin-bottom: var(--space-2);
 }
 
 .errorDetail {
-  font-size: 0.875rem;
-  color: #4f6257;
-  margin-bottom: 1rem;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-4);
 }
 
-@media (max-width: 640px) {
-  .infoGrid {
-    grid-template-columns: 1fr;
-  }
+.errorActions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+}
+
+/* Content sections (findings, conclusion, recommendations) */
+.contentLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+}
+
+.contentText {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  background-color: var(--color-background);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
 }

@@ -11,6 +11,8 @@ import {
   Table,
   Dialog,
 } from "../../components/ui";
+import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
+import { Pencil, Trash2 } from "lucide-react";
 import type { TableColumn } from "../../components/ui";
 import type { PatientResponse } from "../../api/types";
 import styles from "./TutorDetailPage.module.css";
@@ -55,10 +57,7 @@ export function TutorDetailPage() {
       key: "name",
       header: "Name",
       render: (row) => (
-        <Link
-          to={`/patients/${row.id}`}
-          style={{ color: "#1F6F5B", fontWeight: 500 }}
-        >
+        <Link to={`/patients/${row.id}`} className={styles.tableLink}>
           {row.name}
         </Link>
       ),
@@ -82,13 +81,7 @@ export function TutorDetailPage() {
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          padding: "3rem",
-        }}
-      >
+      <div className={styles.loadingContainer}>
         <Spinner size="lg" />
       </div>
     );
@@ -101,13 +94,7 @@ export function TutorDetailPage() {
         <p className={styles.errorDetail}>
           The tutor could not be found or an error occurred.
         </p>
-        <div
-          style={{
-            display: "flex",
-            gap: "0.75rem",
-            justifyContent: "center",
-          }}
-        >
+        <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
             Retry
           </Button>
@@ -121,82 +108,39 @@ export function TutorDetailPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <Link to="/tutors" className={styles.backLink}>
-            &larr; Back to tutors
-          </Link>
-          <h2 className={styles.title}>{tutor.name}</h2>
-        </div>
-        <div style={{ display: "flex", gap: "0.75rem" }}>
-          <Link to={`/tutors/${id}/edit`}>
-            <Button variant="secondary">Edit</Button>
-          </Link>
-          <Button
-            variant="danger"
-            onClick={() => setShowDeleteDialog(true)}
-          >
-            Delete
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title={tutor.name}
+        backLink={{ label: "Back to tutors", to: "/tutors" }}
+        actions={
+          <div className={styles.headerActions}>
+            <Link to={`/tutors/${id}/edit`}>
+              <Button variant="secondary" leftIcon={<Pencil size={16} />}>Edit</Button>
+            </Link>
+            <Button
+              variant="danger"
+              leftIcon={<Trash2 size={16} />}
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              Delete
+            </Button>
+          </div>
+        }
+      />
 
-      <Card title="Tutor information">
-        <div className={styles.grid}>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Name</span>
-            <span className={styles.fieldValue}>{tutor.name}</span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Phone</span>
-            <span className={styles.fieldValue}>
-              {tutor.phone ?? "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Email</span>
-            <span className={styles.fieldValue}>
-              {tutor.email ?? "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Document</span>
-            <span className={styles.fieldValue}>
-              {tutor.document ?? "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Address</span>
-            <span className={styles.fieldValue}>
-              {tutor.address ?? "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>City</span>
-            <span className={styles.fieldValue}>
-              {tutor.city ?? "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>State</span>
-            <span className={styles.fieldValue}>
-              {tutor.state ?? "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Zip code</span>
-            <span className={styles.fieldValue}>
-              {tutor.zipCode ?? "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Registered</span>
-            <span className={styles.fieldValue}>
-              {new Date(tutor.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-        </div>
-      </Card>
+      <DetailSection title="Tutor information" columns={3}>
+        <FieldDisplay label="Name" value={tutor.name} />
+        <FieldDisplay label="Phone" value={tutor.phone ?? "-"} />
+        <FieldDisplay label="Email" value={tutor.email ?? "-"} />
+        <FieldDisplay label="Document" value={tutor.document ?? "-"} />
+        <FieldDisplay label="Address" value={tutor.address ?? "-"} />
+        <FieldDisplay label="City" value={tutor.city ?? "-"} />
+        <FieldDisplay label="State" value={tutor.state ?? "-"} />
+        <FieldDisplay label="Zip code" value={tutor.zipCode ?? "-"} />
+        <FieldDisplay
+          label="Registered"
+          value={new Date(tutor.createdAt).toLocaleDateString()}
+        />
+      </DetailSection>
 
       <div className={styles.section}>
         <div className={styles.sectionHeader}>
@@ -237,23 +181,10 @@ export function TutorDetailPage() {
             Are you sure you want to delete tutor{" "}
             <strong>{tutor.name}</strong>?
           </p>
-          <p
-            style={{
-              fontSize: "0.875rem",
-              color: "#4F6257",
-              marginTop: "0.5rem",
-            }}
-          >
+          <p className={styles.dialogWarning}>
             The tutor must have no linked patients to be deleted.
           </p>
-          <div
-            style={{
-              display: "flex",
-              gap: "0.75rem",
-              justifyContent: "flex-end",
-              marginTop: "1.5rem",
-            }}
-          >
+          <div className={styles.dialogActions}>
             <Button
               variant="secondary"
               onClick={() => setShowDeleteDialog(false)}

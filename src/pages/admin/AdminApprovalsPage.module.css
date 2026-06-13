@@ -1,56 +1,21 @@
-.header {
-  margin-bottom: 2rem;
+.tableLink {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
 }
 
-.title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #17211b;
+.tableLink:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
 }
 
-.section {
-  margin-bottom: 2rem;
-}
-
-.sectionTitle {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #17211b;
-  margin-bottom: 1rem;
-}
-
-.approvalItem {
-  padding: 1rem;
-  border-bottom: 1px solid #d7e3dc;
+.tableActions {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.approvalItem:last-child {
-  border-bottom: none;
-}
-
-.approvalInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--space-2);
+  justify-content: flex-end;
 }
 
 .approvalName {
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: #17211b;
-}
-
-.approvalDetail {
-  font-size: 0.8125rem;
-  color: #4f6257;
-}
-
-.emptySection {
-  padding: 1.5rem;
-  text-align: center;
-  color: #4f6257;
-  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
 }

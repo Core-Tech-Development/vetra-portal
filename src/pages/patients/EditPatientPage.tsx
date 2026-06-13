@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getPatient, updatePatient } from "../../api/patients";
-import { Button, Card, Input, Select, Spinner, Textarea } from "../../components/ui";
+import { Card, Input, Select, Spinner, Textarea, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
+import { PageHeader, FormSection, FormActions } from "../../components/patterns";
 import styles from "./CreatePatientPage.module.css";
 
 const SPECIES_OPTIONS = [
@@ -123,10 +124,11 @@ export function EditPatientPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Edit patient</h2>
-        <p className={styles.subtitle}>Update patient information.</p>
-      </div>
+      <PageHeader
+        title="Edit patient"
+        subtitle="Update patient information."
+        backLink={{ label: "Back to patients", to: "/patients" }}
+      />
 
       <Card>
         <form
@@ -134,103 +136,102 @@ export function EditPatientPage() {
           onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
-          {apiError && <div className={styles.errorBanner}>{apiError}</div>}
+          {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <Input
-            label="Patient name"
-            placeholder="e.g. Rex"
-            error={errors.name?.message}
-            {...register("name")}
+          <FormSection title="General">
+            <Input
+              label="Patient name"
+              placeholder="e.g. Rex"
+              error={errors.name?.message}
+              {...register("name")}
+            />
+
+            <div className={styles.row}>
+              <Select
+                label="Species"
+                error={errors.species?.message}
+                {...register("species")}
+              >
+                <option value="">Select species</option>
+                {SPECIES_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </Select>
+              <Input
+                label="Breed"
+                placeholder="e.g. Labrador Retriever"
+                error={errors.breed?.message}
+                {...register("breed")}
+              />
+            </div>
+
+            <div className={styles.row}>
+              <Select
+                label="Sex"
+                error={errors.sex?.message}
+                {...register("sex")}
+              >
+                <option value="">Select sex</option>
+                {SEX_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </Select>
+              <Input
+                label="Birth date"
+                type="date"
+                error={errors.birthDate?.message}
+                {...register("birthDate")}
+              />
+            </div>
+          </FormSection>
+
+          <FormSection title="Details">
+            <div className={styles.row}>
+              <Input
+                label="Weight (kg)"
+                type="number"
+                step="0.01"
+                placeholder="e.g. 12.5"
+                error={errors.weightKg?.message}
+                {...register("weightKg")}
+              />
+              <Input
+                label="Microchip"
+                placeholder="Microchip number"
+                error={errors.microchip?.message}
+                {...register("microchip")}
+              />
+            </div>
+
+            <div className={styles.checkboxField}>
+              <input
+                type="checkbox"
+                id="neutered"
+                {...register("neutered")}
+              />
+              <label htmlFor="neutered" className={styles.checkboxLabel}>
+                Neutered
+              </label>
+            </div>
+
+            <Textarea
+              label="Clinical notes"
+              placeholder="Any relevant clinical observations..."
+              rows={3}
+              error={errors.clinicalNotes?.message}
+              {...register("clinicalNotes")}
+            />
+          </FormSection>
+
+          <FormActions
+            onCancel={() => navigate("/patients")}
+            submitLabel="Save changes"
+            isSubmitting={mutation.isPending}
           />
-
-          <div className={styles.row}>
-            <Select
-              label="Species"
-              error={errors.species?.message}
-              {...register("species")}
-            >
-              <option value="">Select species</option>
-              {SPECIES_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </Select>
-            <Input
-              label="Breed"
-              placeholder="e.g. Labrador Retriever"
-              error={errors.breed?.message}
-              {...register("breed")}
-            />
-          </div>
-
-          <div className={styles.row}>
-            <Select
-              label="Sex"
-              error={errors.sex?.message}
-              {...register("sex")}
-            >
-              <option value="">Select sex</option>
-              {SEX_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </Select>
-            <Input
-              label="Birth date"
-              type="date"
-              error={errors.birthDate?.message}
-              {...register("birthDate")}
-            />
-          </div>
-
-          <div className={styles.row}>
-            <Input
-              label="Weight (kg)"
-              type="number"
-              step="0.01"
-              placeholder="e.g. 12.5"
-              error={errors.weightKg?.message}
-              {...register("weightKg")}
-            />
-            <Input
-              label="Microchip"
-              placeholder="Microchip number"
-              error={errors.microchip?.message}
-              {...register("microchip")}
-            />
-          </div>
-
-          <div className={styles.checkboxField}>
-            <input
-              type="checkbox"
-              id="neutered"
-              {...register("neutered")}
-            />
-            <label htmlFor="neutered" className={styles.checkboxLabel}>
-              Neutered
-            </label>
-          </div>
-
-          <Textarea
-            label="Clinical notes"
-            placeholder="Any relevant clinical observations..."
-            rows={3}
-            error={errors.clinicalNotes?.message}
-            {...register("clinicalNotes")}
-          />
-
-          <div className={styles.actions}>
-            <Link to="/patients">
-              <Button type="button" variant="secondary">
-                Cancel
-              </Button>
-            </Link>
-            <Button type="submit" isLoading={mutation.isPending}>
-              Save changes
-            </Button>
-          </div>
         </form>
       </Card>
     </div>

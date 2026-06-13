@@ -11,5 +11,10 @@ interface BadgeProps {
 export function Badge({ variant = "neutral", children }: BadgeProps) {
   const classNames = [styles.badge, styles[variant]].join(" ");
 
-  return <span className={classNames}>{children}</span>;
+  return (
+    <span className={classNames}>
+      <span className={styles.dot} />
+      {children}
+    </span>
+  );
 }

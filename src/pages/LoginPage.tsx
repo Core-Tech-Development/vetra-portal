@@ -3,8 +3,9 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { Mail, Lock } from "lucide-react";
 import { useAuth } from "../auth/useAuth";
-import { Button, Input } from "../components/ui";
+import { Button, Input, Alert } from "../components/ui";
 import styles from "./LoginPage.module.css";
 
 const loginSchema = z.object({
@@ -53,56 +54,79 @@ export function LoginPage() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.card}>
-        <div className={styles.logoPlaceholder}>
-          <img src="/logo.png" alt="Vetra" className={styles.logoImg} />
-        </div>
-
-        <p className={styles.subtitle}>
-          Veterinary diagnostic imaging platform
+      {/* Left branding panel — desktop only */}
+      <div className={styles.brandingPanel}>
+        <img
+          src="/logo.png"
+          alt="Vetra"
+          className={styles.brandingLogo}
+        />
+        <h1 className={styles.brandingTagline}>
+          Veterinary Diagnostic Imaging Platform
+        </h1>
+        <p className={styles.brandingDescription}>
+          Connecting veterinary clinics to specialist diagnosticians — anytime,
+          anywhere.
         </p>
+      </div>
 
-        <form
-          className={styles.form}
-          onSubmit={handleSubmit(onSubmit)}
-          noValidate
-        >
-          {authError && (
-            <div className={styles.errorBanner} role="alert">
-              {authError}
-            </div>
-          )}
+      {/* Right form panel */}
+      <div className={styles.formPanel}>
+        <div className={styles.formCard}>
+          {/* Logo — mobile only */}
+          <div className={styles.mobileLogo}>
+            <img src="/logo.png" alt="Vetra" className={styles.logoImg} />
+          </div>
 
-          <Input
-            label="Username"
-            placeholder="you@example.com"
-            autoComplete="username"
-            error={errors.username?.message}
-            {...register("username")}
-          />
+          <h2 className={styles.heading}>Welcome back</h2>
+          <p className={styles.subtitle}>Sign in to your account</p>
 
-          <Input
-            label="Password"
-            type="password"
-            placeholder="Enter your password"
-            autoComplete="current-password"
-            error={errors.password?.message}
-            {...register("password")}
-          />
-
-          <Button
-            type="submit"
-            fullWidth
-            size="lg"
-            isLoading={isSubmitting}
-            className={styles.submitButton}
+          <form
+            className={styles.form}
+            onSubmit={handleSubmit(onSubmit)}
+            noValidate
           >
-            Sign in
-          </Button>
-        </form>
+            {authError && (
+              <Alert variant="danger">{authError}</Alert>
+            )}
 
-        <div className={styles.divider} />
-        <p className={styles.footer}>Secured by Keycloak</p>
+            <Input
+              label="Username"
+              placeholder="you@example.com"
+              autoComplete="username"
+              leftIcon={<Mail size={18} />}
+              error={errors.username?.message}
+              {...register("username")}
+            />
+
+            <Input
+              label="Password"
+              type="password"
+              placeholder="Enter your password"
+              autoComplete="current-password"
+              leftIcon={<Lock size={18} />}
+              error={errors.password?.message}
+              {...register("password")}
+            />
+
+            <Button
+              type="submit"
+              fullWidth
+              size="lg"
+              isLoading={isSubmitting}
+              className={styles.submitButton}
+            >
+              Sign in
+            </Button>
+          </form>
+
+          <a href="#" className={styles.forgotLink}>
+            Forgot password?
+          </a>
+
+          <div className={styles.divider} />
+          <p className={styles.footer}>Secured by Keycloak</p>
+        </div>
       </div>
     </div>
   );

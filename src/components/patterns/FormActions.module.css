@@ -1,0 +1,22 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-sticky);
+}
+
+.cancel {
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .root {
+    padding: var(--space-3) var(--space-4);
+  }
+}

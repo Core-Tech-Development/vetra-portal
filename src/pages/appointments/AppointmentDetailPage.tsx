@@ -14,6 +14,7 @@ import { listFiles, uploadFile } from "../../api/examFiles";
 import { getLaudoByAppointment } from "../../api/laudos";
 import { listNotes, createNote } from "../../api/appointmentNotes";
 import { Button, Card, StatusBadge, Spinner, Dialog, EmptyState } from "../../components/ui";
+import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
 import { useState, useRef } from "react";
 import styles from "./AppointmentDetailPage.module.css";
@@ -186,7 +187,7 @@ export function AppointmentDetailPage() {
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
+      <div className={styles.loadingContainer}>
         <Spinner size="lg" />
       </div>
     );
@@ -199,7 +200,7 @@ export function AppointmentDetailPage() {
         <p className={styles.errorDetail}>
           The appointment could not be found or an error occurred.
         </p>
-        <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center" }}>
+        <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
             Retry
           </Button>
@@ -213,93 +214,62 @@ export function AppointmentDetailPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <Link to="/appointments" className={styles.backLink}>
-            &larr; Back to appointments
-          </Link>
-          <h2 className={styles.title}>Appointment {appointment.id.substring(0, 8)}</h2>
+      <PageHeader
+        title={`Appointment ${appointment.id.substring(0, 8)}`}
+        subtitle={appointment.status}
+        backLink={{ label: "Back to appointments", to: "/appointments" }}
+        actions={
           <StatusBadge status={appointment.status} />
-        </div>
-        <Link to="/appointments">
-          <Button variant="secondary">Back to appointments</Button>
-        </Link>
-      </div>
+        }
+      />
 
       {/* Appointment Information */}
-      <Card title="Appointment information">
-        <div className={styles.infoGrid}>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Appointment ID</span>
-            <span className={styles.fieldValue}>{appointment.id}</span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Exam Request ID</span>
-            <span className={styles.fieldValue}>{appointment.examRequestId}</span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Specialist ID</span>
-            <span className={styles.fieldValue}>{appointment.specialistId}</span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Availability Slot ID</span>
-            <span className={styles.fieldValue}>
-              {appointment.availabilitySlotId ?? "\u2014"}
-            </span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Scheduled Start</span>
-            <span className={styles.fieldValue}>
-              {formatDateTime(appointment.scheduledStartAt)}
-            </span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Scheduled End</span>
-            <span className={styles.fieldValue}>
-              {formatDateTime(appointment.scheduledEndAt)}
-            </span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Actual Start</span>
-            <span className={styles.fieldValue}>
-              {formatDateTime(appointment.actualStartAt)}
-            </span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Actual End</span>
-            <span className={styles.fieldValue}>
-              {formatDateTime(appointment.actualEndAt)}
-            </span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Notes</span>
-            <span className={styles.fieldValue}>
-              {appointment.notes ?? "\u2014"}
-            </span>
-          </div>
-          {appointment.cancelReason && (
-            <div className={styles.fieldBlock}>
-              <span className={styles.fieldLabel}>Cancel Reason</span>
-              <span className={styles.fieldValue}>{appointment.cancelReason}</span>
-            </div>
-          )}
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Created</span>
-            <span className={styles.fieldValue}>
-              {new Date(appointment.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Updated</span>
-            <span className={styles.fieldValue}>
-              {new Date(appointment.updatedAt).toLocaleDateString()}
-            </span>
-          </div>
-        </div>
-      </Card>
+      <DetailSection title="Appointment information" columns={2}>
+        <FieldDisplay label="Appointment ID" value={appointment.id} />
+        <FieldDisplay label="Exam Request ID" value={appointment.examRequestId} />
+        <FieldDisplay label="Specialist ID" value={appointment.specialistId} />
+        <FieldDisplay
+          label="Availability Slot ID"
+          value={appointment.availabilitySlotId ?? "\u2014"}
+        />
+        <FieldDisplay
+          label="Scheduled Start"
+          value={formatDateTime(appointment.scheduledStartAt)}
+        />
+        <FieldDisplay
+          label="Scheduled End"
+          value={formatDateTime(appointment.scheduledEndAt)}
+        />
+        <FieldDisplay
+          label="Actual Start"
+          value={formatDateTime(appointment.actualStartAt)}
+        />
+        <FieldDisplay
+          label="Actual End"
+          value={formatDateTime(appointment.actualEndAt)}
+        />
+        <FieldDisplay
+          label="Notes"
+          value={appointment.notes ?? "\u2014"}
+        />
+        {appointment.cancelReason && (
+          <FieldDisplay
+            label="Cancel Reason"
+            value={appointment.cancelReason}
+          />
+        )}
+        <FieldDisplay
+          label="Created"
+          value={new Date(appointment.createdAt).toLocaleDateString()}
+        />
+        <FieldDisplay
+          label="Updated"
+          value={new Date(appointment.updatedAt).toLocaleDateString()}
+        />
+      </DetailSection>
 
       {/* Action Buttons */}
-      <div className={styles.actions}>
+      <div className={styles.actionRow}>
         {appointment.status === "WAITING_SPECIALIST_ACCEPTANCE" && (
           <>
             <Button
@@ -373,7 +343,7 @@ export function AppointmentDetailPage() {
                 multiple
                 accept="image/*,video/*,application/pdf"
                 onChange={handleFileSelect}
-                style={{ display: "none" }}
+                className={styles.hiddenInput}
               />
               <Button
                 variant="secondary"
@@ -411,48 +381,46 @@ export function AppointmentDetailPage() {
       {/* Laudo Section */}
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>Laudo</h3>
-        <Card>
-          {laudo ? (
-            <div className={styles.infoGrid}>
-              <div className={styles.fieldBlock}>
-                <span className={styles.fieldLabel}>Status</span>
-                <span className={styles.fieldValue}>
-                  <StatusBadge status={laudo.status} />
-                </span>
-              </div>
-              <div className={styles.fieldBlock}>
-                <span className={styles.fieldLabel}>Issued At</span>
-                <span className={styles.fieldValue}>
-                  {formatDateTime(laudo.issuedAt)}
-                </span>
-              </div>
-              {laudo.findings && (
-                <div className={styles.fieldBlock}>
-                  <span className={styles.fieldLabel}>Findings</span>
-                  <span className={styles.fieldValue}>{laudo.findings}</span>
-                </div>
-              )}
-              {laudo.conclusion && (
-                <div className={styles.fieldBlock}>
-                  <span className={styles.fieldLabel}>Conclusion</span>
-                  <span className={styles.fieldValue}>{laudo.conclusion}</span>
-                </div>
-              )}
-              <div className={styles.fieldBlock}>
-                <Link to={`/laudos/${laudo.id}`}>
-                  <Button variant="secondary" size="sm">
-                    View full laudo
-                  </Button>
-                </Link>
-              </div>
+        {laudo ? (
+          <DetailSection columns={2}>
+            <FieldDisplay
+              label="Status"
+              value={<StatusBadge status={laudo.status} />}
+            />
+            <FieldDisplay
+              label="Issued At"
+              value={formatDateTime(laudo.issuedAt)}
+            />
+            {laudo.findings && (
+              <FieldDisplay
+                label="Findings"
+                value={laudo.findings}
+                fullWidth
+              />
+            )}
+            {laudo.conclusion && (
+              <FieldDisplay
+                label="Conclusion"
+                value={laudo.conclusion}
+                fullWidth
+              />
+            )}
+            <div>
+              <Link to={`/laudos/${laudo.id}`}>
+                <Button variant="secondary" size="sm">
+                  View full laudo
+                </Button>
+              </Link>
             </div>
-          ) : (
+          </DetailSection>
+        ) : (
+          <Card>
             <EmptyState
               title="No laudo yet"
               description="A laudo has not been created for this appointment."
             />
-          )}
-        </Card>
+          </Card>
+        )}
       </div>
 
       {/* Notes Section */}
@@ -542,7 +510,7 @@ export function AppointmentDetailPage() {
           </>
         }
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+        <div className={styles.dialogForm}>
           <div>
             <label className={styles.dialogLabel}>Title</label>
             <input
@@ -578,7 +546,7 @@ export function AppointmentDetailPage() {
         }
       >
         {viewingNote && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+          <div className={styles.dialogNoteView}>
             <div className={styles.noteMeta}>
               {viewingNote.authorUserId} &middot;{" "}
               {new Date(viewingNote.createdAt).toLocaleString()}
@@ -611,22 +579,14 @@ export function AppointmentDetailPage() {
           </>
         }
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          <p style={{ fontSize: "0.875rem", color: "#4F6257" }}>
+        <div className={styles.dialogForm}>
+          <p className={styles.cancelDialogText}>
             Please provide a reason for cancellation:
           </p>
           <textarea
             value={cancelReason}
             onChange={(e) => setCancelReason(e.target.value)}
-            style={{
-              padding: "0.5rem",
-              borderRadius: "0.375rem",
-              border: "1px solid #D7E3DC",
-              minHeight: "80px",
-              fontFamily: "inherit",
-              fontSize: "0.875rem",
-              resize: "vertical",
-            }}
+            className={styles.cancelDialogTextarea}
           />
         </div>
       </Dialog>

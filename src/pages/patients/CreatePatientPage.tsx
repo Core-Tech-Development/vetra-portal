@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -7,8 +7,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { createPatient } from "../../api/patients";
 import { listTutorsByClinic } from "../../api/tutors";
 import { useClinicId } from "../../hooks/useClinicId";
-import { Button, Card, Input, Select, Textarea } from "../../components/ui";
+import { Card, Input, Select, Textarea, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
+import { PageHeader, FormSection, FormActions } from "../../components/patterns";
 import styles from "./CreatePatientPage.module.css";
 
 const SPECIES_OPTIONS = [
@@ -109,12 +110,11 @@ export function CreatePatientPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.title}>New patient</h2>
-        <p className={styles.subtitle}>
-          Register a new patient for the clinic.
-        </p>
-      </div>
+      <PageHeader
+        title="New patient"
+        subtitle="Register a new patient for the clinic."
+        backLink={{ label: "Back to patients", to: "/patients" }}
+      />
 
       <Card>
         <form
@@ -122,116 +122,115 @@ export function CreatePatientPage() {
           onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
-          {apiError && <div className={styles.errorBanner}>{apiError}</div>}
+          {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <Select
-            label="Tutor"
-            error={errors.tutorId?.message}
-            {...register("tutorId")}
-          >
-            <option value="">Select a tutor</option>
-            {tutorsData?.content.map((tutor) => (
-              <option key={tutor.id} value={tutor.id}>
-                {tutor.name}
-              </option>
-            ))}
-          </Select>
-
-          <Input
-            label="Patient name"
-            placeholder="e.g. Rex"
-            error={errors.name?.message}
-            {...register("name")}
-          />
-
-          <div className={styles.row}>
+          <FormSection title="General">
             <Select
-              label="Species"
-              error={errors.species?.message}
-              {...register("species")}
+              label="Tutor"
+              error={errors.tutorId?.message}
+              {...register("tutorId")}
             >
-              <option value="">Select species</option>
-              {SPECIES_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
+              <option value="">Select a tutor</option>
+              {tutorsData?.content.map((tutor) => (
+                <option key={tutor.id} value={tutor.id}>
+                  {tutor.name}
                 </option>
               ))}
             </Select>
-            <Input
-              label="Breed"
-              placeholder="e.g. Labrador Retriever"
-              error={errors.breed?.message}
-              {...register("breed")}
-            />
-          </div>
 
-          <div className={styles.row}>
-            <Select
-              label="Sex"
-              error={errors.sex?.message}
-              {...register("sex")}
-            >
-              <option value="">Select sex</option>
-              {SEX_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </Select>
             <Input
-              label="Birth date"
-              type="date"
-              error={errors.birthDate?.message}
-              {...register("birthDate")}
+              label="Patient name"
+              placeholder="e.g. Rex"
+              error={errors.name?.message}
+              {...register("name")}
             />
-          </div>
 
-          <div className={styles.row}>
-            <Input
-              label="Weight (kg)"
-              type="number"
-              step="0.01"
-              placeholder="e.g. 12.5"
-              error={errors.weightKg?.message}
-              {...register("weightKg")}
-            />
-            <Input
-              label="Microchip"
-              placeholder="Microchip number"
-              error={errors.microchip?.message}
-              {...register("microchip")}
-            />
-          </div>
+            <div className={styles.row}>
+              <Select
+                label="Species"
+                error={errors.species?.message}
+                {...register("species")}
+              >
+                <option value="">Select species</option>
+                {SPECIES_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </Select>
+              <Input
+                label="Breed"
+                placeholder="e.g. Labrador Retriever"
+                error={errors.breed?.message}
+                {...register("breed")}
+              />
+            </div>
 
-          <div className={styles.checkboxField}>
-            <input
-              type="checkbox"
-              id="neutered"
-              {...register("neutered")}
-            />
-            <label htmlFor="neutered" className={styles.checkboxLabel}>
-              Neutered
-            </label>
-          </div>
+            <div className={styles.row}>
+              <Select
+                label="Sex"
+                error={errors.sex?.message}
+                {...register("sex")}
+              >
+                <option value="">Select sex</option>
+                {SEX_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </Select>
+              <Input
+                label="Birth date"
+                type="date"
+                error={errors.birthDate?.message}
+                {...register("birthDate")}
+              />
+            </div>
+          </FormSection>
 
-          <Textarea
-            label="Clinical notes"
-            placeholder="Any relevant clinical observations..."
-            rows={3}
-            error={errors.clinicalNotes?.message}
-            {...register("clinicalNotes")}
+          <FormSection title="Details">
+            <div className={styles.row}>
+              <Input
+                label="Weight (kg)"
+                type="number"
+                step="0.01"
+                placeholder="e.g. 12.5"
+                error={errors.weightKg?.message}
+                {...register("weightKg")}
+              />
+              <Input
+                label="Microchip"
+                placeholder="Microchip number"
+                error={errors.microchip?.message}
+                {...register("microchip")}
+              />
+            </div>
+
+            <div className={styles.checkboxField}>
+              <input
+                type="checkbox"
+                id="neutered"
+                {...register("neutered")}
+              />
+              <label htmlFor="neutered" className={styles.checkboxLabel}>
+                Neutered
+              </label>
+            </div>
+
+            <Textarea
+              label="Clinical notes"
+              placeholder="Any relevant clinical observations..."
+              rows={3}
+              error={errors.clinicalNotes?.message}
+              {...register("clinicalNotes")}
+            />
+          </FormSection>
+
+          <FormActions
+            onCancel={() => navigate("/patients")}
+            submitLabel="Create patient"
+            isSubmitting={mutation.isPending}
           />
-
-          <div className={styles.actions}>
-            <Link to="/patients">
-              <Button type="button" variant="secondary">
-                Cancel
-              </Button>
-            </Link>
-            <Button type="submit" isLoading={mutation.isPending}>
-              Create patient
-            </Button>
-          </div>
         </form>
       </Card>
     </div>

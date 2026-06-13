@@ -18,6 +18,7 @@ import {
 } from "../../components/ui";
 import type { BadgeVariant, TableColumn } from "../../components/ui";
 import type { SpecialistResponse } from "../../api/types";
+import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
 import styles from "./ExamRequestDetailPage.module.css";
 
@@ -108,7 +109,7 @@ export function ExamRequestDetailPage() {
       key: "name",
       header: "Name",
       render: (row) => (
-        <span style={{ fontWeight: 500 }}>{row.name}</span>
+        <span className={styles.specialistName}>{row.name}</span>
       ),
     },
     {
@@ -154,13 +155,7 @@ export function ExamRequestDetailPage() {
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          padding: "3rem",
-        }}
-      >
+      <div className={styles.loadingContainer}>
         <Spinner size="lg" />
       </div>
     );
@@ -173,13 +168,7 @@ export function ExamRequestDetailPage() {
         <p className={styles.errorDetail}>
           The exam request could not be found or an error occurred.
         </p>
-        <div
-          style={{
-            display: "flex",
-            gap: "0.75rem",
-            justifyContent: "center",
-          }}
-        >
+        <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
             Retry
           </Button>
@@ -193,110 +182,93 @@ export function ExamRequestDetailPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <Link to="/exam-requests" className={styles.backLink}>
-            &larr; Back to exam requests
-          </Link>
-          <h2 className={styles.title}>
-            Exam request &mdash; {examRequest.examType.replace(/_/g, " ")}
-          </h2>
-        </div>
-        <div className={styles.headerActions}>
-          {examRequest.status === "CREATED" && (
-            <Button
-              variant="danger"
-              onClick={() => cancelMutation.mutate()}
-              isLoading={cancelMutation.isPending}
-            >
-              Cancel request
-            </Button>
-          )}
-        </div>
-      </div>
+      <PageHeader
+        title={`Exam request — ${examRequest.examType.replace(/_/g, " ")}`}
+        backLink={{ label: "Back to exam requests", to: "/exam-requests" }}
+        actions={
+          examRequest.status === "CREATED" ? (
+            <div className={styles.headerActions}>
+              <Button
+                variant="danger"
+                onClick={() => cancelMutation.mutate()}
+                isLoading={cancelMutation.isPending}
+              >
+                Cancel request
+              </Button>
+            </div>
+          ) : undefined
+        }
+      />
 
-      <Card title="Request details">
-        <div className={styles.grid}>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Exam type</span>
-            <span className={styles.fieldValue}>
-              {examRequest.examType.replace(/_/g, " ")}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Priority</span>
-            <span className={styles.fieldValue}>
-              <Badge
-                variant={PRIORITY_VARIANT[examRequest.priority] ?? "neutral"}
-              >
-                {examRequest.priority}
-              </Badge>
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Status</span>
-            <span className={styles.fieldValue}>
-              <StatusBadge status={examRequest.status} />
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Patient</span>
-            <span className={styles.fieldValue}>
-              <Link
-                to={`/patients/${examRequest.patientId}`}
-                style={{ color: "#1F6F5B", fontWeight: 500 }}
-              >
-                {patient?.name ?? examRequest.patientId.substring(0, 8) + "..."}
-              </Link>
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Requested by</span>
-            <span className={styles.fieldValue}>
-              {examRequest.requestedBy ?? "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Created</span>
-            <span className={styles.fieldValue}>
-              {new Date(examRequest.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-          {examRequest.diagnosticHypothesis && (
-            <div className={styles.fieldFull}>
-              <span className={styles.fieldLabel}>Diagnostic hypothesis</span>
-              <span className={styles.fieldValue}>
-                {examRequest.diagnosticHypothesis}
-              </span>
-            </div>
-          )}
-          {examRequest.clinicalHistory && (
-            <div className={styles.fieldFull}>
-              <span className={styles.fieldLabel}>Clinical history</span>
-              <span className={styles.fieldValue}>
-                {examRequest.clinicalHistory}
-              </span>
-            </div>
-          )}
-          {examRequest.additionalNotes && (
-            <div className={styles.fieldFull}>
-              <span className={styles.fieldLabel}>Additional notes</span>
-              <span className={styles.fieldValue}>
-                {examRequest.additionalNotes}
-              </span>
-            </div>
-          )}
-        </div>
-      </Card>
+      <DetailSection title="Request details" columns={2}>
+        <FieldDisplay
+          label="Exam type"
+          value={examRequest.examType.replace(/_/g, " ")}
+        />
+        <FieldDisplay
+          label="Priority"
+          value={
+            <Badge
+              variant={PRIORITY_VARIANT[examRequest.priority] ?? "neutral"}
+            >
+              {examRequest.priority}
+            </Badge>
+          }
+        />
+        <FieldDisplay
+          label="Status"
+          value={<StatusBadge status={examRequest.status} />}
+        />
+        <FieldDisplay
+          label="Patient"
+          value={
+            <Link
+              to={`/patients/${examRequest.patientId}`}
+              className={styles.tableLink}
+            >
+              {patient?.name ?? examRequest.patientId.substring(0, 8) + "..."}
+            </Link>
+          }
+        />
+        <FieldDisplay
+          label="Requested by"
+          value={examRequest.requestedBy ?? "-"}
+        />
+        <FieldDisplay
+          label="Created"
+          value={new Date(examRequest.createdAt).toLocaleDateString()}
+        />
+        {examRequest.diagnosticHypothesis && (
+          <FieldDisplay
+            label="Diagnostic hypothesis"
+            value={examRequest.diagnosticHypothesis}
+            fullWidth
+          />
+        )}
+        {examRequest.clinicalHistory && (
+          <FieldDisplay
+            label="Clinical history"
+            value={examRequest.clinicalHistory}
+            fullWidth
+          />
+        )}
+        {examRequest.additionalNotes && (
+          <FieldDisplay
+            label="Additional notes"
+            value={examRequest.additionalNotes}
+            fullWidth
+          />
+        )}
+      </DetailSection>
 
       {examRequest.status === "PENDING_SPECIALIST" && (
         <div className={styles.section}>
           <Card>
-            <div style={{ textAlign: "center", padding: "1rem 0" }}>
-              <p style={{ fontSize: "0.875rem", color: "#4F6257", marginBottom: "0.5rem" }}>
+            <div className={styles.pendingInfo}>
+              <p className={styles.pendingInfoText}>
                 Waiting for specialist acceptance
               </p>
-              <p style={{ fontSize: "0.75rem", color: "#4F6257" }}>
+              <p className={styles.pendingInfoDetail}>
                 An appointment has been sent to the specialist. If the specialist declines or the appointment is cancelled, you can assign another specialist.
               </p>
             </div>
@@ -317,7 +289,7 @@ export function ExamRequestDetailPage() {
 
           {showSpecialists && (
             <Card noPadding>
-              <div className={styles.filterRow} style={{ padding: "1rem 1.5rem 0" }}>
+              <div className={styles.filterRow}>
                 <label className={styles.filterLabel}>
                   <input
                     type="checkbox"
@@ -328,26 +300,14 @@ export function ExamRequestDetailPage() {
                 </label>
               </div>
               {isLoadingSpecialists && (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    padding: "3rem",
-                  }}
-                >
+                <div className={styles.loadingContainer}>
                   <Spinner size="lg" />
                 </div>
               )}
 
               {isErrorSpecialists && (
-                <div style={{ padding: "1.5rem", textAlign: "center" }}>
-                  <p
-                    style={{
-                      fontSize: "0.875rem",
-                      color: "#b42318",
-                      marginBottom: "0.75rem",
-                    }}
-                  >
+                <div className={styles.specialistError}>
+                  <p className={styles.specialistErrorText}>
                     Failed to search specialists.
                   </p>
                   <Button
@@ -395,23 +355,10 @@ export function ExamRequestDetailPage() {
             {schedulingSpecialist.crmv} / {schedulingSpecialist.crmvState}) for
             this exam request?
           </p>
-          <p
-            style={{
-              fontSize: "0.875rem",
-              color: "#4F6257",
-              marginTop: "0.5rem",
-            }}
-          >
+          <p className={styles.dialogText}>
             The specialist will receive the request and can accept or decline.
           </p>
-          <div
-            style={{
-              display: "flex",
-              gap: "0.75rem",
-              justifyContent: "flex-end",
-              marginTop: "1.5rem",
-            }}
-          >
+          <div className={styles.dialogActions}>
             <Button
               variant="secondary"
               onClick={() => setSchedulingSpecialist(null)}

@@ -1,67 +1,67 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: var(--space-1);
 }
 
 .label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #17211b;
-  line-height: 1.25;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
 }
 
 .textarea {
   width: 100%;
   min-height: 5rem;
-  border: 1px solid #d7e3dc;
-  background-color: #ffffff;
-  color: #17211b;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
   padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  border-radius: 0.5rem;
+  font-size: var(--font-size-sm);
+  border-radius: var(--input-radius);
   resize: vertical;
-  transition: border-color 180ms cubic-bezier(0.2, 0, 0, 1);
+  transition: border-color var(--duration-normal) var(--easing-default);
 }
 
 .textarea::placeholder {
-  color: #4f6257;
+  color: var(--color-text-secondary);
   opacity: 0.6;
 }
 
 .textarea:hover:not(:disabled) {
-  border-color: #7ca982;
+  border-color: var(--color-border-hover);
 }
 
 .textarea:focus {
   outline: none;
-  border-color: #1f6f5b;
-  box-shadow: 0 0 0 1px #1f6f5b;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 1px var(--color-primary);
 }
 
 .textarea:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background-color: #eef5f1;
+  background-color: var(--color-surface-muted);
 }
 
 .error {
-  border-color: #b42318;
+  border-color: var(--color-danger);
 }
 
 .error:focus {
-  border-color: #b42318;
-  box-shadow: 0 0 0 1px #b42318;
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 1px var(--color-danger);
 }
 
 .errorMessage {
-  font-size: 0.75rem;
-  color: #b42318;
-  line-height: 1.25;
+  font-size: var(--font-size-xs);
+  color: var(--color-danger);
+  line-height: var(--line-height-tight);
 }
 
 .helperText {
-  font-size: 0.75rem;
-  color: #4f6257;
-  line-height: 1.25;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-tight);
 }

@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { createClinic } from "../../api/clinics";
-import { Button, Card, Input, Select } from "../../components/ui";
+import { Card, Input, Select, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
+import { PageHeader, FormSection, FormActions } from "../../components/patterns";
 import type { CreateClinicRequest } from "../../api/types";
 import styles from "./CreateClinicPage.module.css";
 
@@ -69,12 +70,11 @@ export function CreateClinicPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.title}>New clinic</h2>
-        <p className={styles.subtitle}>
-          Register a new veterinary clinic on the platform.
-        </p>
-      </div>
+      <PageHeader
+        title="New clinic"
+        subtitle="Register a new veterinary clinic on the platform."
+        backLink={{ label: "Back to clinics", to: "/clinics" }}
+      />
 
       <Card>
         <form
@@ -82,32 +82,32 @@ export function CreateClinicPage() {
           onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
-          {apiError && <div className={styles.errorBanner}>{apiError}</div>}
+          {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <Input
-            label="Clinic name"
-            placeholder="e.g. PetVida Veterinary Clinic"
-            error={errors.name?.message}
-            {...register("name")}
-          />
-
-          <div className={styles.row}>
+          <FormSection title="Clinic information">
             <Input
-              label="CNPJ"
-              placeholder="00.000.000/0000-00"
-              error={errors.document?.message}
-              {...register("document")}
+              label="Clinic name"
+              placeholder="e.g. PetVida Veterinary Clinic"
+              error={errors.name?.message}
+              {...register("name")}
             />
-            <Input
-              label="Email"
-              type="email"
-              placeholder="contact@clinic.com"
-              error={errors.email?.message}
-              {...register("email")}
-            />
-          </div>
 
-          <div className={styles.row}>
+            <div className={styles.row}>
+              <Input
+                label="CNPJ"
+                placeholder="00.000.000/0000-00"
+                error={errors.document?.message}
+                {...register("document")}
+              />
+              <Input
+                label="Email"
+                type="email"
+                placeholder="contact@clinic.com"
+                error={errors.email?.message}
+                {...register("email")}
+              />
+            </div>
+
             <Input
               label="Phone"
               type="tel"
@@ -115,44 +115,43 @@ export function CreateClinicPage() {
               error={errors.phone?.message}
               {...register("phone")}
             />
-            <Select
-              label="State"
-              error={errors.state?.message}
-              {...register("state")}
-            >
-              <option value="">Select state</option>
-              {BRAZILIAN_STATES.map((st) => (
-                <option key={st} value={st}>
-                  {st}
-                </option>
-              ))}
-            </Select>
-          </div>
+          </FormSection>
 
-          <Input
-            label="City"
-            placeholder="e.g. Sao Paulo"
-            error={errors.city?.message}
-            {...register("city")}
+          <FormSection title="Address">
+            <Input
+              label="Address"
+              placeholder="Full address"
+              error={errors.address?.message}
+              {...register("address")}
+            />
+
+            <div className={styles.row}>
+              <Input
+                label="City"
+                placeholder="e.g. Sao Paulo"
+                error={errors.city?.message}
+                {...register("city")}
+              />
+              <Select
+                label="State"
+                error={errors.state?.message}
+                {...register("state")}
+              >
+                <option value="">Select state</option>
+                {BRAZILIAN_STATES.map((st) => (
+                  <option key={st} value={st}>
+                    {st}
+                  </option>
+                ))}
+              </Select>
+            </div>
+          </FormSection>
+
+          <FormActions
+            onCancel={() => navigate("/clinics")}
+            submitLabel="Create clinic"
+            isSubmitting={mutation.isPending}
           />
-
-          <Input
-            label="Address"
-            placeholder="Full address"
-            error={errors.address?.message}
-            {...register("address")}
-          />
-
-          <div className={styles.actions}>
-            <Link to="/clinics">
-              <Button type="button" variant="secondary">
-                Cancel
-              </Button>
-            </Link>
-            <Button type="submit" isLoading={mutation.isPending}>
-              Create clinic
-            </Button>
-          </div>
         </form>
       </Card>
     </div>

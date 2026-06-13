@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { createSpecialist } from "../../api/specialists";
-import { Button, Card, Input, Select, Textarea } from "../../components/ui";
+import { Card, Input, Select, Textarea, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
+import { PageHeader, FormSection, FormActions } from "../../components/patterns";
 import type { CreateSpecialistRequest } from "../../api/types";
 import styles from "./CreateSpecialistPage.module.css";
 
@@ -97,12 +98,11 @@ export function CreateSpecialistPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.title}>New specialist</h2>
-        <p className={styles.subtitle}>
-          Register a new imaging specialist on the platform.
-        </p>
-      </div>
+      <PageHeader
+        title="New specialist"
+        subtitle="Register a new imaging specialist on the platform."
+        backLink={{ label: "Back to specialists", to: "/specialists" }}
+      />
 
       <Card>
         <form
@@ -110,121 +110,126 @@ export function CreateSpecialistPage() {
           onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
-          {apiError && <div className={styles.errorBanner}>{apiError}</div>}
+          {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <Input
-            label="Full name"
-            placeholder="e.g. Dr. Maria Silva"
-            error={errors.name?.message}
-            {...register("name")}
-          />
+          <FormSection title="Personal information">
+            <Input
+              label="Full name"
+              placeholder="e.g. Dr. Maria Silva"
+              error={errors.name?.message}
+              {...register("name")}
+            />
 
-          <div className={styles.row}>
-            <Input
-              label="Email"
-              type="email"
-              placeholder="specialist@email.com"
-              error={errors.email?.message}
-              {...register("email")}
-            />
-            <Input
-              label="Phone"
-              type="tel"
-              placeholder="(11) 99999-9999"
-              error={errors.phone?.message}
-              {...register("phone")}
-            />
-          </div>
+            <div className={styles.row}>
+              <Input
+                label="Email"
+                type="email"
+                placeholder="specialist@email.com"
+                error={errors.email?.message}
+                {...register("email")}
+              />
+              <Input
+                label="Phone"
+                type="tel"
+                placeholder="(11) 99999-9999"
+                error={errors.phone?.message}
+                {...register("phone")}
+              />
+            </div>
+          </FormSection>
 
-          <div className={styles.row}>
-            <Input
-              label="CRMV"
-              placeholder="e.g. 12345"
-              error={errors.crmv?.message}
-              {...register("crmv")}
-            />
+          <FormSection title="Professional registration">
+            <div className={styles.row}>
+              <Input
+                label="CRMV"
+                placeholder="e.g. 12345"
+                error={errors.crmv?.message}
+                {...register("crmv")}
+              />
+              <Select
+                label="CRMV State"
+                error={errors.crmvState?.message}
+                {...register("crmvState")}
+              >
+                <option value="">Select state</option>
+                {BRAZILIAN_STATES.map((st) => (
+                  <option key={st} value={st}>
+                    {st}
+                  </option>
+                ))}
+              </Select>
+            </div>
+
             <Select
-              label="CRMV State"
-              error={errors.crmvState?.message}
-              {...register("crmvState")}
+              label="Specialty"
+              error={errors.specialty?.message}
+              {...register("specialty")}
             >
-              <option value="">Select state</option>
-              {BRAZILIAN_STATES.map((st) => (
-                <option key={st} value={st}>
-                  {st}
+              <option value="">Select specialty</option>
+              {SPECIALTIES.map((sp) => (
+                <option key={sp.value} value={sp.value}>
+                  {sp.label}
                 </option>
               ))}
             </Select>
-          </div>
+          </FormSection>
 
-          <Select
-            label="Specialty"
-            error={errors.specialty?.message}
-            {...register("specialty")}
-          >
-            <option value="">Select specialty</option>
-            {SPECIALTIES.map((sp) => (
-              <option key={sp.value} value={sp.value}>
-                {sp.label}
-              </option>
-            ))}
-          </Select>
+          <FormSection title="Coverage area">
+            <div className={styles.row}>
+              <Input
+                label="Base city"
+                placeholder="e.g. Sao Paulo"
+                error={errors.baseCity?.message}
+                {...register("baseCity")}
+              />
+              <Select
+                label="Base state"
+                error={errors.baseState?.message}
+                {...register("baseState")}
+              >
+                <option value="">Select state</option>
+                {BRAZILIAN_STATES.map((st) => (
+                  <option key={st} value={st}>
+                    {st}
+                  </option>
+                ))}
+              </Select>
+            </div>
 
-          <div className={styles.row}>
             <Input
-              label="Base city"
-              placeholder="e.g. Sao Paulo"
-              error={errors.baseCity?.message}
-              {...register("baseCity")}
+              label="Max travel radius (km)"
+              type="number"
+              placeholder="e.g. 50"
+              error={errors.maxTravelRadiusKm?.message}
+              {...register("maxTravelRadiusKm")}
             />
-            <Select
-              label="Base state"
-              error={errors.baseState?.message}
-              {...register("baseState")}
-            >
-              <option value="">Select state</option>
-              {BRAZILIAN_STATES.map((st) => (
-                <option key={st} value={st}>
-                  {st}
-                </option>
-              ))}
-            </Select>
-          </div>
 
-          <Input
-            label="Max travel radius (km)"
-            type="number"
-            placeholder="e.g. 50"
-            error={errors.maxTravelRadiusKm?.message}
-            {...register("maxTravelRadiusKm")}
-          />
+            <div className={styles.checkboxField}>
+              <input
+                type="checkbox"
+                id="hasOwnEquipment"
+                {...register("hasOwnEquipment")}
+              />
+              <label htmlFor="hasOwnEquipment" className={styles.checkboxLabel}>
+                Has own equipment
+              </label>
+            </div>
+          </FormSection>
 
-          <div className={styles.checkboxField}>
-            <input
-              type="checkbox"
-              id="hasOwnEquipment"
-              {...register("hasOwnEquipment")}
+          <FormSection title="Bio">
+            <Textarea
+              label="Bio"
+              placeholder="Brief professional description..."
+              error={errors.bio?.message}
+              {...register("bio")}
             />
-            <label htmlFor="hasOwnEquipment">Has own equipment</label>
-          </div>
+          </FormSection>
 
-          <Textarea
-            label="Bio"
-            placeholder="Brief professional description..."
-            error={errors.bio?.message}
-            {...register("bio")}
+          <FormActions
+            onCancel={() => navigate("/specialists")}
+            submitLabel="Create specialist"
+            isSubmitting={mutation.isPending}
           />
-
-          <div className={styles.actions}>
-            <Link to="/specialists">
-              <Button type="button" variant="secondary">
-                Cancel
-              </Button>
-            </Link>
-            <Button type="submit" isLoading={mutation.isPending}>
-              Create specialist
-            </Button>
-          </div>
         </form>
       </Card>
     </div>

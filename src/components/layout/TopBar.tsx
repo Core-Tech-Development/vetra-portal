@@ -1,7 +1,11 @@
+import { Menu, Bell, LogOut, User } from "lucide-react";
+import { Breadcrumb } from "../ui/Breadcrumb";
+import { Avatar } from "../ui/Avatar";
+import { DropdownMenu } from "../ui/DropdownMenu";
 import styles from "./TopBar.module.css";
 
 interface TopBarProps {
-  pageTitle: string;
+  breadcrumbs: { label: string; href?: string }[];
   userName: string;
   userRole: string;
   onMenuToggle: () => void;
@@ -9,32 +13,48 @@ interface TopBarProps {
 }
 
 export function TopBar({
-  pageTitle,
+  breadcrumbs,
   userName,
-  userRole,
   onMenuToggle,
   onLogout,
 }: TopBarProps) {
   return (
     <header className={styles.topbar}>
-      <div className={styles.left}>
+      <div className={styles.leftSection}>
         <button
-          className={styles.menuButton}
+          className={`${styles.iconButton} ${styles.menuButton}`}
           onClick={onMenuToggle}
           aria-label="Toggle navigation menu"
         >
-          &#9776;
+          <Menu size={20} />
         </button>
-        <h1 className={styles.pageTitle}>{pageTitle}</h1>
+        <Breadcrumb items={breadcrumbs} />
       </div>
-      <div className={styles.right}>
-        <div className={styles.userInfo}>
-          <span className={styles.userName}>{userName}</span>
-          <span className={styles.userRole}>{userRole}</span>
-        </div>
-        <button className={styles.logoutButton} onClick={onLogout}>
-          Sign out
+      <div className={styles.rightSection}>
+        <button
+          className={styles.iconButton}
+          aria-label="Notifications"
+          type="button"
+        >
+          <Bell size={20} />
         </button>
+        <DropdownMenu
+          trigger={<Avatar name={userName} size="sm" />}
+          items={[
+            {
+              label: userName,
+              icon: <User size={16} />,
+              onClick: () => {},
+            },
+            {
+              label: "Sign out",
+              icon: <LogOut size={16} />,
+              onClick: onLogout,
+              variant: "danger",
+            },
+          ]}
+          align="end"
+        />
       </div>
     </header>
   );

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -7,8 +7,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { createExamRequest } from "../../api/examRequests";
 import { listPatientsByClinic } from "../../api/patients";
 import { useClinicId } from "../../hooks/useClinicId";
-import { Button, Card, Select, Textarea } from "../../components/ui";
+import { Card, Select, Textarea, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
+import { PageHeader, FormSection, FormActions } from "../../components/patterns";
 import type { CreateExamRequestRequest } from "../../api/types";
 import styles from "./CreateExamRequestPage.module.css";
 
@@ -84,12 +85,11 @@ export function CreateExamRequestPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.title}>New exam request</h2>
-        <p className={styles.subtitle}>
-          Request a diagnostic imaging exam for a patient.
-        </p>
-      </div>
+      <PageHeader
+        title="New exam request"
+        subtitle="Request a diagnostic imaging exam for a patient."
+        backLink={{ label: "Back to exam requests", to: "/exam-requests" }}
+      />
 
       <Card>
         <form
@@ -97,82 +97,81 @@ export function CreateExamRequestPage() {
           onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
-          {apiError && <div className={styles.errorBanner}>{apiError}</div>}
+          {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <div className={styles.row}>
+          <FormSection title="Exam details">
+            <div className={styles.row}>
+              <Select
+                label="Patient"
+                error={errors.patientId?.message}
+                disabled={patientsLoading}
+                {...register("patientId")}
+              >
+                <option value="">
+                  {patientsLoading ? "Loading patients..." : "Select a patient"}
+                </option>
+                {patientsData?.content.map((patient) => (
+                  <option key={patient.id} value={patient.id}>
+                    {patient.name} ({patient.species})
+                  </option>
+                ))}
+              </Select>
+
+              <Select
+                label="Exam type"
+                error={errors.examType?.message}
+                {...register("examType")}
+              >
+                <option value="">Select exam type</option>
+                {EXAM_TYPES.map((type) => (
+                  <option key={type.value} value={type.value}>
+                    {type.label}
+                  </option>
+                ))}
+              </Select>
+            </div>
+
             <Select
-              label="Patient"
-              error={errors.patientId?.message}
-              disabled={patientsLoading}
-              {...register("patientId")}
+              label="Priority"
+              error={errors.priority?.message}
+              {...register("priority")}
             >
-              <option value="">
-                {patientsLoading ? "Loading patients..." : "Select a patient"}
-              </option>
-              {patientsData?.content.map((patient) => (
-                <option key={patient.id} value={patient.id}>
-                  {patient.name} ({patient.species})
+              {PRIORITIES.map((p) => (
+                <option key={p.value} value={p.value}>
+                  {p.label}
                 </option>
               ))}
             </Select>
+          </FormSection>
 
-            <Select
-              label="Exam type"
-              error={errors.examType?.message}
-              {...register("examType")}
-            >
-              <option value="">Select exam type</option>
-              {EXAM_TYPES.map((type) => (
-                <option key={type.value} value={type.value}>
-                  {type.label}
-                </option>
-              ))}
-            </Select>
-          </div>
+          <FormSection title="Clinical information">
+            <Textarea
+              label="Diagnostic hypothesis"
+              placeholder="Describe the diagnostic hypothesis..."
+              rows={3}
+              {...register("diagnosticHypothesis")}
+            />
 
-          <Select
-            label="Priority"
-            error={errors.priority?.message}
-            {...register("priority")}
-          >
-            {PRIORITIES.map((p) => (
-              <option key={p.value} value={p.value}>
-                {p.label}
-              </option>
-            ))}
-          </Select>
+            <Textarea
+              label="Clinical history"
+              placeholder="Describe the clinical history..."
+              rows={3}
+              {...register("clinicalHistory")}
+            />
 
-          <Textarea
-            label="Diagnostic hypothesis"
-            placeholder="Describe the diagnostic hypothesis..."
-            rows={3}
-            {...register("diagnosticHypothesis")}
+            <Textarea
+              label="Additional notes"
+              placeholder="Any additional notes or observations..."
+              rows={3}
+              {...register("additionalNotes")}
+            />
+          </FormSection>
+
+          <FormActions
+            onCancel={() => navigate("/exam-requests")}
+            submitLabel="Create exam request"
+            isSubmitting={mutation.isPending}
           />
-
-          <Textarea
-            label="Clinical history"
-            placeholder="Describe the clinical history..."
-            rows={3}
-            {...register("clinicalHistory")}
-          />
-
-          <Textarea
-            label="Additional notes"
-            placeholder="Any additional notes or observations..."
-            rows={3}
-            {...register("additionalNotes")}
-          />
-
-          <div className={styles.actions}>
-            <Link to="/exam-requests">
-              <Button type="button" variant="secondary">
-                Cancel
-              </Button>
-            </Link>
-            <Button type="submit" isLoading={mutation.isPending}>
-              Create exam request
-            </Button>
-          </div>
         </form>
       </Card>
     </div>

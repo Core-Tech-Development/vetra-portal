@@ -1,0 +1,113 @@
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.message {
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.dismissButton {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-1);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: color var(--duration-fast) var(--easing-default),
+    background-color var(--duration-fast) var(--easing-default);
+}
+
+.dismissButton:hover {
+  color: var(--color-text-primary);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dismissButton:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* Variant: info */
+.info {
+  background-color: var(--color-info-light);
+  border-color: var(--color-info);
+}
+
+.info .icon {
+  color: var(--color-info);
+}
+
+.info .title {
+  color: var(--color-info);
+}
+
+/* Variant: success */
+.success {
+  background-color: var(--color-success-light);
+  border-color: var(--color-success);
+}
+
+.success .icon {
+  color: var(--color-success);
+}
+
+.success .title {
+  color: var(--color-success);
+}
+
+/* Variant: warning */
+.warning {
+  background-color: var(--color-warning-light);
+  border-color: var(--color-warning);
+}
+
+.warning .icon {
+  color: var(--color-warning);
+}
+
+.warning .title {
+  color: var(--color-warning);
+}
+
+/* Variant: danger */
+.danger {
+  background-color: var(--color-danger-light);
+  border-color: var(--color-danger);
+}
+
+.danger .icon {
+  color: var(--color-danger);
+}
+
+.danger .title {
+  color: var(--color-danger);
+}

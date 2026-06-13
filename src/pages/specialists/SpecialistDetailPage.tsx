@@ -9,6 +9,8 @@ import {
   removeCoverageArea,
 } from "../../api/specialists";
 import { Button, Card, StatusBadge, Spinner } from "../../components/ui";
+import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
+import { ArrowLeft } from "lucide-react";
 import { useToast } from "../../components/ui/Toast";
 import styles from "./SpecialistDetailPage.module.css";
 
@@ -85,7 +87,7 @@ export function SpecialistDetailPage() {
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
+      <div className={styles.loadingContainer}>
         <Spinner size="lg" />
       </div>
     );
@@ -98,7 +100,7 @@ export function SpecialistDetailPage() {
         <p className={styles.errorDetail}>
           The specialist could not be found or an error occurred.
         </p>
-        <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center" }}>
+        <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
             Retry
           </Button>
@@ -117,91 +119,73 @@ export function SpecialistDetailPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <h2 className={styles.title}>{specialist.name}</h2>
-          <StatusBadge status={specialist.status} />
-        </div>
-        <div className={styles.headerActions}>
-          {specialist.status === "PENDING_APPROVAL" && (
-            <Button
-              onClick={() => approveMutation.mutate()}
-              isLoading={approveMutation.isPending}
-            >
-              Approve
-            </Button>
-          )}
-          <Link to="/specialists">
-            <Button variant="secondary">Back to specialists</Button>
-          </Link>
-        </div>
-      </div>
+      <PageHeader
+        title={specialist.name}
+        backLink={{ label: "Back to specialists", to: "/specialists" }}
+        actions={
+          <div className={styles.headerActions}>
+            <StatusBadge status={specialist.status} />
+            {specialist.status === "PENDING_APPROVAL" && (
+              <Button
+                onClick={() => approveMutation.mutate()}
+                isLoading={approveMutation.isPending}
+              >
+                Approve
+              </Button>
+            )}
+            <Link to="/specialists">
+              <Button variant="secondary" leftIcon={<ArrowLeft size={16} />}>
+                Back to specialists
+              </Button>
+            </Link>
+          </div>
+        }
+      />
 
-      <Card title="Specialist information">
-        <div className={styles.grid}>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Email</span>
-            <span className={styles.fieldValue}>{specialist.email}</span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Phone</span>
-            <span className={styles.fieldValue}>
-              {specialist.phone || "--"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>CRMV</span>
-            <span className={styles.fieldValue}>
-              {specialist.crmv} / {specialist.crmvState}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Specialty</span>
-            <span className={styles.fieldValue}>
-              {specialist.specialty.replace(/_/g, " ")}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Base location</span>
-            <span className={styles.fieldValue}>
-              {specialist.baseCity && specialist.baseState
-                ? `${specialist.baseCity}, ${specialist.baseState}`
-                : "--"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Max travel radius</span>
-            <span className={styles.fieldValue}>
-              {specialist.maxTravelRadiusKm
-                ? `${specialist.maxTravelRadiusKm} km`
-                : "--"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Own equipment</span>
-            <span className={styles.fieldValue}>
-              {specialist.hasOwnEquipment ? "Yes" : "No"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Registered</span>
-            <span className={styles.fieldValue}>
-              {new Date(specialist.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-          {specialist.bio && (
-            <div className={styles.field} style={{ gridColumn: "1 / -1" }}>
-              <span className={styles.fieldLabel}>Bio</span>
-              <span className={styles.fieldValue}>{specialist.bio}</span>
-            </div>
-          )}
-        </div>
-      </Card>
+      <DetailSection title="Specialist information" columns={3}>
+        <FieldDisplay label="Email" value={specialist.email} />
+        <FieldDisplay label="Phone" value={specialist.phone || "--"} />
+        <FieldDisplay
+          label="CRMV"
+          value={`${specialist.crmv} / ${specialist.crmvState}`}
+        />
+        <FieldDisplay
+          label="Specialty"
+          value={specialist.specialty.replace(/_/g, " ")}
+        />
+        <FieldDisplay
+          label="Base location"
+          value={
+            specialist.baseCity && specialist.baseState
+              ? `${specialist.baseCity}, ${specialist.baseState}`
+              : "--"
+          }
+        />
+        <FieldDisplay
+          label="Max travel radius"
+          value={
+            specialist.maxTravelRadiusKm
+              ? `${specialist.maxTravelRadiusKm} km`
+              : "--"
+          }
+        />
+        <FieldDisplay
+          label="Own equipment"
+          value={specialist.hasOwnEquipment ? "Yes" : "No"}
+        />
+        <FieldDisplay
+          label="Registered"
+          value={new Date(specialist.createdAt).toLocaleDateString()}
+        />
+        {specialist.bio && (
+          <FieldDisplay label="Bio" value={specialist.bio} fullWidth />
+        )}
+      </DetailSection>
 
       <div className={styles.section}>
         <Card title="Coverage areas">
           {areasLoading && (
-            <div style={{ display: "flex", justifyContent: "center", padding: "1.5rem" }}>
+            <div className={styles.loadingContainer}>
               <Spinner />
             </div>
           )}

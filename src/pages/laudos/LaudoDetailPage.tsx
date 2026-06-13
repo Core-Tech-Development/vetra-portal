@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getLaudo, issueLaudo } from "../../api/laudos";
 import { Button, Card, StatusBadge, Spinner } from "../../components/ui";
+import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
 import styles from "./LaudoDetailPage.module.css";
 
@@ -34,13 +35,7 @@ export function LaudoDetailPage() {
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          padding: "3rem",
-        }}
-      >
+      <div className={styles.loadingContainer}>
         <Spinner size="lg" />
       </div>
     );
@@ -53,13 +48,7 @@ export function LaudoDetailPage() {
         <p className={styles.errorDetail}>
           The laudo could not be found or an error occurred.
         </p>
-        <div
-          style={{
-            display: "flex",
-            gap: "0.75rem",
-            justifyContent: "center",
-          }}
-        >
+        <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
             Retry
           </Button>
@@ -73,53 +62,35 @@ export function LaudoDetailPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <Link to="/laudos" className={styles.backLink}>
-            &larr; Back to laudos
-          </Link>
-          <h2 className={styles.title}>Laudo {laudo.id.substring(0, 8)}</h2>
+      <PageHeader
+        title={`Laudo ${laudo.id.substring(0, 8)}`}
+        backLink={{ label: "Back to laudos", to: "/laudos" }}
+        actions={
           <StatusBadge status={laudo.status} />
-        </div>
-      </div>
+        }
+      />
 
-      <Card title="Laudo information">
-        <div className={styles.infoGrid}>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Laudo ID</span>
-            <span className={styles.fieldValue}>{laudo.id}</span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Appointment ID</span>
-            <span className={styles.fieldValue}>{laudo.appointmentId}</span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Specialist ID</span>
-            <span className={styles.fieldValue}>{laudo.specialistId}</span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Status</span>
-            <span className={styles.fieldValue}>{laudo.status}</span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Issued date</span>
-            <span className={styles.fieldValue}>
-              {laudo.issuedAt
-                ? new Date(laudo.issuedAt).toLocaleString()
-                : "-"}
-            </span>
-          </div>
-          <div className={styles.fieldBlock}>
-            <span className={styles.fieldLabel}>Created</span>
-            <span className={styles.fieldValue}>
-              {new Date(laudo.createdAt).toLocaleString()}
-            </span>
-          </div>
-        </div>
-      </Card>
+      <DetailSection title="Laudo information" columns={2}>
+        <FieldDisplay label="Laudo ID" value={laudo.id} />
+        <FieldDisplay label="Appointment ID" value={laudo.appointmentId} />
+        <FieldDisplay label="Specialist ID" value={laudo.specialistId} />
+        <FieldDisplay label="Status" value={laudo.status} />
+        <FieldDisplay
+          label="Issued date"
+          value={
+            laudo.issuedAt
+              ? new Date(laudo.issuedAt).toLocaleString()
+              : "-"
+          }
+        />
+        <FieldDisplay
+          label="Created"
+          value={new Date(laudo.createdAt).toLocaleString()}
+        />
+      </DetailSection>
 
       {laudo.findings && (
-        <div className={styles.contentSection}>
+        <div className={styles.section}>
           <Card>
             <div className={styles.contentLabel}>Findings</div>
             <div className={styles.contentText}>{laudo.findings}</div>
@@ -128,7 +99,7 @@ export function LaudoDetailPage() {
       )}
 
       {laudo.conclusion && (
-        <div className={styles.contentSection}>
+        <div className={styles.section}>
           <Card>
             <div className={styles.contentLabel}>Conclusion</div>
             <div className={styles.contentText}>{laudo.conclusion}</div>
@@ -137,7 +108,7 @@ export function LaudoDetailPage() {
       )}
 
       {laudo.recommendations && (
-        <div className={styles.contentSection}>
+        <div className={styles.section}>
           <Card>
             <div className={styles.contentLabel}>Recommendations</div>
             <div className={styles.contentText}>{laudo.recommendations}</div>
@@ -146,7 +117,7 @@ export function LaudoDetailPage() {
       )}
 
       {laudo.status === "DRAFT" && (
-        <div className={styles.actions}>
+        <div className={styles.actionRow}>
           <Button
             onClick={() => issueMutation.mutate()}
             isLoading={issueMutation.isPending}

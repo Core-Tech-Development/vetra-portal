@@ -1,21 +1,30 @@
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listClinics } from "../../api/clinics";
 import { listSpecialists, approveSpecialist } from "../../api/specialists";
 import { approveClinic } from "../../api/admin";
-import { Button, Card, Spinner } from "../../components/ui";
+import { Button, Tabs, TabList, Tab, TabPanel } from "../../components/ui";
+import type { TableColumn } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
+import { PageHeader, DataTableLayout } from "../../components/patterns";
+import type { ClinicResponse, SpecialistResponse } from "../../api/types";
 import styles from "./AdminApprovalsPage.module.css";
 
 export function AdminApprovalsPage() {
+  const [activeTab, setActiveTab] = useState("clinics");
+  const [clinicPage, setClinicPage] = useState(0);
+  const [specialistPage, setSpecialistPage] = useState(0);
+  const [clinicSearch, setClinicSearch] = useState("");
+  const [specialistSearch, setSpecialistSearch] = useState("");
   const { showToast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: clinicsData, isLoading: clinicsLoading } = useQuery({
+  const { data: clinicsData, isLoading: clinicsLoading, isError: clinicsError, refetch: refetchClinics } = useQuery({
     queryKey: ["clinics", 0],
     queryFn: () => listClinics(0, 100),
   });
 
-  const { data: specialistsData, isLoading: specialistsLoading } = useQuery({
+  const { data: specialistsData, isLoading: specialistsLoading, isError: specialistsError, refetch: refetchSpecialists } = useQuery({
     queryKey: ["specialists", 0],
     queryFn: () => listSpecialists(0, 100),
   });
@@ -50,96 +59,134 @@ export function AdminApprovalsPage() {
     },
   });
 
-  const isLoading = clinicsLoading || specialistsLoading;
+  const clinicColumns: TableColumn<ClinicResponse>[] = [
+    {
+      key: "name",
+      header: "Name",
+      render: (row) => <span className={styles.approvalName}>{row.name}</span>,
+    },
+    {
+      key: "document",
+      header: "Document",
+      render: (row) => row.document,
+    },
+    {
+      key: "location",
+      header: "Location",
+      render: (row) => `${row.city}, ${row.state}`,
+    },
+    {
+      key: "actions",
+      header: "",
+      render: (row) => (
+        <div className={styles.tableActions}>
+          <Button
+            size="sm"
+            onClick={() => approveCMutation.mutate(row.id)}
+            isLoading={
+              approveCMutation.isPending &&
+              approveCMutation.variables === row.id
+            }
+            disabled={approveCMutation.isPending}
+          >
+            Approve
+          </Button>
+        </div>
+      ),
+    },
+  ];
 
-  if (isLoading) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          padding: "3rem",
-        }}
-      >
-        <Spinner size="lg" />
-      </div>
-    );
-  }
+  const specialistColumns: TableColumn<SpecialistResponse>[] = [
+    {
+      key: "name",
+      header: "Name",
+      render: (row) => <span className={styles.approvalName}>{row.name}</span>,
+    },
+    {
+      key: "crmv",
+      header: "CRMV",
+      render: (row) => `${row.crmv}/${row.crmvState}`,
+    },
+    {
+      key: "specialty",
+      header: "Specialty",
+      render: (row) => row.specialty,
+    },
+    {
+      key: "actions",
+      header: "",
+      render: (row) => (
+        <div className={styles.tableActions}>
+          <Button
+            size="sm"
+            onClick={() => approveSMutation.mutate(row.id)}
+            isLoading={
+              approveSMutation.isPending &&
+              approveSMutation.variables === row.id
+            }
+            disabled={approveSMutation.isPending}
+          >
+            Approve
+          </Button>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Pending approvals</h2>
-      </div>
+      <PageHeader title="Pending approvals" />
 
-      <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>Pending clinics</h3>
-        <Card noPadding>
-          {pendingClinics.length === 0 ? (
-            <div className={styles.emptySection}>
-              No clinics pending approval.
-            </div>
-          ) : (
-            pendingClinics.map((clinic) => (
-              <div key={clinic.id} className={styles.approvalItem}>
-                <div className={styles.approvalInfo}>
-                  <span className={styles.approvalName}>{clinic.name}</span>
-                  <span className={styles.approvalDetail}>
-                    {clinic.document} &middot; {clinic.city}, {clinic.state}
-                  </span>
-                </div>
-                <Button
-                  size="sm"
-                  onClick={() => approveCMutation.mutate(clinic.id)}
-                  isLoading={
-                    approveCMutation.isPending &&
-                    approveCMutation.variables === clinic.id
-                  }
-                  disabled={approveCMutation.isPending}
-                >
-                  Approve
-                </Button>
-              </div>
-            ))
-          )}
-        </Card>
-      </div>
+      <Tabs value={activeTab} onChange={setActiveTab}>
+        <TabList>
+          <Tab value="clinics">Clinic Approvals ({pendingClinics.length})</Tab>
+          <Tab value="specialists">Specialist Approvals ({pendingSpecialists.length})</Tab>
+        </TabList>
 
-      <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>Pending specialists</h3>
-        <Card noPadding>
-          {pendingSpecialists.length === 0 ? (
-            <div className={styles.emptySection}>
-              No specialists pending approval.
-            </div>
-          ) : (
-            pendingSpecialists.map((specialist) => (
-              <div key={specialist.id} className={styles.approvalItem}>
-                <div className={styles.approvalInfo}>
-                  <span className={styles.approvalName}>
-                    {specialist.name}
-                  </span>
-                  <span className={styles.approvalDetail}>
-                    {specialist.crmv}/{specialist.crmvState} &middot;{" "}
-                    {specialist.specialty}
-                  </span>
-                </div>
-                <Button
-                  size="sm"
-                  onClick={() => approveSMutation.mutate(specialist.id)}
-                  isLoading={
-                    approveSMutation.isPending &&
-                    approveSMutation.variables === specialist.id
-                  }
-                  disabled={approveSMutation.isPending}
-                >
-                  Approve
-                </Button>
-              </div>
-            ))
-          )}
-        </Card>
-      </div>
+        <TabPanel value="clinics" activeValue={activeTab}>
+          <DataTableLayout
+            columns={clinicColumns}
+            data={pendingClinics}
+            keyExtractor={(row) => row.id}
+            isLoading={clinicsLoading}
+            isError={clinicsError}
+            errorMessage="Failed to load clinics pending approval"
+            onRetry={() => refetchClinics()}
+            emptyState={{
+              title: "No clinics pending approval",
+              description: "All clinic registrations have been reviewed.",
+            }}
+            page={clinicPage}
+            totalPages={1}
+            onPageChange={setClinicPage}
+            searchValue={clinicSearch}
+            onSearchChange={setClinicSearch}
+            searchPlaceholder="Search clinics..."
+          />
+        </TabPanel>
+
+        <TabPanel value="specialists" activeValue={activeTab}>
+          <DataTableLayout
+            columns={specialistColumns}
+            data={pendingSpecialists}
+            keyExtractor={(row) => row.id}
+            isLoading={specialistsLoading}
+            isError={specialistsError}
+            errorMessage="Failed to load specialists pending approval"
+            onRetry={() => refetchSpecialists()}
+            emptyState={{
+              title: "No specialists pending approval",
+              description: "All specialist registrations have been reviewed.",
+            }}
+            page={specialistPage}
+            totalPages={1}
+            onPageChange={setSpecialistPage}
+            searchValue={specialistSearch}
+            onSearchChange={setSpecialistSearch}
+            searchPlaceholder="Search specialists..."
+          />
+        </TabPanel>
+      </Tabs>
     </div>
   );
 }

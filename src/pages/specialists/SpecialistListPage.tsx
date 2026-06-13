@@ -1,21 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { Plus } from "lucide-react";
 import { listSpecialists } from "../../api/specialists";
-import {
-  Button,
-  Card,
-  Table,
-  StatusBadge,
-  Spinner,
-  EmptyState,
-} from "../../components/ui";
+import { Button, StatusBadge } from "../../components/ui";
 import type { TableColumn } from "../../components/ui";
+import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { SpecialistResponse } from "../../api/types";
 import styles from "./SpecialistListPage.module.css";
 
 export function SpecialistListPage() {
   const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["specialists", page],
@@ -27,10 +23,7 @@ export function SpecialistListPage() {
       key: "name",
       header: "Name",
       render: (row) => (
-        <Link
-          to={`/specialists/${row.id}`}
-          style={{ color: "#1F6F5B", fontWeight: 500 }}
-        >
+        <Link to={`/specialists/${row.id}`} className={styles.tableLink}>
           {row.name}
         </Link>
       ),
@@ -59,77 +52,39 @@ export function SpecialistListPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Specialists</h2>
-        <Link to="/specialists/new">
-          <Button>New specialist</Button>
-        </Link>
-      </div>
+      <PageHeader
+        title="Specialists"
+        actions={
+          <Link to="/specialists/new">
+            <Button leftIcon={<Plus size={16} />}>New specialist</Button>
+          </Link>
+        }
+      />
 
-      <Card noPadding>
-        {isLoading && (
-          <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
-            <Spinner size="lg" />
-          </div>
-        )}
-
-        {isError && (
-          <div className={styles.errorBox}>
-            <div className={styles.errorTitle}>Failed to load specialists</div>
-            <p className={styles.errorDetail}>
-              An error occurred while fetching the specialists list. Please try again.
-            </p>
-            <Button variant="secondary" onClick={() => refetch()}>
-              Retry
-            </Button>
-          </div>
-        )}
-
-        {data && data.content.length === 0 && (
-          <EmptyState
-            title="No specialists registered"
-            description="Start by registering the first specialist on the platform."
-            action={
-              <Link to="/specialists/new">
-                <Button>New specialist</Button>
-              </Link>
-            }
-          />
-        )}
-
-        {data && data.content.length > 0 && (
-          <>
-            <Table
-              columns={columns}
-              data={data.content}
-              keyExtractor={(row) => row.id}
-            />
-            {data.totalPages > 1 && (
-              <div className={styles.pagination}>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  disabled={page === 0}
-                  onClick={() => setPage((p) => p - 1)}
-                >
-                  Previous
-                </Button>
-                <span className={styles.pageInfo}>
-                  Page {page + 1} of {data.totalPages}
-                </span>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  disabled={page + 1 >= data.totalPages}
-                  onClick={() => setPage((p) => p + 1)}
-                >
-                  Next
-                </Button>
-              </div>
-            )}
-          </>
-        )}
-      </Card>
+      <DataTableLayout
+        columns={columns}
+        data={data?.content ?? []}
+        keyExtractor={(row) => row.id}
+        isLoading={isLoading}
+        isError={isError}
+        errorMessage="Failed to load specialists"
+        onRetry={() => refetch()}
+        emptyState={{
+          title: "No specialists registered",
+          description: "Start by registering the first specialist on the platform.",
+          action: (
+            <Link to="/specialists/new">
+              <Button leftIcon={<Plus size={16} />}>New specialist</Button>
+            </Link>
+          ),
+        }}
+        page={page}
+        totalPages={data?.totalPages ?? 0}
+        onPageChange={setPage}
+        searchValue={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="Search specialists..."
+      />
     </div>
   );
 }

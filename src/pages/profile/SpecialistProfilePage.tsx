@@ -21,6 +21,7 @@ import {
   Dialog,
   EmptyState,
 } from "../../components/ui";
+import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
 import styles from "./SpecialistProfilePage.module.css";
 
@@ -201,13 +202,7 @@ export function SpecialistProfilePage() {
 
   if (isLoading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          padding: "3rem",
-        }}
-      >
+      <div className={styles.loadingContainer}>
         <Spinner size="lg" />
       </div>
     );
@@ -220,13 +215,7 @@ export function SpecialistProfilePage() {
         <p className={styles.errorDetail}>
           Your profile could not be loaded. Please try again.
         </p>
-        <div
-          style={{
-            display: "flex",
-            gap: "0.75rem",
-            justifyContent: "center",
-          }}
-        >
+        <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
             Retry
           </Button>
@@ -239,40 +228,27 @@ export function SpecialistProfilePage() {
 
   return (
     <div>
-      <h2 className={styles.title}>My profile</h2>
+      <PageHeader title={profile.name} subtitle="Specialist profile" />
 
-      <Card title="Professional information">
-        <div className={styles.grid}>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Email</span>
-            <span className={styles.fieldValue}>{profile.email}</span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>CRMV</span>
-            <span className={styles.fieldValue}>
-              {profile.crmv} / {profile.crmvState}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Specialty</span>
-            <span className={styles.fieldValue}>
-              {profile.specialty.replace(/_/g, " ")}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Status</span>
-            <span className={styles.fieldValue}>
-              <StatusBadge status={profile.status} />
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Registered</span>
-            <span className={styles.fieldValue}>
-              {new Date(profile.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-        </div>
-      </Card>
+      <DetailSection title="Professional information" columns={2}>
+        <FieldDisplay label="Email" value={profile.email} />
+        <FieldDisplay
+          label="CRMV"
+          value={`${profile.crmv} / ${profile.crmvState}`}
+        />
+        <FieldDisplay
+          label="Specialty"
+          value={profile.specialty.replace(/_/g, " ")}
+        />
+        <FieldDisplay
+          label="Status"
+          value={<StatusBadge status={profile.status} />}
+        />
+        <FieldDisplay
+          label="Registered"
+          value={new Date(profile.createdAt).toLocaleDateString()}
+        />
+      </DetailSection>
 
       <div className={styles.section}>
         <Card title="Personal information">
@@ -408,19 +384,13 @@ export function SpecialistProfilePage() {
           </div>
 
           {areasLoading && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                padding: "1.5rem",
-              }}
-            >
+            <div className={styles.areasLoadingContainer}>
               <Spinner />
             </div>
           )}
 
           {!areasLoading && coverageAreas && coverageAreas.length === 0 && (
-            <div style={{ marginTop: "1rem" }}>
+            <div className={styles.areasEmptyContainer}>
               <EmptyState
                 title="No coverage areas"
                 description="Add your first coverage area above to let clinics find you."
@@ -436,7 +406,7 @@ export function SpecialistProfilePage() {
                   <th>State</th>
                   <th>Radius</th>
                   <th>Status</th>
-                  <th style={{ textAlign: "right" }}>Actions</th>
+                  <th className={styles.areaTableActionsHeader}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -490,14 +460,7 @@ export function SpecialistProfilePage() {
             </strong>{" "}
             from your coverage areas?
           </p>
-          <div
-            style={{
-              display: "flex",
-              gap: "0.75rem",
-              justifyContent: "flex-end",
-              marginTop: "1.5rem",
-            }}
-          >
+          <div className={styles.dialogActions}>
             <Button
               variant="secondary"
               onClick={() => setRemoveAreaId(null)}

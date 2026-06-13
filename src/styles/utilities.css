@@ -1,0 +1,50 @@
+/* =============================================================================
+   Utility Classes
+   ============================================================================= */
+
+/* Screen-reader only — visually hidden but accessible to screen readers */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Skip to main content link — visible on focus for keyboard users */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-4, 1rem);
+  z-index: 9999;
+  padding: var(--space-2, 0.5rem) var(--space-4, 1rem);
+  background: var(--color-primary, #1F6F5B);
+  color: var(--color-text-inverse, #FFFFFF);
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: var(--font-weight-medium, 500);
+  border-radius: var(--radius-md, 0.5rem);
+  text-decoration: none;
+  transition: top var(--duration-fast, 120ms) var(--easing-default, ease);
+}
+
+.skip-link:focus {
+  top: var(--space-2, 0.5rem);
+  outline: none;
+}
+
+/* Focus ring utility */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring, 0 0 0 2px #FFFFFF, 0 0 0 4px #1F6F5B);
+}
+
+/* Truncate text with ellipsis */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

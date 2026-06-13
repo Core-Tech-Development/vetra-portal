@@ -5,9 +5,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  z-index: 1000;
-  animation: vetra-fade-in 180ms cubic-bezier(0.2, 0, 0, 1);
+  padding: var(--space-4);
+  z-index: var(--z-modal);
+  animation: vetra-fade-in var(--duration-normal) var(--easing-default);
 }
 
 @keyframes vetra-fade-in {
@@ -20,14 +20,30 @@
 }
 
 .dialog {
-  background-color: #ffffff;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 16px rgba(23, 33, 27, 0.1);
-  max-width: 32rem;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   width: 100%;
   max-height: 85vh;
   overflow-y: auto;
-  animation: vetra-scale-in 180ms cubic-bezier(0.2, 0, 0, 1);
+  animation: vetra-scale-in var(--duration-normal) var(--easing-default);
+}
+
+/* Size variants */
+.sm {
+  max-width: 24rem;
+}
+
+.md {
+  max-width: 32rem;
+}
+
+.lg {
+  max-width: 42rem;
+}
+
+.xl {
+  max-width: 56rem;
 }
 
 @keyframes vetra-scale-in {
@@ -42,23 +58,53 @@
 }
 
 .header {
-  padding: 1.5rem 1.5rem 0;
+  position: relative;
+  padding: var(--space-6) var(--space-6) 0;
+  padding-right: 2.5rem;
 }
 
 .title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #17211b;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
   margin: 0;
 }
 
+.description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: var(--space-1) 0 0;
+}
+
+.closeButton {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: background var(--duration-fast), color var(--duration-fast);
+}
+
+.closeButton:hover {
+  background: var(--color-surface-muted);
+  color: var(--color-text-primary);
+}
+
 .content {
-  padding: 1rem 1.5rem;
+  padding: var(--space-4) var(--space-6);
 }
 
 .actions {
   display: flex;
   justify-content: flex-end;
-  gap: 0.5rem;
-  padding: 0 1.5rem 1.5rem;
+  gap: var(--space-2);
+  padding: 0 var(--space-6) var(--space-6);
 }

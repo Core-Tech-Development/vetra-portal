@@ -1,26 +1,32 @@
 .container {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 2000;
+  top: var(--space-4);
+  right: var(--space-4);
+  z-index: var(--z-toast);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
   pointer-events: none;
 }
 
 .toast {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   box-shadow: 0 4px 16px rgba(23, 33, 27, 0.1);
   pointer-events: auto;
-  animation: vetra-toast-in 180ms cubic-bezier(0.2, 0, 0, 1);
+  animation: vetra-toast-in var(--duration-normal) var(--easing-default);
   max-width: 24rem;
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 
 @keyframes vetra-toast-in {
@@ -35,27 +41,27 @@
 }
 
 .success {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border: 1px solid #c8e6c9;
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+  border: 1px solid var(--toast-border-success);
 }
 
 .errorVariant {
-  background-color: #fce8e6;
-  color: #b42318;
-  border: 1px solid #f5c6cb;
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+  border: 1px solid var(--toast-border-danger);
 }
 
 .warning {
-  background-color: #fff8e1;
-  color: #b7791f;
-  border: 1px solid #ffecb3;
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+  border: 1px solid var(--toast-border-warning);
 }
 
 .info {
-  background-color: #e3f2fd;
-  color: #2563eb;
-  border: 1px solid #bbdefb;
+  background-color: var(--color-info-light);
+  color: var(--color-info);
+  border: 1px solid var(--toast-border-info);
 }
 
 .closeButton {

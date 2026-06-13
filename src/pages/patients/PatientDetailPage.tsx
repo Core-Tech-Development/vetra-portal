@@ -13,6 +13,8 @@ import {
   EmptyState,
   Dialog,
 } from "../../components/ui";
+import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
+import { Pencil, Trash2 } from "lucide-react";
 import type { BadgeVariant } from "../../components/ui";
 import styles from "./PatientDetailPage.module.css";
 
@@ -65,7 +67,7 @@ export function PatientDetailPage() {
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
+      <div className={styles.loadingContainer}>
         <Spinner size="lg" />
       </div>
     );
@@ -78,7 +80,7 @@ export function PatientDetailPage() {
         <p className={styles.errorDetail}>
           The patient could not be found or an error occurred.
         </p>
-        <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center" }}>
+        <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
             Retry
           </Button>
@@ -92,117 +94,77 @@ export function PatientDetailPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <Link to="/patients" className={styles.backLink}>
-            &larr; Back to patients
-          </Link>
-          <h2 className={styles.title}>{patient.name}</h2>
-        </div>
-        <div style={{ display: "flex", gap: "0.75rem" }}>
-          <Link to={`/patients/${id}/edit`}>
-            <Button variant="secondary">Edit</Button>
-          </Link>
-          <Button variant="danger" onClick={() => setShowDeleteDialog(true)}>
-            Delete
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title={patient.name}
+        backLink={{ label: "Back to patients", to: "/patients" }}
+        actions={
+          <div className={styles.headerActions}>
+            <Link to={`/patients/${id}/edit`}>
+              <Button variant="secondary" leftIcon={<Pencil size={16} />}>Edit</Button>
+            </Link>
+            <Button
+              variant="danger"
+              leftIcon={<Trash2 size={16} />}
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              Delete
+            </Button>
+          </div>
+        }
+      />
 
-      <Card title="Patient information">
-        <div className={styles.grid}>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Species</span>
-            <span className={styles.fieldValue}>
-              {patient.species.replace(/_/g, " ")}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Breed</span>
-            <span className={styles.fieldValue}>{patient.breed ?? "-"}</span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Sex</span>
-            <span className={styles.fieldValue}>{patient.sex ?? "-"}</span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Birth date</span>
-            <span className={styles.fieldValue}>
-              {patient.birthDate
-                ? new Date(patient.birthDate).toLocaleDateString()
-                : "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Weight (kg)</span>
-            <span className={styles.fieldValue}>
-              {patient.weightKg != null ? patient.weightKg : "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Neutered</span>
-            <span className={styles.fieldValue}>
-              {patient.neutered != null ? (patient.neutered ? "Yes" : "No") : "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Microchip</span>
-            <span className={styles.fieldValue}>
-              {patient.microchip ?? "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Registered</span>
-            <span className={styles.fieldValue}>
-              {new Date(patient.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-        </div>
-        {patient.clinicalNotes && (
-          <div className={styles.field} style={{ marginTop: "1.5rem" }}>
-            <span className={styles.fieldLabel}>Clinical notes</span>
-            <span className={styles.fieldValue}>{patient.clinicalNotes}</span>
-          </div>
-        )}
-      </Card>
+      <DetailSection title="Patient information" columns={3}>
+        <FieldDisplay label="Species" value={patient.species.replace(/_/g, " ")} />
+        <FieldDisplay label="Breed" value={patient.breed ?? "-"} />
+        <FieldDisplay label="Sex" value={patient.sex ?? "-"} />
+        <FieldDisplay
+          label="Birth date"
+          value={
+            patient.birthDate
+              ? new Date(patient.birthDate).toLocaleDateString()
+              : "-"
+          }
+        />
+        <FieldDisplay
+          label="Weight (kg)"
+          value={patient.weightKg != null ? patient.weightKg : "-"}
+        />
+        <FieldDisplay
+          label="Neutered"
+          value={
+            patient.neutered != null ? (patient.neutered ? "Yes" : "No") : "-"
+          }
+        />
+        <FieldDisplay label="Microchip" value={patient.microchip ?? "-"} />
+        <FieldDisplay
+          label="Registered"
+          value={new Date(patient.createdAt).toLocaleDateString()}
+        />
+      </DetailSection>
 
-      <Card title="Tutor" style={{ marginTop: "1.5rem" }}>
-        <div className={styles.grid}>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Name</span>
-            <span className={styles.fieldValue}>
-              {tutor ? (
-                <Link
-                  to={`/tutors/${tutor.id}`}
-                  style={{ color: "#1F6F5B", fontWeight: 500 }}
-                >
-                  {tutor.name}
-                </Link>
-              ) : (
-                "-"
-              )}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Phone</span>
-            <span className={styles.fieldValue}>
-              {tutor?.phone ?? "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Email</span>
-            <span className={styles.fieldValue}>
-              {tutor?.email ?? "-"}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Document</span>
-            <span className={styles.fieldValue}>
-              {tutor?.document ?? "-"}
-            </span>
-          </div>
-        </div>
-      </Card>
+      {patient.clinicalNotes && (
+        <DetailSection columns={2}>
+          <FieldDisplay label="Clinical notes" value={patient.clinicalNotes} fullWidth />
+        </DetailSection>
+      )}
+
+      <DetailSection title="Tutor" columns={3}>
+        <FieldDisplay
+          label="Name"
+          value={
+            tutor ? (
+              <Link to={`/tutors/${tutor.id}`} className={styles.tableLink}>
+                {tutor.name}
+              </Link>
+            ) : (
+              "-"
+            )
+          }
+        />
+        <FieldDisplay label="Phone" value={tutor?.phone ?? "-"} />
+        <FieldDisplay label="Email" value={tutor?.email ?? "-"} />
+        <FieldDisplay label="Document" value={tutor?.document ?? "-"} />
+      </DetailSection>
 
       <div className={styles.section}>
         <h3 className={styles.sectionTitle}>Exam history</h3>
@@ -219,7 +181,7 @@ export function PatientDetailPage() {
                 <Link
                   key={exam.id}
                   to={`/exam-requests/${exam.id}`}
-                  style={{ textDecoration: "none" }}
+                  className={styles.examLink}
                 >
                   <div className={styles.examItem}>
                     <div className={styles.examInfo}>
@@ -230,7 +192,7 @@ export function PatientDetailPage() {
                         {new Date(exam.createdAt).toLocaleDateString()}
                       </span>
                     </div>
-                    <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                    <div className={styles.examBadges}>
                       <Badge variant={PRIORITY_VARIANT[exam.priority] ?? "neutral"}>
                         {exam.priority}
                       </Badge>
@@ -251,10 +213,10 @@ export function PatientDetailPage() {
           title="Delete patient"
         >
           <p>Are you sure you want to delete patient <strong>{patient.name}</strong>?</p>
-          <p style={{ fontSize: "0.875rem", color: "#4F6257", marginTop: "0.5rem" }}>
+          <p className={styles.dialogWarning}>
             This action cannot be undone.
           </p>
-          <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end", marginTop: "1.5rem" }}>
+          <div className={styles.dialogActions}>
             <Button variant="secondary" onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
             <Button variant="danger" isLoading={deleteMutation.isPending} onClick={() => deleteMutation.mutate(id!)}>Delete</Button>
           </div>

@@ -1,3 +1,13 @@
+/**
+ * Vetra Design Tokens — TypeScript constants
+ *
+ * IMPORTANT: The primary source of truth for design tokens is the CSS custom
+ * properties defined in tokens.css. This file mirrors those values for
+ * programmatic use in TypeScript/JSX (e.g., the Spinner component).
+ *
+ * When updating tokens, always update tokens.css FIRST, then sync this file.
+ */
+
 export const colors = {
   background: "#F7FAF8",
   surface: "#FFFFFF",
@@ -14,6 +24,7 @@ export const colors = {
   success: "#2E7D32",
   warning: "#B7791F",
   danger: "#B42318",
+  dangerHover: "#921D14",
   info: "#2563EB",
 } as const;
 
@@ -61,8 +72,8 @@ export const radius = {
 
 export const shadows = {
   sm: "0 1px 2px rgba(23, 33, 27, 0.06)",
-  md: "0 2px 8px rgba(23, 33, 27, 0.08)",
-  lg: "0 4px 16px rgba(23, 33, 27, 0.10)",
+  md: "0 4px 6px rgba(23, 33, 27, 0.07), 0 2px 4px rgba(23, 33, 27, 0.06)",
+  lg: "0 10px 15px rgba(23, 33, 27, 0.08), 0 4px 6px rgba(23, 33, 27, 0.05)",
 } as const;
 
 export const breakpoints = {

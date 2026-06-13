@@ -10,21 +10,40 @@
 .icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  color: #4f6257;
+  color: var(--color-text-secondary);
   opacity: 0.5;
 }
 
 .title {
   font-size: 1rem;
   font-weight: 600;
-  color: #17211b;
+  color: var(--color-text-primary);
   margin-bottom: 0.25rem;
 }
 
 .description {
   font-size: 0.875rem;
-  color: #4f6257;
+  color: var(--color-text-secondary);
   margin-bottom: 1.5rem;
   max-width: 24rem;
   line-height: 1.5;
+}
+
+/* Small variant for inside cards */
+.sm {
+  padding: 1.5rem 1rem;
+}
+
+.sm .icon {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.sm .title {
+  font-size: 0.875rem;
+}
+
+.sm .description {
+  font-size: 0.75rem;
+  margin-bottom: 1rem;
 }

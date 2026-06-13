@@ -1,7 +1,9 @@
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getClinic } from "../../api/clinics";
-import { Button, Card, StatusBadge, Spinner } from "../../components/ui";
+import { Button, StatusBadge, Spinner } from "../../components/ui";
+import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
+import { ArrowLeft } from "lucide-react";
 import styles from "./ClinicDetailPage.module.css";
 
 export function ClinicDetailPage() {
@@ -15,7 +17,7 @@ export function ClinicDetailPage() {
 
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
+      <div className={styles.loadingContainer}>
         <Spinner size="lg" />
       </div>
     );
@@ -28,7 +30,7 @@ export function ClinicDetailPage() {
         <p className={styles.errorDetail}>
           The clinic could not be found or an error occurred.
         </p>
-        <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center" }}>
+        <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
             Retry
           </Button>
@@ -42,48 +44,33 @@ export function ClinicDetailPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <h2 className={styles.title}>{clinic.name}</h2>
-          <StatusBadge status={clinic.status} />
-        </div>
-        <Link to="/clinics">
-          <Button variant="secondary">Back to clinics</Button>
-        </Link>
-      </div>
+      <PageHeader
+        title={clinic.name}
+        subtitle={clinic.status}
+        backLink={{ label: "Back to clinics", to: "/clinics" }}
+        actions={
+          <div className={styles.headerActions}>
+            <StatusBadge status={clinic.status} />
+            <Link to="/clinics">
+              <Button variant="secondary" leftIcon={<ArrowLeft size={16} />}>
+                Back to clinics
+              </Button>
+            </Link>
+          </div>
+        }
+      />
 
-      <Card title="Clinic information">
-        <div className={styles.grid}>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Document (CNPJ)</span>
-            <span className={styles.fieldValue}>{clinic.document}</span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Email</span>
-            <span className={styles.fieldValue}>{clinic.email}</span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Phone</span>
-            <span className={styles.fieldValue}>{clinic.phone}</span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Location</span>
-            <span className={styles.fieldValue}>
-              {clinic.city}, {clinic.state}
-            </span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Address</span>
-            <span className={styles.fieldValue}>{clinic.address}</span>
-          </div>
-          <div className={styles.field}>
-            <span className={styles.fieldLabel}>Registered</span>
-            <span className={styles.fieldValue}>
-              {new Date(clinic.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-        </div>
-      </Card>
+      <DetailSection title="Clinic information" columns={3}>
+        <FieldDisplay label="Document (CNPJ)" value={clinic.document} />
+        <FieldDisplay label="Email" value={clinic.email} />
+        <FieldDisplay label="Phone" value={clinic.phone} />
+        <FieldDisplay label="Location" value={`${clinic.city}, ${clinic.state}`} />
+        <FieldDisplay label="Address" value={clinic.address} />
+        <FieldDisplay
+          label="Registered"
+          value={new Date(clinic.createdAt).toLocaleDateString()}
+        />
+      </DetailSection>
     </div>
   );
 }

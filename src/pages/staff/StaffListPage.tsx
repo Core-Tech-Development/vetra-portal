@@ -1,18 +1,16 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 import { listClinicStaff, deactivateClinicStaff } from "../../api/clinicStaff";
 import {
   Button,
-  Card,
-  Table,
-  Spinner,
-  EmptyState,
   Badge,
   StatusBadge,
   Dialog,
 } from "../../components/ui";
 import type { TableColumn } from "../../components/ui";
+import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { ClinicStaffResponse } from "../../api/types";
 import styles from "./StaffListPage.module.css";
 
@@ -44,6 +42,7 @@ function getRoleBadgeVariant(role: string): "neutral" | "info" {
 
 export function StaffListPage() {
   const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
   const clinicId = getClinicId();
 
   const queryClient = useQueryClient();
@@ -71,10 +70,7 @@ export function StaffListPage() {
       key: "name",
       header: "Name",
       render: (row) => (
-        <Link
-          to={`/staff/${row.id}`}
-          style={{ color: "#1F6F5B", fontWeight: 500 }}
-        >
+        <Link to={`/staff/${row.id}`} className={styles.tableLink}>
           {row.name}
         </Link>
       ),
@@ -102,11 +98,11 @@ export function StaffListPage() {
       key: "actions",
       header: "",
       render: (row) => (
-        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+        <div className={styles.tableActions}>
           <Link to={`/staff/${row.id}/edit`}>
-            <Button variant="secondary" size="sm">Edit</Button>
+            <Button variant="secondary" size="sm" leftIcon={<Pencil size={14} />}>Edit</Button>
           </Link>
-          <Button variant="danger" size="sm" onClick={() => setDeactivatingStaff(row)}>
+          <Button variant="danger" size="sm" leftIcon={<Trash2 size={14} />} onClick={() => setDeactivatingStaff(row)}>
             Deactivate
           </Button>
         </div>
@@ -117,91 +113,59 @@ export function StaffListPage() {
   if (!clinicId) {
     return (
       <div>
-        <div className={styles.header}>
-          <h2 className={styles.title}>Staff</h2>
-        </div>
-        <Card>
-          <div className={styles.noClinic}>
-            Please select a clinic first.
-          </div>
-        </Card>
+        <PageHeader title="Staff" />
+        <DataTableLayout
+          columns={columns}
+          data={[]}
+          keyExtractor={(row) => row.id}
+          isLoading={false}
+          emptyState={{
+            title: "No clinic selected",
+            description: "Please select a clinic first.",
+          }}
+          page={0}
+          totalPages={0}
+          onPageChange={() => {}}
+        />
       </div>
     );
   }
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Staff</h2>
-        <Link to="/staff/new">
-          <Button>New collaborator</Button>
-        </Link>
-      </div>
+      <PageHeader
+        title="Staff"
+        actions={
+          <Link to="/staff/new">
+            <Button leftIcon={<Plus size={16} />}>New collaborator</Button>
+          </Link>
+        }
+      />
 
-      <Card noPadding>
-        {isLoading && (
-          <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
-            <Spinner size="lg" />
-          </div>
-        )}
-
-        {isError && (
-          <div className={styles.errorBox}>
-            <div className={styles.errorTitle}>Failed to load staff</div>
-            <p className={styles.errorDetail}>
-              An error occurred while fetching the staff list. Please try again.
-            </p>
-            <Button variant="secondary" onClick={() => refetch()}>
-              Retry
-            </Button>
-          </div>
-        )}
-
-        {data && data.content.length === 0 && (
-          <EmptyState
-            title="No staff registered"
-            description="Start by registering the first collaborator for this clinic."
-            action={
-              <Link to="/staff/new">
-                <Button>New collaborator</Button>
-              </Link>
-            }
-          />
-        )}
-
-        {data && data.content.length > 0 && (
-          <>
-            <Table
-              columns={columns}
-              data={data.content}
-              keyExtractor={(row) => row.id}
-            />
-            {data.totalPages > 1 && (
-              <div className={styles.pagination}>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  disabled={page === 0}
-                  onClick={() => setPage((p) => p - 1)}
-                >
-                  Previous
-                </Button>
-                <span className={styles.pageInfo}>
-                  Page {page + 1} of {data.totalPages}
-                </span>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  disabled={page + 1 >= data.totalPages}
-                  onClick={() => setPage((p) => p + 1)}
-                >
-                  Next
-                </Button>
-              </div>
-            )}
-          </>
-        )}
-      </Card>
+      <DataTableLayout
+        columns={columns}
+        data={data?.content ?? []}
+        keyExtractor={(row) => row.id}
+        isLoading={isLoading}
+        isError={isError}
+        errorMessage="Failed to load staff"
+        onRetry={() => refetch()}
+        emptyState={{
+          title: "No staff registered",
+          description: "Start by registering the first collaborator for this clinic.",
+          action: (
+            <Link to="/staff/new">
+              <Button leftIcon={<Plus size={16} />}>New collaborator</Button>
+            </Link>
+          ),
+        }}
+        page={page}
+        totalPages={data?.totalPages ?? 0}
+        onPageChange={setPage}
+        searchValue={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="Search staff..."
+      />
 
       {deactivatingStaff && (
         <Dialog
@@ -213,7 +177,7 @@ export function StaffListPage() {
             Are you sure you want to deactivate <strong>{deactivatingStaff.name}</strong>?
             They will no longer be able to access the platform.
           </p>
-          <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-end", marginTop: "1.5rem" }}>
+          <div className={styles.dialogActions}>
             <Button variant="secondary" onClick={() => setDeactivatingStaff(null)}>Cancel</Button>
             <Button variant="danger" isLoading={deactivateMutation.isPending} onClick={() => deactivateMutation.mutate(deactivatingStaff.id)}>Deactivate</Button>
           </div>

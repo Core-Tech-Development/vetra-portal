@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { createTutor } from "../../api/tutors";
-import { Button, Card, Input } from "../../components/ui";
+import { Card, Input, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
+import { PageHeader, FormSection, FormActions } from "../../components/patterns";
 import styles from "./CreateTutorPage.module.css";
 
 function getClinicId(): string {
@@ -80,12 +81,11 @@ export function CreateTutorPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.title}>New tutor</h2>
-        <p className={styles.subtitle}>
-          Register a new pet tutor for the clinic.
-        </p>
-      </div>
+      <PageHeader
+        title="New tutor"
+        subtitle="Register a new pet tutor for the clinic."
+        backLink={{ label: "Back to tutors", to: "/tutors" }}
+      />
 
       <Card>
         <form
@@ -93,78 +93,77 @@ export function CreateTutorPage() {
           onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
-          {apiError && <div className={styles.errorBanner}>{apiError}</div>}
+          {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <Input
-            label="Full name"
-            placeholder="e.g. Joao da Silva"
-            error={errors.name?.message}
-            {...register("name")}
-          />
-
-          <div className={styles.row}>
+          <FormSection title="Personal information">
             <Input
-              label="Phone"
-              type="tel"
-              placeholder="(11) 99999-9999"
-              error={errors.phone?.message}
-              {...register("phone")}
+              label="Full name"
+              placeholder="e.g. Joao da Silva"
+              error={errors.name?.message}
+              {...register("name")}
             />
+
+            <div className={styles.row}>
+              <Input
+                label="Phone"
+                type="tel"
+                placeholder="(11) 99999-9999"
+                error={errors.phone?.message}
+                {...register("phone")}
+              />
+              <Input
+                label="Email"
+                type="email"
+                placeholder="tutor@email.com"
+                error={errors.email?.message}
+                {...register("email")}
+              />
+            </div>
+
             <Input
-              label="Email"
-              type="email"
-              placeholder="tutor@email.com"
-              error={errors.email?.message}
-              {...register("email")}
+              label="Document"
+              placeholder="CPF"
+              error={errors.document?.message}
+              {...register("document")}
             />
-          </div>
+          </FormSection>
 
-          <Input
-            label="Document"
-            placeholder="CPF"
-            error={errors.document?.message}
-            {...register("document")}
-          />
-
-          <Input
-            label="Address"
-            placeholder="Rua das Flores, 123"
-            error={errors.address?.message}
-            {...register("address")}
-          />
-
-          <div className={styles.row}>
+          <FormSection title="Address">
             <Input
-              label="City"
-              placeholder="Sao Paulo"
-              error={errors.city?.message}
-              {...register("city")}
+              label="Address"
+              placeholder="Rua das Flores, 123"
+              error={errors.address?.message}
+              {...register("address")}
             />
+
+            <div className={styles.row}>
+              <Input
+                label="City"
+                placeholder="Sao Paulo"
+                error={errors.city?.message}
+                {...register("city")}
+              />
+              <Input
+                label="State"
+                placeholder="SP"
+                error={errors.state?.message}
+                {...register("state")}
+              />
+            </div>
+
             <Input
-              label="State"
-              placeholder="SP"
-              error={errors.state?.message}
-              {...register("state")}
+              label="Zip code"
+              placeholder="01001-000"
+              error={errors.zipCode?.message}
+              {...register("zipCode")}
             />
-          </div>
+          </FormSection>
 
-          <Input
-            label="Zip code"
-            placeholder="01001-000"
-            error={errors.zipCode?.message}
-            {...register("zipCode")}
+          <FormActions
+            onCancel={() => navigate("/tutors")}
+            submitLabel="Create tutor"
+            isSubmitting={mutation.isPending}
           />
-
-          <div className={styles.actions}>
-            <Link to="/tutors">
-              <Button type="button" variant="secondary">
-                Cancel
-              </Button>
-            </Link>
-            <Button type="submit" isLoading={mutation.isPending}>
-              Create tutor
-            </Button>
-          </div>
         </form>
       </Card>
     </div>

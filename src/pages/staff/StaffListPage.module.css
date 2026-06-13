@@ -1,52 +1,23 @@
-.header {
+.tableLink {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+.tableLink:hover {
+  color: var(--color-primary-hover);
+  text-decoration: underline;
+}
+
+.tableActions {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-  gap: 1rem;
+  gap: var(--space-2);
+  justify-content: flex-end;
 }
 
-.title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #17211b;
-}
-
-.pagination {
+.dialogActions {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.pageInfo {
-  font-size: 0.875rem;
-  color: #4f6257;
-}
-
-.errorBox {
-  padding: 1.5rem;
-  text-align: center;
-}
-
-.errorTitle {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #b42318;
-  margin-bottom: 0.5rem;
-}
-
-.errorDetail {
-  font-size: 0.875rem;
-  color: #4f6257;
-  margin-bottom: 1rem;
-}
-
-.noClinic {
-  padding: 3rem 1.5rem;
-  text-align: center;
-  color: #4f6257;
-  font-size: 0.9375rem;
+  gap: var(--space-3);
+  justify-content: flex-end;
+  margin-top: var(--space-6);
 }

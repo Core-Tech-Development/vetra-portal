@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, createContext, useContext } from "react";
 import type { ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { CheckCircle, AlertCircle, AlertTriangle, Info } from "lucide-react";
 import styles from "./Toast.module.css";
 
 type ToastVariant = "success" | "error" | "warning" | "info";
@@ -30,6 +31,13 @@ const VARIANT_CLASS: Record<ToastVariant, string> = {
   error: styles.errorVariant,
   warning: styles.warning,
   info: styles.info,
+};
+
+const VARIANT_ICON: Record<ToastVariant, ReactNode> = {
+  success: <CheckCircle className={styles.icon} />,
+  error: <AlertCircle className={styles.icon} />,
+  warning: <AlertTriangle className={styles.icon} />,
+  info: <Info className={styles.icon} />,
 };
 
 let nextId = 0;
@@ -85,6 +93,7 @@ function ToastEntry({
       className={`${styles.toast} ${VARIANT_CLASS[toast.variant]}`}
       role="status"
     >
+      {VARIANT_ICON[toast.variant]}
       <span>{toast.message}</span>
       <button
         className={styles.closeButton}

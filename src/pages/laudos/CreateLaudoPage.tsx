@@ -1,13 +1,14 @@
 import { useState, useRef, useCallback } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createLaudo, issueLaudo } from "../../api/laudos";
 import { uploadFile, listFiles, deleteFile } from "../../api/examFiles";
-import { Button, Card, Textarea, Spinner } from "../../components/ui";
+import { Button, Card, Textarea, Spinner, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
+import { PageHeader, FormSection } from "../../components/patterns";
 import styles from "./CreateLaudoPage.module.css";
 
 const schema = z.object({
@@ -146,19 +147,11 @@ export function CreateLaudoPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <Link
-          to={`/appointments/${appointmentId}`}
-          className={styles.backLink}
-        >
-          &larr; Back to appointment
-        </Link>
-        <h2 className={styles.title}>New laudo</h2>
-        <p className={styles.subtitle}>
-          Create a diagnostic laudo for appointment{" "}
-          {appointmentId?.substring(0, 8)}.
-        </p>
-      </div>
+      <PageHeader
+        title="New laudo"
+        subtitle={`Create a diagnostic laudo for appointment ${appointmentId?.substring(0, 8)}.`}
+        backLink={{ label: "Back to appointment", to: `/appointments/${appointmentId}` }}
+      />
 
       {/* File Upload Section */}
       <Card title="Exam files">
@@ -266,35 +259,40 @@ export function CreateLaudoPage() {
       {/* Text Content Section */}
       <Card title="Diagnostic content">
         <div className={styles.form}>
-          {apiError && <div className={styles.errorBanner}>{apiError}</div>}
+          {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <Textarea
-            label="Findings"
-            placeholder="Describe the diagnostic findings..."
-            rows={6}
-            {...register("findings")}
-          />
+          <FormSection title="Findings and conclusion">
+            <Textarea
+              label="Findings"
+              placeholder="Describe the diagnostic findings..."
+              rows={6}
+              {...register("findings")}
+            />
 
-          <Textarea
-            label="Conclusion"
-            placeholder="Summarize the diagnostic conclusion..."
-            rows={4}
-            {...register("conclusion")}
-          />
+            <Textarea
+              label="Conclusion"
+              placeholder="Summarize the diagnostic conclusion..."
+              rows={4}
+              {...register("conclusion")}
+            />
 
-          <Textarea
-            label="Recommendations"
-            placeholder="Provide any recommendations for the clinic..."
-            rows={4}
-            {...register("recommendations")}
-          />
+            <Textarea
+              label="Recommendations"
+              placeholder="Provide any recommendations for the clinic..."
+              rows={4}
+              {...register("recommendations")}
+            />
+          </FormSection>
 
           <div className={styles.actions}>
-            <Link to={`/appointments/${appointmentId}`}>
-              <Button type="button" variant="secondary" disabled={isSaving}>
-                Cancel
-              </Button>
-            </Link>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => navigate(`/appointments/${appointmentId}`)}
+              disabled={isSaving}
+            >
+              Cancel
+            </Button>
             <Button
               type="button"
               variant="secondary"

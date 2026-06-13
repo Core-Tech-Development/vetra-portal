@@ -2,16 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { listAppointments } from "../../api/appointments";
-import {
-  Button,
-  Card,
-  Select,
-  Table,
-  StatusBadge,
-  Spinner,
-  EmptyState,
-} from "../../components/ui";
+import { Select, StatusBadge } from "../../components/ui";
 import type { TableColumn } from "../../components/ui";
+import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { AppointmentResponse } from "../../api/types";
 import styles from "./AppointmentListPage.module.css";
 
@@ -29,6 +22,7 @@ const APPOINTMENT_STATUSES = [
 
 export function AppointmentListPage() {
   const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
   const { data, isLoading, isError, refetch } = useQuery({
@@ -41,10 +35,7 @@ export function AppointmentListPage() {
       key: "id",
       header: "ID",
       render: (row) => (
-        <Link
-          to={`/appointments/${row.id}`}
-          style={{ color: "#1F6F5B", fontWeight: 500 }}
-        >
+        <Link to={`/appointments/${row.id}`} className={styles.tableLink}>
           {row.id.substring(0, 8)}
         </Link>
       ),
@@ -76,87 +67,44 @@ export function AppointmentListPage() {
 
   return (
     <div>
-      <div className={styles.header}>
-        <h2 className={styles.title}>Appointments</h2>
-      </div>
+      <PageHeader title="Appointments" />
 
-      <div className={styles.filters}>
-        <Select
-          label="Status"
-          selectSize="sm"
-          value={statusFilter}
-          onChange={(e) => {
-            setStatusFilter(e.target.value);
-            setPage(0);
-          }}
-        >
-          {APPOINTMENT_STATUSES.map((s) => (
-            <option key={s.value} value={s.value}>
-              {s.label}
-            </option>
-          ))}
-        </Select>
-      </div>
-
-      <Card noPadding>
-        {isLoading && (
-          <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
-            <Spinner size="lg" />
-          </div>
-        )}
-
-        {isError && (
-          <div className={styles.errorBox}>
-            <div className={styles.errorTitle}>Failed to load appointments</div>
-            <p className={styles.errorDetail}>
-              An error occurred while fetching the appointments list. Please try again.
-            </p>
-            <Button variant="secondary" onClick={() => refetch()}>
-              Retry
-            </Button>
-          </div>
-        )}
-
-        {data && data.content.length === 0 && (
-          <EmptyState
-            title="No appointments found"
-            description="There are no appointments matching the current filter."
-          />
-        )}
-
-        {data && data.content.length > 0 && (
-          <>
-            <Table
-              columns={columns}
-              data={data.content}
-              keyExtractor={(row) => row.id}
-            />
-            {data.totalPages > 1 && (
-              <div className={styles.pagination}>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  disabled={page === 0}
-                  onClick={() => setPage((p) => p - 1)}
-                >
-                  Previous
-                </Button>
-                <span className={styles.pageInfo}>
-                  Page {page + 1} of {data.totalPages}
-                </span>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  disabled={page + 1 >= data.totalPages}
-                  onClick={() => setPage((p) => p + 1)}
-                >
-                  Next
-                </Button>
-              </div>
-            )}
-          </>
-        )}
-      </Card>
+      <DataTableLayout
+        columns={columns}
+        data={data?.content ?? []}
+        keyExtractor={(row) => row.id}
+        isLoading={isLoading}
+        isError={isError}
+        errorMessage="Failed to load appointments"
+        onRetry={() => refetch()}
+        emptyState={{
+          title: "No appointments found",
+          description: "There are no appointments matching the current filter.",
+        }}
+        page={page}
+        totalPages={data?.totalPages ?? 0}
+        onPageChange={setPage}
+        searchValue={search}
+        onSearchChange={setSearch}
+        searchPlaceholder="Search appointments..."
+        filters={
+          <Select
+            label="Status"
+            selectSize="sm"
+            value={statusFilter}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setPage(0);
+            }}
+          >
+            {APPOINTMENT_STATUSES.map((s) => (
+              <option key={s.value} value={s.value}>
+                {s.label}
+              </option>
+            ))}
+          </Select>
+        }
+      />
     </div>
   );
 }
