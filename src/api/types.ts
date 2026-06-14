@@ -345,3 +345,66 @@ export interface AdminDashboardResponse {
   totalAppointmentsToday: number;
   totalActiveAppointments: number;
 }
+
+// === Billing ===
+export interface ExamTypePricingResponse {
+  id: string;
+  examType: string;
+  priceCents: number;
+  platformFeePercent: number;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateExamTypePricingRequest {
+  examType: string;
+  priceCents: number;
+  platformFeePercent: number;
+}
+
+export interface UpdateExamTypePricingRequest {
+  priceCents: number;
+  platformFeePercent: number;
+  active: boolean;
+}
+
+export interface CreateSpecialistPricingRequest {
+  examType: string;
+  priceCents: number;
+}
+
+export interface SpecialistPricingResponse {
+  id: string;
+  specialistId: string;
+  examType: string;
+  priceCents: number;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BillingRecordResponse {
+  id: string;
+  laudoId: string;
+  appointmentId: string;
+  clinicId: string;
+  specialistId: string;
+  examType: string;
+  totalCents: number;
+  platformFeeCents: number;
+  specialistShareCents: number;
+  status: string;
+  asaasPaymentId: string | null;
+  errorMessage: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BillingDashboardResponse {
+  totalRevenueCents: number;
+  totalPlatformFeeCents: number;
+  pendingPayments: number;
+  overduePayments: number;
+  totalBillingRecords: number;
+}

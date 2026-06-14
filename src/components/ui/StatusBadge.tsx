@@ -25,6 +25,13 @@ const STATUS_CONFIG: Record<string, { label: string; variant: BadgeVariant }> = 
   CANCELED: { label: "Canceled", variant: "danger" },
   NOT_PERFORMED: { label: "Not performed", variant: "danger" },
   REJECTED: { label: "Rejected", variant: "danger" },
+  PENDING_PAYMENT_CREATION: { label: "Pending", variant: "warning" },
+  PAYMENT_CREATED: { label: "Awaiting payment", variant: "info" },
+  PAYMENT_CONFIRMED: { label: "Confirmed", variant: "success" },
+  PAYMENT_RECEIVED: { label: "Received", variant: "success" },
+  PAYMENT_OVERDUE: { label: "Overdue", variant: "danger" },
+  PAYMENT_REFUNDED: { label: "Refunded", variant: "neutral" },
+  FAILED: { label: "Failed", variant: "danger" },
 };
 
 interface StatusBadgeProps {

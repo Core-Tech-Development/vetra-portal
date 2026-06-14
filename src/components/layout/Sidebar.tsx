@@ -18,6 +18,7 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
+  DollarSign,
 } from "lucide-react";
 import type { UserRole } from "../../auth/roles";
 import { ROLES } from "../../auth/roles";
@@ -38,6 +39,7 @@ const CLINIC_NAV: NavItem[] = [
   { label: "Exam requests", path: "/exam-requests", icon: ClipboardList },
   { label: "Appointments", path: "/appointments", icon: Calendar },
   { label: "Laudos", path: "/laudos", icon: FileText },
+  { label: "Billing", path: "/billing", icon: DollarSign },
 ];
 
 const SPECIALIST_NAV: NavItem[] = [
@@ -57,6 +59,8 @@ const ADMIN_NAV: NavItem[] = [
   { label: "Appointments", path: "/appointments", icon: Calendar },
   { label: "Laudos", path: "/laudos", icon: FileText },
   { label: "Audit log", path: "/admin/audit", icon: ScrollText },
+  { label: "Pricing", path: "/admin/pricing", icon: DollarSign },
+  { label: "Billing", path: "/admin/billing", icon: DollarSign },
 ];
 
 function getNavItems(roles: UserRole[]): NavItem[] {

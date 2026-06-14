@@ -40,6 +40,10 @@ import { AdminDashboardPage } from "../pages/admin/AdminDashboardPage";
 import { AdminApprovalsPage } from "../pages/admin/AdminApprovalsPage";
 import { AuditLogPage } from "../pages/admin/AuditLogPage";
 import { SpecialistProfilePage } from "../pages/profile/SpecialistProfilePage";
+import { PricingPage } from "../pages/admin/pricing/PricingPage";
+import { BillingDashboardPage } from "../pages/admin/billing/BillingDashboardPage";
+import { BillingRecordDetailPage } from "../pages/admin/billing/BillingRecordDetailPage";
+import { ClinicBillingPage } from "../pages/billing/ClinicBillingPage";
 
 function ClinicStatusGuard({ children }: { children: React.ReactNode }) {
   const { roles, clinicStatus } = useAuth();
@@ -365,6 +369,52 @@ export function AppRoutes() {
           element={
             <ProtectedRoute requiredRoles={[ROLES.SPECIALIST]}>
               <SpecialistProfilePage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Billing (Clinic) */}
+        <Route
+          path="billing"
+          element={
+            <ProtectedRoute
+              requiredRoles={[ROLES.CLINIC_ADMIN, ROLES.CLINIC_STAFF]}
+            >
+              <ClinicBillingPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Pricing */}
+        <Route
+          path="admin/pricing"
+          element={
+            <ProtectedRoute
+              requiredRoles={[ROLES.PLATFORM_ADMIN]}
+            >
+              <PricingPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin Billing */}
+        <Route
+          path="admin/billing"
+          element={
+            <ProtectedRoute
+              requiredRoles={[ROLES.PLATFORM_ADMIN, ROLES.PLATFORM_OPERATOR]}
+            >
+              <BillingDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="admin/billing/:id"
+          element={
+            <ProtectedRoute
+              requiredRoles={[ROLES.PLATFORM_ADMIN, ROLES.PLATFORM_OPERATOR]}
+            >
+              <BillingRecordDetailPage />
             </ProtectedRoute>
           }
         />

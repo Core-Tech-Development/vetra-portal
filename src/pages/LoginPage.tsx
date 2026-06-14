@@ -58,25 +58,18 @@ export function LoginPage() {
     const el = altchaRef.current;
     if (!el) return;
 
-    const handleVerification = (e: Event) => {
-      const detail = (e as CustomEvent).detail;
-      if (detail?.payload) {
-        setCaptchaSolution(detail.payload);
-      }
-    };
-
     const handleStateChange = (e: Event) => {
       const detail = (e as CustomEvent).detail;
-      if (detail?.state === "expired" || detail?.state === "error") {
+      if (detail?.state === "verified" && detail?.payload) {
+        setCaptchaSolution(detail.payload);
+      } else if (detail?.state === "expired" || detail?.state === "error") {
         setCaptchaSolution(null);
       }
     };
 
-    el.addEventListener("verification", handleVerification);
     el.addEventListener("statechange", handleStateChange);
 
     return () => {
-      el.removeEventListener("verification", handleVerification);
       el.removeEventListener("statechange", handleStateChange);
     };
   }, [captchaChallenge]);
