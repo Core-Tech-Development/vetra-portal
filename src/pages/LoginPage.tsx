@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Mail, Lock } from "lucide-react";
+import "altcha";
 import { useAuth } from "../auth/useAuth";
+import { getResetPasswordUrl, fetchCaptchaChallenge } from "../auth/keycloakTokenService";
+import type { CaptchaChallenge } from "../auth/keycloakTokenService";
 import { Button, Input, Alert } from "../components/ui";
 import styles from "./LoginPage.module.css";
 
@@ -20,6 +23,10 @@ export function LoginPage() {
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [captchaSolution, setCaptchaSolution] = useState<string | null>(null);
+  const [captchaChallenge, setCaptchaChallenge] = useState<CaptchaChallenge | null>(null);
+  const [captchaError, setCaptchaError] = useState(false);
+  const altchaRef = useRef<HTMLElement>(null);
 
   const {
     register,
@@ -30,16 +37,64 @@ export function LoginPage() {
     defaultValues: { username: "", password: "" },
   });
 
+  // Load CAPTCHA challenge
+  const loadChallenge = useCallback(async () => {
+    try {
+      setCaptchaError(false);
+      const challenge = await fetchCaptchaChallenge();
+      setCaptchaChallenge(challenge);
+    } catch {
+      setCaptchaError(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadChallenge();
+  }, [loadChallenge]);
+
+  // Listen for Altcha verification events
+  useEffect(() => {
+    const el = altchaRef.current;
+    if (!el) return;
+
+    const handleVerification = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.payload) {
+        setCaptchaSolution(detail.payload);
+      }
+    };
+
+    const handleStateChange = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.state === "expired" || detail?.state === "error") {
+        setCaptchaSolution(null);
+      }
+    };
+
+    el.addEventListener("verification", handleVerification);
+    el.addEventListener("statechange", handleStateChange);
+
+    return () => {
+      el.removeEventListener("verification", handleVerification);
+      el.removeEventListener("statechange", handleStateChange);
+    };
+  }, [captchaChallenge]);
+
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }
 
   const onSubmit = async (data: LoginForm) => {
+    if (!captchaSolution) {
+      setAuthError("Please complete the CAPTCHA verification.");
+      return;
+    }
+
     setAuthError(null);
     setIsSubmitting(true);
 
     try {
-      await loginWithCredentials(data.username, data.password);
+      await loginWithCredentials(data.username, data.password, captchaSolution);
       navigate("/", { replace: true });
     } catch (error) {
       setAuthError(
@@ -47,6 +102,9 @@ export function LoginPage() {
           ? error.message
           : "An unexpected error occurred. Please try again.",
       );
+      // Reset CAPTCHA after failed attempt
+      setCaptchaSolution(null);
+      loadChallenge();
     } finally {
       setIsSubmitting(false);
     }
@@ -109,18 +167,40 @@ export function LoginPage() {
               {...register("password")}
             />
 
+            {/* Altcha CAPTCHA Widget */}
+            <div className={styles.captchaWrapper}>
+              {captchaError ? (
+                <div className={styles.captchaError}>
+                  <p>Failed to load CAPTCHA.</p>
+                  <button type="button" onClick={loadChallenge} className={styles.captchaRetry}>
+                    Retry
+                  </button>
+                </div>
+              ) : captchaChallenge ? (
+                <altcha-widget
+                  ref={altchaRef}
+                  challengejson={JSON.stringify(captchaChallenge)}
+                  hidefooter
+                  hidelogo
+                />
+              ) : (
+                <div className={styles.captchaLoading}>Loading CAPTCHA...</div>
+              )}
+            </div>
+
             <Button
               type="submit"
               fullWidth
               size="lg"
               isLoading={isSubmitting}
+              disabled={!captchaSolution}
               className={styles.submitButton}
             >
               Sign in
             </Button>
           </form>
 
-          <a href="#" className={styles.forgotLink}>
+          <a href={getResetPasswordUrl()} className={styles.forgotLink}>
             Forgot password?
           </a>
 

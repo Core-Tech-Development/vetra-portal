@@ -4,7 +4,7 @@ import type Keycloak from "keycloak-js";
 import type { KeycloakTokenParsed } from "keycloak-js";
 import type { UserRole } from "./roles";
 import keycloakInstance from "./keycloak";
-import { requestTokenWithPassword, refreshToken } from "./keycloakTokenService";
+import { loginWithCaptcha, refreshToken } from "./keycloakTokenService";
 import { Spinner } from "../components/ui/Spinner";
 
 const TOKEN_STORAGE_KEY = "vetra_tokens";
@@ -25,7 +25,7 @@ export interface AuthContextType {
   clinicStatus: string | null;
   keycloak: Keycloak;
   login: () => void;
-  loginWithCredentials: (username: string, password: string) => Promise<void>;
+  loginWithCredentials: (username: string, password: string, captcha?: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -270,8 +270,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const loginWithCredentials = useCallback(
-    async (username: string, password: string): Promise<void> => {
-      const tokenResponse = await requestTokenWithPassword(username, password);
+    async (username: string, password: string, captcha?: string): Promise<void> => {
+      const tokenResponse = await loginWithCaptcha(username, password, captcha ?? "");
 
       setKeycloakTokens(
         keycloakInstance,
