@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Mail, Lock } from "lucide-react";
 import "altcha";
+import "altcha/types/react";
 import { useAuth } from "../auth/useAuth";
 import { getResetPasswordUrl, fetchCaptchaChallenge } from "../auth/keycloakTokenService";
 import type { CaptchaChallenge } from "../auth/keycloakTokenService";
@@ -179,9 +180,8 @@ export function LoginPage() {
               ) : captchaChallenge ? (
                 <altcha-widget
                   ref={altchaRef}
-                  challengejson={JSON.stringify(captchaChallenge)}
-                  hidefooter
-                  hidelogo
+                  challenge={JSON.stringify(captchaChallenge)}
+                  configuration={JSON.stringify({ hideFooter: true, hideLogo: true })}
                 />
               ) : (
                 <div className={styles.captchaLoading}>Loading CAPTCHA...</div>
