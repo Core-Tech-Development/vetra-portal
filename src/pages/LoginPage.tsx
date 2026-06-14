@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -7,7 +7,7 @@ import { Mail, Lock } from "lucide-react";
 import "altcha";
 import "altcha/types/react";
 import { useAuth } from "../auth/useAuth";
-import { getResetPasswordUrl, fetchCaptchaChallenge } from "../auth/keycloakTokenService";
+import { fetchCaptchaChallenge } from "../auth/keycloakTokenService";
 import type { CaptchaChallenge } from "../auth/keycloakTokenService";
 import { Button, Input, Alert } from "../components/ui";
 import styles from "./LoginPage.module.css";
@@ -200,9 +200,9 @@ export function LoginPage() {
             </Button>
           </form>
 
-          <a href={getResetPasswordUrl()} className={styles.forgotLink}>
+          <Link to="/forgot-password" className={styles.forgotLink}>
             Forgot password?
-          </a>
+          </Link>
 
           <div className={styles.divider} />
           <p className={styles.footer}>Secured by Keycloak</p>

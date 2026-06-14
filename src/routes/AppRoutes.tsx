@@ -4,6 +4,7 @@ import { ProtectedRoute } from "../auth/ProtectedRoute";
 import { useAuth } from "../auth/useAuth";
 import { ROLES } from "../auth/roles";
 import { LoginPage } from "../pages/LoginPage";
+import { ForgotPasswordPage } from "../pages/ForgotPasswordPage";
 import { PendingApprovalPage } from "../pages/PendingApprovalPage";
 import { DashboardPage } from "../pages/DashboardPage";
 import { NotFoundPage } from "../pages/NotFoundPage";
@@ -56,6 +57,7 @@ export function AppRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
       <Route
         element={

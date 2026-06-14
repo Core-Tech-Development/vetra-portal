@@ -27,11 +27,6 @@ function getTokenEndpoint(): string {
   return `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token`;
 }
 
-export function getResetPasswordUrl(): string {
-  const redirectUri = encodeURIComponent(window.location.origin + "/");
-  return `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/login-actions/reset-credentials?client_id=${KEYCLOAK_CLIENT_ID}&redirect_uri=${redirectUri}`;
-}
-
 export async function refreshToken(
   storedRefreshToken: string,
 ): Promise<KeycloakTokenResponse> {
