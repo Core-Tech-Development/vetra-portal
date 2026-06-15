@@ -25,7 +25,11 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error: AxiosError<ErrorResponse>) => {
     if (error.response?.status === 401) {
-      keycloak.login();
+      localStorage.removeItem("vetra_tokens");
+      localStorage.removeItem("vetra_clinic_id");
+      localStorage.removeItem("vetra_clinic_status");
+      localStorage.removeItem("vetra_specialist_id");
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }
