@@ -1,0 +1,35 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.notificationsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.loadingWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-10) 0;
+}
+
+.emptyWrapper {
+  padding: var(--space-8) var(--space-4);
+}
+
+.paginationWrapper {
+  padding: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: center;
+}

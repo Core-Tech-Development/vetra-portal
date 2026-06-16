@@ -1,0 +1,120 @@
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  transition: background var(--duration-fast);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.item:hover {
+  background: var(--color-surface-muted);
+}
+
+.item:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.unread {
+  background: var(--color-surface-muted);
+}
+
+.unread:hover {
+  background: var(--color-border);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-muted);
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.unread .iconWrapper {
+  background: var(--color-primary);
+  color: white;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.subject {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-normal);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.unread .subject {
+  font-weight: var(--font-weight-semibold);
+}
+
+.typeName {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin: 0;
+  margin-top: var(--space-1);
+}
+
+.time {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.unreadDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  flex-shrink: 0;
+  margin-top: 0.375rem;
+}
+
+/* Larger variant for the full page */
+.large {
+  padding: var(--space-4) var(--space-5);
+  gap: var(--space-4);
+}
+
+.large .iconWrapper {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.large .subject {
+  font-size: var(--font-size-base);
+}
+
+.large .typeName {
+  font-size: var(--font-size-sm);
+}
+
+.large .time {
+  font-size: var(--font-size-sm);
+}

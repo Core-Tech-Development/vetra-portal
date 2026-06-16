@@ -199,6 +199,7 @@ export interface ExamRequestResponse {
 export interface CreateSlotRequest {
   startAt: string;
   endAt: string;
+  label?: string;
 }
 
 export interface SlotResponse {
@@ -207,17 +208,27 @@ export interface SlotResponse {
   startAt: string;
   endAt: string;
   status: string;
+  label: string | null;
+  recurrenceGroupId: string | null;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface CreateBulkSlotsRequest {
+  startDate: string;
+  endDate: string;
+  daysOfWeek: string[];
+  startTime: string;
+  endTime: string;
+  label?: string;
+  timezone: string;
 }
 
 // === Appointment ===
 export interface CreateAppointmentRequest {
   examRequestId: string;
   specialistId: string;
-  availabilitySlotId?: string;
-  scheduledStartAt?: string;
-  scheduledEndAt?: string;
+  availabilitySlotId: string;
 }
 
 export interface AppointmentResponse {
@@ -304,6 +315,10 @@ export interface NotificationResponse {
   status: string;
   subject: string | null;
   payload: string | null;
+  referenceId: string | null;
+  referenceType: string | null;
+  read: boolean;
+  readAt: string | null;
   sentAt: string | null;
   createdAt: string;
 }

@@ -27,6 +27,45 @@
     "slotDeleted": "Slot deleted.",
     "slotDeleteFailed": "Failed to delete slot.",
     "slotBlocked": "Slot blocked.",
-    "slotBlockFailed": "Failed to block slot."
+    "slotBlockFailed": "Failed to block slot.",
+    "bulkCreated": "{{count}} slots created.",
+    "bulkCreateFailed": "Failed to create recurring slots.",
+    "overlapError": "Slot conflicts with an existing one."
+  },
+  "calendar": {
+    "today": "Today",
+    "previousWeek": "Previous week",
+    "nextWeek": "Next week",
+    "weekOf": "Week of {{date}}"
+  },
+  "createSlot": {
+    "title": "Add Availability",
+    "tabSingle": "Single",
+    "tabRecurring": "Recurring",
+    "date": "Date",
+    "startTime": "Start time",
+    "endTime": "End time",
+    "label": "Label (optional)",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "daysOfWeek": "Days of week",
+    "timezone": "Timezone",
+    "preview": "{{count}} slots will be created",
+    "previewZero": "No slots will be created",
+    "submit": "Create",
+    "submitBulk": "Create slots"
+  },
+  "days": {
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun"
+  },
+  "tabs": {
+    "week": "Week",
+    "list": "List"
   }
 }

@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { Calendar } from "lucide-react";
 import { getExamRequest, cancelExamRequest } from "../../api/examRequests";
 import { getClinic } from "../../api/clinics";
 import { getPatient } from "../../api/patients";
 import { searchSpecialists } from "../../api/specialists";
 import { createAppointment } from "../../api/appointments";
+import { listAvailableSlots } from "../../api/availabilitySlots";
 import {
   Button,
   Card,
@@ -18,10 +20,10 @@ import {
   Dialog,
 } from "../../components/ui";
 import type { BadgeVariant, TableColumn } from "../../components/ui";
-import type { SpecialistResponse } from "../../api/types";
+import type { SpecialistResponse, SlotResponse } from "../../api/types";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
-import { formatDate } from "../../i18n/formatting";
+import { formatDate, formatDateTime } from "../../i18n/formatting";
 import styles from "./ExamRequestDetailPage.module.css";
 
 const PRIORITY_VARIANT: Record<string, BadgeVariant> = {
@@ -30,8 +32,15 @@ const PRIORITY_VARIANT: Record<string, BadgeVariant> = {
   URGENT: "danger",
 };
 
+function formatDateISO(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
 export function ExamRequestDetailPage() {
-  const { t } = useTranslation(['examRequests', 'common']);
+  const { t } = useTranslation(['examRequests', 'common', 'schedule']);
   const { id } = useParams<{ id: string }>();
   const { showToast } = useToast();
   const queryClient = useQueryClient();
@@ -39,6 +48,7 @@ export function ExamRequestDetailPage() {
   const [filterBySpecialty, setFilterBySpecialty] = useState(true);
   const [schedulingSpecialist, setSchedulingSpecialist] =
     useState<SpecialistResponse | null>(null);
+  const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
 
   const {
     data: examRequest,
@@ -82,6 +92,34 @@ export function ExamRequestDetailPage() {
     enabled: showSpecialists && !!clinic && !!examRequest,
   });
 
+  // Date range for available slots: next 14 days
+  const slotDateRange = useMemo(() => {
+    const from = new Date();
+    const to = new Date();
+    to.setDate(to.getDate() + 14);
+    return { from: formatDateISO(from), to: formatDateISO(to) };
+  }, []);
+
+  // Fetch available slots for the selected specialist
+  const {
+    data: availableSlots,
+    isLoading: isLoadingSlots,
+  } = useQuery({
+    queryKey: [
+      "available-slots",
+      schedulingSpecialist?.id,
+      slotDateRange.from,
+      slotDateRange.to,
+    ],
+    queryFn: () =>
+      listAvailableSlots(
+        schedulingSpecialist!.id,
+        slotDateRange.from,
+        slotDateRange.to
+      ),
+    enabled: !!schedulingSpecialist,
+  });
+
   const cancelMutation = useMutation({
     mutationFn: () => cancelExamRequest(id!),
     onSuccess: () => {
@@ -94,15 +132,25 @@ export function ExamRequestDetailPage() {
   });
 
   const scheduleMutation = useMutation({
-    mutationFn: (specialistId: string) =>
-      createAppointment({ examRequestId: id!, specialistId }),
+    mutationFn: ({
+      specialistId,
+      availabilitySlotId,
+    }: {
+      specialistId: string;
+      availabilitySlotId: string;
+    }) =>
+      createAppointment({
+        examRequestId: id!,
+        specialistId,
+        availabilitySlotId,
+      }),
     onSuccess: () => {
       setSchedulingSpecialist(null);
+      setSelectedSlotId(null);
       showToast(t('examRequests:detail.scheduleDialog.success'), "success");
       queryClient.invalidateQueries({ queryKey: ["exam-request", id] });
     },
     onError: () => {
-      setSchedulingSpecialist(null);
       showToast(t('examRequests:detail.scheduleDialog.error'), "error");
     },
   });
@@ -148,8 +196,12 @@ export function ExamRequestDetailPage() {
       render: (row) => (
         <Button
           size="sm"
-          onClick={() => setSchedulingSpecialist(row)}
+          onClick={() => {
+            setSchedulingSpecialist(row);
+            setSelectedSlotId(null);
+          }}
         >
+          <Calendar size={14} />
           {t('examRequests:detail.specialists.scheduleButton')}
         </Button>
       ),
@@ -350,32 +402,90 @@ export function ExamRequestDetailPage() {
         </div>
       )}
 
+      {/* Slot selection dialog */}
       {schedulingSpecialist && (
         <Dialog
           open={!!schedulingSpecialist}
-          onClose={() => setSchedulingSpecialist(null)}
+          onClose={() => {
+            setSchedulingSpecialist(null);
+            setSelectedSlotId(null);
+          }}
           title={t('examRequests:detail.scheduleDialog.title')}
+          size="lg"
         >
           <p dangerouslySetInnerHTML={{ __html: t('examRequests:detail.scheduleDialog.message', {
             name: schedulingSpecialist.name,
             crmv: schedulingSpecialist.crmv,
             crmvState: schedulingSpecialist.crmvState,
           }) }} />
-          <p className={styles.dialogText}>
-            {t('examRequests:detail.scheduleDialog.detail')}
-          </p>
+
+          <div className={styles.slotSelectionSection}>
+            <p className={styles.slotSelectionLabel}>
+              {t('examRequests:detail.scheduleDialog.selectSlot')}
+            </p>
+
+            {isLoadingSlots && (
+              <div className={styles.loadingContainer}>
+                <Spinner size="md" />
+              </div>
+            )}
+
+            {availableSlots && availableSlots.length === 0 && (
+              <div className={styles.noSlotsMessage}>
+                {t('examRequests:detail.scheduleDialog.noSlots')}
+              </div>
+            )}
+
+            {availableSlots && availableSlots.length > 0 && (
+              <div className={styles.slotList}>
+                {availableSlots.map((slot: SlotResponse) => (
+                  <label
+                    key={slot.id}
+                    className={`${styles.slotOption} ${selectedSlotId === slot.id ? styles.slotOptionSelected : ""}`}
+                  >
+                    <input
+                      type="radio"
+                      name="slot-selection"
+                      value={slot.id}
+                      checked={selectedSlotId === slot.id}
+                      onChange={() => setSelectedSlotId(slot.id)}
+                      className={styles.slotRadio}
+                    />
+                    <div className={styles.slotOptionContent}>
+                      <span className={styles.slotOptionTime}>
+                        {formatDateTime(slot.startAt)} &mdash; {formatDateTime(slot.endAt)}
+                      </span>
+                      {slot.label && (
+                        <span className={styles.slotOptionLabel}>{slot.label}</span>
+                      )}
+                    </div>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div className={styles.dialogActions}>
             <Button
               variant="secondary"
-              onClick={() => setSchedulingSpecialist(null)}
+              onClick={() => {
+                setSchedulingSpecialist(null);
+                setSelectedSlotId(null);
+              }}
             >
               {t('common:actions.cancel')}
             </Button>
             <Button
               isLoading={scheduleMutation.isPending}
-              onClick={() =>
-                scheduleMutation.mutate(schedulingSpecialist.id)
-              }
+              disabled={!selectedSlotId}
+              onClick={() => {
+                if (selectedSlotId && schedulingSpecialist) {
+                  scheduleMutation.mutate({
+                    specialistId: schedulingSpecialist.id,
+                    availabilitySlotId: selectedSlotId,
+                  });
+                }
+              }}
             >
               {t('examRequests:detail.scheduleDialog.confirmButton')}
             </Button>

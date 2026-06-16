@@ -144,3 +144,79 @@
   justify-content: flex-end;
   margin-top: var(--space-6);
 }
+
+/* Slot selection in scheduling dialog */
+.slotSelectionSection {
+  margin-top: var(--space-4);
+}
+
+.slotSelectionLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.slotList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: var(--space-1);
+}
+
+.slotOption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.slotOption:hover {
+  border-color: var(--color-primary);
+  background-color: rgba(31, 111, 91, 0.03);
+}
+
+.slotOptionSelected {
+  border-color: var(--color-primary);
+  background-color: rgba(31, 111, 91, 0.06);
+}
+
+.slotRadio {
+  accent-color: var(--color-primary);
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.slotOptionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.slotOptionTime {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.slotOptionLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.noSlotsMessage {
+  padding: var(--space-4);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface-muted);
+  border-radius: var(--radius-sm);
+}

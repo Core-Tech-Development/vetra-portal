@@ -1,9 +1,13 @@
+import { useState, useRef, useCallback } from "react";
 import { Menu, Bell, LogOut, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
 import { Breadcrumb } from "../ui/Breadcrumb";
 import { Avatar } from "../ui/Avatar";
 import { DropdownMenu } from "../ui/DropdownMenu";
 import { LanguageSwitcher } from "../ui/LanguageSwitcher";
+import { NotificationPanel } from "../notifications/NotificationPanel";
+import { getUnreadCount } from "../../api/notifications";
 import styles from "./TopBar.module.css";
 
 interface TopBarProps {
@@ -21,6 +25,18 @@ export function TopBar({
   onLogout,
 }: TopBarProps) {
   const { t } = useTranslation("common");
+  const [panelOpen, setPanelOpen] = useState(false);
+  const bellRef = useRef<HTMLDivElement>(null);
+
+  const { data: unreadCount = 0 } = useQuery({
+    queryKey: ["notifications-unread-count"],
+    queryFn: getUnreadCount,
+    refetchInterval: 30000,
+  });
+
+  const handleClose = useCallback(() => {
+    setPanelOpen(false);
+  }, []);
 
   return (
     <header className={styles.topbar}>
@@ -36,13 +52,22 @@ export function TopBar({
       </div>
       <div className={styles.rightSection}>
         <LanguageSwitcher />
-        <button
-          className={styles.iconButton}
-          aria-label={t("topbar.notifications")}
-          type="button"
-        >
-          <Bell size={20} />
-        </button>
+        <div className={styles.bellWrapper} ref={bellRef}>
+          <button
+            className={styles.iconButton}
+            onClick={() => setPanelOpen(!panelOpen)}
+            aria-label={t("topbar.notifications")}
+            type="button"
+          >
+            <Bell size={20} />
+            {unreadCount > 0 && (
+              <span className={styles.unreadBadge}>
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
+          </button>
+          {panelOpen && <NotificationPanel onClose={handleClose} />}
+        </div>
         <DropdownMenu
           trigger={<Avatar name={userName} size="sm" />}
           items={[

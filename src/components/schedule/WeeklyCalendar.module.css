@@ -1,0 +1,178 @@
+.container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Navigation bar */
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.navCenter {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.navButtons {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Grid layout */
+.grid {
+  display: grid;
+  grid-template-columns: 56px repeat(7, 1fr);
+  border: 1px solid var(--color-border);
+  border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  background-color: var(--color-surface);
+  min-width: 720px;
+}
+
+/* Header row */
+.headerCell {
+  padding: var(--space-2) var(--space-1);
+  text-align: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
+  background-color: var(--color-surface-muted);
+}
+
+.headerCell:first-child {
+  border-left: none;
+}
+
+.headerDate {
+  display: block;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.headerToday .headerDate {
+  color: var(--color-primary);
+}
+
+.timeGutterHeader {
+  padding: var(--space-2) var(--space-1);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface-muted);
+}
+
+/* Body area */
+.timeGutter {
+  position: relative;
+  border-right: 1px solid var(--color-border);
+}
+
+.timeLabel {
+  position: absolute;
+  right: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  transform: translateY(-50%);
+  line-height: 1;
+}
+
+/* Day column */
+.dayColumn {
+  position: relative;
+  border-left: 1px solid var(--color-border);
+  cursor: pointer;
+}
+
+.dayColumn:hover {
+  background-color: rgba(31, 111, 91, 0.02);
+}
+
+.hourLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--color-border);
+}
+
+.halfHourLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--color-border);
+  opacity: 0.4;
+}
+
+/* Slot block */
+.slotBlock {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: var(--radius-sm);
+  padding: 2px 4px;
+  font-size: 11px;
+  line-height: 1.2;
+  overflow: hidden;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  z-index: 1;
+  border-left: 3px solid transparent;
+}
+
+.slotBlock:hover {
+  opacity: 0.85;
+}
+
+.slotAvailable {
+  background-color: rgba(31, 111, 91, 0.12);
+  border-left-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.slotReserved {
+  background-color: rgba(37, 99, 235, 0.12);
+  border-left-color: var(--color-info);
+  color: var(--color-info);
+}
+
+.slotBlocked {
+  background-color: rgba(0, 0, 0, 0.06);
+  border-left-color: var(--color-text-secondary);
+  color: var(--color-text-secondary);
+}
+
+.slotLabel {
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.slotTime {
+  font-size: 10px;
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Loading overlay */
+.loadingOverlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}

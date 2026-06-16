@@ -27,6 +27,45 @@
     "slotDeleted": "Horário excluído.",
     "slotDeleteFailed": "Falha ao excluir horário.",
     "slotBlocked": "Horário bloqueado.",
-    "slotBlockFailed": "Falha ao bloquear horário."
+    "slotBlockFailed": "Falha ao bloquear horário.",
+    "bulkCreated": "{{count}} horários criados.",
+    "bulkCreateFailed": "Falha ao criar horários recorrentes.",
+    "overlapError": "Horário conflita com outro já existente."
+  },
+  "calendar": {
+    "today": "Hoje",
+    "previousWeek": "Semana anterior",
+    "nextWeek": "Próxima semana",
+    "weekOf": "Semana de {{date}}"
+  },
+  "createSlot": {
+    "title": "Adicionar Disponibilidade",
+    "tabSingle": "Único",
+    "tabRecurring": "Recorrente",
+    "date": "Data",
+    "startTime": "Hora início",
+    "endTime": "Hora fim",
+    "label": "Rótulo (opcional)",
+    "startDate": "Data início",
+    "endDate": "Data fim",
+    "daysOfWeek": "Dias da semana",
+    "timezone": "Fuso horário",
+    "preview": "{{count}} horários serão criados",
+    "previewZero": "Nenhum horário será criado",
+    "submit": "Criar",
+    "submitBulk": "Criar horários"
+  },
+  "days": {
+    "mon": "Seg",
+    "tue": "Ter",
+    "wed": "Qua",
+    "thu": "Qui",
+    "fri": "Sex",
+    "sat": "Sáb",
+    "sun": "Dom"
+  },
+  "tabs": {
+    "week": "Semana",
+    "list": "Lista"
   }
 }

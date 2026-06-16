@@ -44,6 +44,7 @@ import { PricingPage } from "../pages/admin/pricing/PricingPage";
 import { BillingDashboardPage } from "../pages/admin/billing/BillingDashboardPage";
 import { BillingRecordDetailPage } from "../pages/admin/billing/BillingRecordDetailPage";
 import { ClinicBillingPage } from "../pages/billing/ClinicBillingPage";
+import { NotificationsPage } from "../pages/notifications/NotificationsPage";
 
 function ClinicStatusGuard({ children }: { children: React.ReactNode }) {
   const { roles, clinicStatus } = useAuth();
@@ -75,6 +76,9 @@ export function AppRoutes() {
         }
       >
         <Route index element={<DashboardPage />} />
+
+        {/* Notifications */}
+        <Route path="notifications" element={<NotificationsPage />} />
 
         {/* Clinics */}
         <Route

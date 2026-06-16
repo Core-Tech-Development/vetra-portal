@@ -1,0 +1,35 @@
+{
+  "title": "Notifications",
+  "markAllRead": "Mark all as read",
+  "viewAll": "View all notifications",
+  "empty": {
+    "title": "No notifications",
+    "description": "You have no notifications at this time."
+  },
+  "filters": {
+    "all": "All",
+    "unread": "Unread"
+  },
+  "types": {
+    "EXAM_REQUEST_CREATED": "New exam request",
+    "APPOINTMENT_SCHEDULED": "Appointment scheduled",
+    "APPOINTMENT_ACCEPTED": "Appointment accepted",
+    "APPOINTMENT_DECLINED": "Appointment declined",
+    "SPECIALIST_IN_TRANSIT": "Specialist in transit",
+    "EXAM_IN_SERVICE": "Exam in progress",
+    "EXAM_COMPLETED": "Exam completed",
+    "LAUDO_ISSUED": "Report issued",
+    "APPOINTMENT_COMPLETED": "Appointment completed",
+    "APPOINTMENT_CANCELLED": "Appointment cancelled",
+    "APPOINTMENT_NO_SHOW": "No-show recorded",
+    "CLINIC_APPROVED": "Clinic approved",
+    "SPECIALIST_APPROVED": "Profile approved",
+    "BILLING_RECORD_CREATED": "Billing record created"
+  },
+  "timeAgo": {
+    "justNow": "Just now",
+    "minutesAgo": "{{count}}m ago",
+    "hoursAgo": "{{count}}h ago",
+    "daysAgo": "{{count}}d ago"
+  }
+}

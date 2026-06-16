@@ -78,6 +78,10 @@ export {
   Lock,
   LogOut,
 
+  // Transport & Billing
+  Truck,
+  CreditCard,
+
   // Misc
   Eye,
   EyeOff,

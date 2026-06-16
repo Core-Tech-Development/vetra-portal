@@ -17,6 +17,7 @@ import clinicsPtBR from "./locales/pt-BR/clinics.json";
 import specialistsPtBR from "./locales/pt-BR/specialists.json";
 import billingPtBR from "./locales/pt-BR/billing.json";
 import adminPtBR from "./locales/pt-BR/admin.json";
+import notificationsPtBR from "./locales/pt-BR/notifications.json";
 
 // EN
 import commonEn from "./locales/en/common.json";
@@ -33,6 +34,7 @@ import clinicsEn from "./locales/en/clinics.json";
 import specialistsEn from "./locales/en/specialists.json";
 import billingEn from "./locales/en/billing.json";
 import adminEn from "./locales/en/admin.json";
+import notificationsEn from "./locales/en/notifications.json";
 
 const resources = {
   "pt-BR": {
@@ -50,6 +52,7 @@ const resources = {
     specialists: specialistsPtBR,
     billing: billingPtBR,
     admin: adminPtBR,
+    notifications: notificationsPtBR,
   },
   en: {
     common: commonEn,
@@ -66,6 +69,7 @@ const resources = {
     specialists: specialistsEn,
     billing: billingEn,
     admin: adminEn,
+    notifications: notificationsEn,
   },
 };
 
@@ -91,6 +95,7 @@ i18n
       "specialists",
       "billing",
       "admin",
+      "notifications",
     ],
     interpolation: {
       escapeValue: false,

@@ -103,6 +103,8 @@
       "title": "Agendar atendimento",
       "message": "Agendar um atendimento com <strong>{{name}}</strong> (CRMV {{crmv}} / {{crmvState}}) para esta solicitação de exame?",
       "detail": "O especialista receberá a solicitação e poderá aceitar ou recusar.",
+      "selectSlot": "Selecione um horário disponível (próximos 14 dias):",
+      "noSlots": "Nenhum horário disponível nos próximos 14 dias para este especialista.",
       "confirmButton": "Confirmar agendamento",
       "success": "Agendamento realizado com sucesso.",
       "error": "Falha ao agendar atendimento."

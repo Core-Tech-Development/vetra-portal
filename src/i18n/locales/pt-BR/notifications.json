@@ -1,0 +1,35 @@
+{
+  "title": "Notificações",
+  "markAllRead": "Marcar todas como lidas",
+  "viewAll": "Ver todas as notificações",
+  "empty": {
+    "title": "Nenhuma notificação",
+    "description": "Você não tem notificações no momento."
+  },
+  "filters": {
+    "all": "Todas",
+    "unread": "Não lidas"
+  },
+  "types": {
+    "EXAM_REQUEST_CREATED": "Nova solicitação de exame",
+    "APPOINTMENT_SCHEDULED": "Agendamento criado",
+    "APPOINTMENT_ACCEPTED": "Agendamento aceito",
+    "APPOINTMENT_DECLINED": "Agendamento recusado",
+    "SPECIALIST_IN_TRANSIT": "Especialista a caminho",
+    "EXAM_IN_SERVICE": "Exame em andamento",
+    "EXAM_COMPLETED": "Exame concluído",
+    "LAUDO_ISSUED": "Laudo emitido",
+    "APPOINTMENT_COMPLETED": "Atendimento concluído",
+    "APPOINTMENT_CANCELLED": "Agendamento cancelado",
+    "APPOINTMENT_NO_SHOW": "Ausência registrada",
+    "CLINIC_APPROVED": "Clínica aprovada",
+    "SPECIALIST_APPROVED": "Cadastro aprovado",
+    "BILLING_RECORD_CREATED": "Cobrança gerada"
+  },
+  "timeAgo": {
+    "justNow": "Agora",
+    "minutesAgo": "{{count}}min atrás",
+    "hoursAgo": "{{count}}h atrás",
+    "daysAgo": "{{count}}d atrás"
+  }
+}

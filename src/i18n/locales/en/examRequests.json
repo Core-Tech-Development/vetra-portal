@@ -103,6 +103,8 @@
       "title": "Schedule appointment",
       "message": "Schedule an appointment with <strong>{{name}}</strong> (CRMV {{crmv}} / {{crmvState}}) for this exam request?",
       "detail": "The specialist will receive the request and can accept or decline.",
+      "selectSlot": "Select an available time slot (next 14 days):",
+      "noSlots": "No available slots in the next 14 days for this specialist.",
       "confirmButton": "Confirm schedule",
       "success": "Appointment scheduled successfully.",
       "error": "Failed to schedule appointment."
