@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -12,6 +13,7 @@ import { Button, Card, StatusBadge, Spinner } from "../../components/ui";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { ArrowLeft } from "lucide-react";
 import { useToast } from "../../components/ui/Toast";
+import { formatDate } from "../../i18n/formatting";
 import styles from "./SpecialistDetailPage.module.css";
 
 const BRAZILIAN_STATES = [
@@ -20,6 +22,7 @@ const BRAZILIAN_STATES = [
 ];
 
 export function SpecialistDetailPage() {
+  const { t } = useTranslation(['specialists', 'common']);
   const { id } = useParams<{ id: string }>();
   const queryClient = useQueryClient();
   const { showToast } = useToast();
@@ -43,11 +46,11 @@ export function SpecialistDetailPage() {
   const approveMutation = useMutation({
     mutationFn: () => approveSpecialist(id!),
     onSuccess: () => {
-      showToast("Specialist approved successfully.", "success");
+      showToast(t('specialists:detail.toast.approved'), "success");
       queryClient.invalidateQueries({ queryKey: ["specialist", id] });
     },
     onError: () => {
-      showToast("Failed to approve specialist.", "error");
+      showToast(t('specialists:detail.toast.approveFailed'), "error");
     },
   });
 
@@ -59,7 +62,7 @@ export function SpecialistDetailPage() {
         radiusKm: areaRadius ? Number(areaRadius) : undefined,
       }),
     onSuccess: () => {
-      showToast("Coverage area added.", "success");
+      showToast(t('specialists:detail.toast.areaAdded'), "success");
       setAreaCity("");
       setAreaState("");
       setAreaRadius("");
@@ -68,20 +71,20 @@ export function SpecialistDetailPage() {
       });
     },
     onError: () => {
-      showToast("Failed to add coverage area.", "error");
+      showToast(t('specialists:detail.toast.areaAddFailed'), "error");
     },
   });
 
   const removeAreaMutation = useMutation({
     mutationFn: (areaId: string) => removeCoverageArea(id!, areaId),
     onSuccess: () => {
-      showToast("Coverage area removed.", "success");
+      showToast(t('specialists:detail.toast.areaRemoved'), "success");
       queryClient.invalidateQueries({
         queryKey: ["specialist", id, "coverage-areas"],
       });
     },
     onError: () => {
-      showToast("Failed to remove coverage area.", "error");
+      showToast(t('specialists:detail.toast.areaRemoveFailed'), "error");
     },
   });
 
@@ -96,16 +99,16 @@ export function SpecialistDetailPage() {
   if (isError || !specialist) {
     return (
       <div className={styles.errorBox}>
-        <div className={styles.errorTitle}>Failed to load specialist</div>
+        <div className={styles.errorTitle}>{t('specialists:detail.error.title')}</div>
         <p className={styles.errorDetail}>
-          The specialist could not be found or an error occurred.
+          {t('specialists:detail.error.detail')}
         </p>
         <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
-            Retry
+            {t('common:actions.retry')}
           </Button>
           <Link to="/specialists">
-            <Button variant="outline">Back to specialists</Button>
+            <Button variant="outline">{t('specialists:detail.error.backButton')}</Button>
           </Link>
         </div>
       </div>
@@ -121,7 +124,7 @@ export function SpecialistDetailPage() {
     <div>
       <PageHeader
         title={specialist.name}
-        backLink={{ label: "Back to specialists", to: "/specialists" }}
+        backLink={{ label: t('specialists:detail.backLink'), to: "/specialists" }}
         actions={
           <div className={styles.headerActions}>
             <StatusBadge status={specialist.status} />
@@ -130,31 +133,31 @@ export function SpecialistDetailPage() {
                 onClick={() => approveMutation.mutate()}
                 isLoading={approveMutation.isPending}
               >
-                Approve
+                {t('common:actions.approve')}
               </Button>
             )}
             <Link to="/specialists">
               <Button variant="secondary" leftIcon={<ArrowLeft size={16} />}>
-                Back to specialists
+                {t('specialists:detail.backLink')}
               </Button>
             </Link>
           </div>
         }
       />
 
-      <DetailSection title="Specialist information" columns={3}>
-        <FieldDisplay label="Email" value={specialist.email} />
-        <FieldDisplay label="Phone" value={specialist.phone || "--"} />
+      <DetailSection title={t('specialists:detail.sections.specialistInformation')} columns={3}>
+        <FieldDisplay label={t('specialists:detail.fields.email')} value={specialist.email} />
+        <FieldDisplay label={t('specialists:detail.fields.phone')} value={specialist.phone || "--"} />
         <FieldDisplay
-          label="CRMV"
+          label={t('specialists:detail.fields.crmv')}
           value={`${specialist.crmv} / ${specialist.crmvState}`}
         />
         <FieldDisplay
-          label="Specialty"
+          label={t('specialists:detail.fields.specialty')}
           value={specialist.specialty.replace(/_/g, " ")}
         />
         <FieldDisplay
-          label="Base location"
+          label={t('specialists:detail.fields.baseLocation')}
           value={
             specialist.baseCity && specialist.baseState
               ? `${specialist.baseCity}, ${specialist.baseState}`
@@ -162,7 +165,7 @@ export function SpecialistDetailPage() {
           }
         />
         <FieldDisplay
-          label="Max travel radius"
+          label={t('specialists:detail.fields.maxTravelRadius')}
           value={
             specialist.maxTravelRadiusKm
               ? `${specialist.maxTravelRadiusKm} km`
@@ -170,20 +173,20 @@ export function SpecialistDetailPage() {
           }
         />
         <FieldDisplay
-          label="Own equipment"
-          value={specialist.hasOwnEquipment ? "Yes" : "No"}
+          label={t('specialists:detail.fields.ownEquipment')}
+          value={specialist.hasOwnEquipment ? t('common:common.yes') : t('common:common.no')}
         />
         <FieldDisplay
-          label="Registered"
-          value={new Date(specialist.createdAt).toLocaleDateString()}
+          label={t('specialists:detail.fields.registered')}
+          value={formatDate(specialist.createdAt)}
         />
         {specialist.bio && (
-          <FieldDisplay label="Bio" value={specialist.bio} fullWidth />
+          <FieldDisplay label={t('specialists:detail.fields.bio')} value={specialist.bio} fullWidth />
         )}
       </DetailSection>
 
       <div className={styles.section}>
-        <Card title="Coverage areas">
+        <Card title={t('specialists:detail.sections.coverageAreas')}>
           {areasLoading && (
             <div className={styles.loadingContainer}>
               <Spinner />
@@ -192,7 +195,7 @@ export function SpecialistDetailPage() {
 
           {coverageAreas && coverageAreas.length === 0 && (
             <div className={styles.emptyAreas}>
-              No coverage areas registered yet.
+              {t('specialists:detail.coverageAreas.empty')}
             </div>
           )}
 
@@ -216,7 +219,7 @@ export function SpecialistDetailPage() {
                     onClick={() => removeAreaMutation.mutate(area.id)}
                     isLoading={removeAreaMutation.isPending}
                   >
-                    Remove
+                    {t('specialists:detail.coverageAreas.remove')}
                   </Button>
                 </div>
               ))}
@@ -225,23 +228,23 @@ export function SpecialistDetailPage() {
 
           <div className={styles.addAreaForm}>
             <div className={styles.addAreaField}>
-              <label className={styles.addAreaLabel}>City</label>
+              <label className={styles.addAreaLabel}>{t('specialists:detail.coverageAreas.city')}</label>
               <input
                 className={styles.addAreaInput}
                 type="text"
-                placeholder="e.g. Sao Paulo"
+                placeholder={t('specialists:detail.coverageAreas.cityPlaceholder')}
                 value={areaCity}
                 onChange={(e) => setAreaCity(e.target.value)}
               />
             </div>
             <div className={styles.addAreaField}>
-              <label className={styles.addAreaLabel}>State</label>
+              <label className={styles.addAreaLabel}>{t('specialists:detail.coverageAreas.state')}</label>
               <select
                 className={styles.addAreaInput}
                 value={areaState}
                 onChange={(e) => setAreaState(e.target.value)}
               >
-                <option value="">Select</option>
+                <option value="">{t('specialists:detail.coverageAreas.selectState')}</option>
                 {BRAZILIAN_STATES.map((st) => (
                   <option key={st} value={st}>
                     {st}
@@ -250,11 +253,11 @@ export function SpecialistDetailPage() {
               </select>
             </div>
             <div className={styles.addAreaField}>
-              <label className={styles.addAreaLabel}>Radius (km)</label>
+              <label className={styles.addAreaLabel}>{t('specialists:detail.coverageAreas.radiusKm')}</label>
               <input
                 className={styles.addAreaInput}
                 type="number"
-                placeholder="e.g. 30"
+                placeholder={t('specialists:detail.coverageAreas.radiusPlaceholder')}
                 value={areaRadius}
                 onChange={(e) => setAreaRadius(e.target.value)}
               />
@@ -265,7 +268,7 @@ export function SpecialistDetailPage() {
               isLoading={addAreaMutation.isPending}
               disabled={!areaCity.trim() || !areaState.trim()}
             >
-              Add area
+              {t('specialists:detail.coverageAreas.addArea')}
             </Button>
           </div>
         </Card>

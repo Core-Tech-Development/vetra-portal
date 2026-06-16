@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 import { getTutor, updateTutor } from "../../api/tutors";
 import { Card, Input, Spinner, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
@@ -11,9 +13,9 @@ import { PageHeader, FormSection, FormActions } from "../../components/patterns"
 import styles from "./CreateTutorPage.module.css";
 
 const editTutorSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string().min(1, i18next.t('tutors:create.validation.nameRequired')),
   phone: z.string().optional(),
-  email: z.string().email("Valid email required").optional().or(z.literal("")),
+  email: z.string().email(i18next.t('tutors:create.validation.validEmailRequired')).optional().or(z.literal("")),
   document: z.string().optional(),
   address: z.string().optional(),
   city: z.string().optional(),
@@ -24,6 +26,7 @@ const editTutorSchema = z.object({
 type EditTutorForm = z.infer<typeof editTutorSchema>;
 
 export function EditTutorPage() {
+  const { t } = useTranslation(['tutors', 'common']);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -72,11 +75,11 @@ export function EditTutorPage() {
         zipCode: data.zipCode || undefined,
       }),
     onSuccess: () => {
-      showToast("Tutor updated successfully.", "success");
+      showToast(t('tutors:edit.toast.success'), "success");
       navigate("/tutors");
     },
     onError: () => {
-      setApiError("Failed to update tutor. Please try again.");
+      setApiError(t('tutors:edit.toast.error'));
     },
   });
 
@@ -102,9 +105,9 @@ export function EditTutorPage() {
   return (
     <div>
       <PageHeader
-        title="Edit tutor"
-        subtitle="Update tutor information."
-        backLink={{ label: "Back to tutors", to: "/tutors" }}
+        title={t('tutors:edit.title')}
+        subtitle={t('tutors:edit.subtitle')}
+        backLink={{ label: t('tutors:edit.backLink'), to: "/tutors" }}
       />
 
       <Card>
@@ -115,65 +118,65 @@ export function EditTutorPage() {
         >
           {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <FormSection title="Personal information">
+          <FormSection title={t('tutors:create.sections.personalInformation')}>
             <Input
-              label="Full name"
-              placeholder="e.g. Joao da Silva"
+              label={t('tutors:create.fields.fullName')}
+              placeholder={t('tutors:create.fields.fullNamePlaceholder')}
               error={errors.name?.message}
               {...register("name")}
             />
 
             <div className={styles.row}>
               <Input
-                label="Phone"
+                label={t('tutors:create.fields.phone')}
                 type="tel"
-                placeholder="(11) 99999-9999"
+                placeholder={t('tutors:create.fields.phonePlaceholder')}
                 error={errors.phone?.message}
                 {...register("phone")}
               />
               <Input
-                label="Email"
+                label={t('tutors:create.fields.email')}
                 type="email"
-                placeholder="tutor@email.com"
+                placeholder={t('tutors:create.fields.emailPlaceholder')}
                 error={errors.email?.message}
                 {...register("email")}
               />
             </div>
 
             <Input
-              label="Document"
-              placeholder="CPF"
+              label={t('tutors:create.fields.document')}
+              placeholder={t('tutors:create.fields.documentPlaceholder')}
               error={errors.document?.message}
               {...register("document")}
             />
           </FormSection>
 
-          <FormSection title="Address">
+          <FormSection title={t('tutors:create.sections.address')}>
             <Input
-              label="Address"
-              placeholder="Rua das Flores, 123"
+              label={t('tutors:create.fields.address')}
+              placeholder={t('tutors:create.fields.addressPlaceholder')}
               error={errors.address?.message}
               {...register("address")}
             />
 
             <div className={styles.row}>
               <Input
-                label="City"
-                placeholder="Sao Paulo"
+                label={t('tutors:create.fields.city')}
+                placeholder={t('tutors:create.fields.cityPlaceholder')}
                 error={errors.city?.message}
                 {...register("city")}
               />
               <Input
-                label="State"
-                placeholder="SP"
+                label={t('tutors:create.fields.state')}
+                placeholder={t('tutors:create.fields.statePlaceholder')}
                 error={errors.state?.message}
                 {...register("state")}
               />
             </div>
 
             <Input
-              label="Zip code"
-              placeholder="01001-000"
+              label={t('tutors:create.fields.zipCode')}
+              placeholder={t('tutors:create.fields.zipCodePlaceholder')}
               error={errors.zipCode?.message}
               {...register("zipCode")}
             />
@@ -181,7 +184,7 @@ export function EditTutorPage() {
 
           <FormActions
             onCancel={() => navigate("/tutors")}
-            submitLabel="Save changes"
+            submitLabel={t('tutors:edit.submitButton')}
             isSubmitting={mutation.isPending}
           />
         </form>

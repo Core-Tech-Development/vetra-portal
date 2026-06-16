@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { listTutorsByClinic, deleteTutor } from "../../api/tutors";
 import { Button, Dialog } from "../../components/ui";
@@ -14,6 +15,7 @@ function getClinicId(): string {
 }
 
 export function TutorListPage() {
+  const { t } = useTranslation(['tutors', 'common']);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
   const clinicId = getClinicId();
@@ -41,7 +43,7 @@ export function TutorListPage() {
   const columns: TableColumn<TutorResponse>[] = [
     {
       key: "name",
-      header: "Name",
+      header: t('tutors:list.columns.name'),
       render: (row) => (
         <Link to={`/tutors/${row.id}`} className={styles.tableLink}>
           {row.name}
@@ -50,17 +52,17 @@ export function TutorListPage() {
     },
     {
       key: "phone",
-      header: "Phone",
+      header: t('tutors:list.columns.phone'),
       render: (row) => row.phone || "--",
     },
     {
       key: "email",
-      header: "Email",
+      header: t('tutors:list.columns.email'),
       render: (row) => row.email || "--",
     },
     {
       key: "document",
-      header: "Document",
+      header: t('tutors:list.columns.document'),
       render: (row) => row.document || "--",
     },
     {
@@ -69,10 +71,10 @@ export function TutorListPage() {
       render: (row) => (
         <div className={styles.tableActions}>
           <Link to={`/tutors/${row.id}/edit`}>
-            <Button variant="secondary" size="sm" leftIcon={<Pencil size={14} />}>Edit</Button>
+            <Button variant="secondary" size="sm" leftIcon={<Pencil size={14} />}>{t('common:actions.edit')}</Button>
           </Link>
           <Button variant="danger" size="sm" leftIcon={<Trash2 size={14} />} onClick={() => setDeletingTutor(row)}>
-            Delete
+            {t('common:actions.delete')}
           </Button>
         </div>
       ),
@@ -82,15 +84,15 @@ export function TutorListPage() {
   if (!clinicId) {
     return (
       <div>
-        <PageHeader title="Tutors" />
+        <PageHeader title={t('tutors:list.title')} />
         <DataTableLayout
           columns={columns}
           data={[]}
           keyExtractor={(row) => row.id}
           isLoading={false}
           emptyState={{
-            title: "No clinic selected",
-            description: "Please select a clinic first.",
+            title: t('tutors:list.noClinic.title'),
+            description: t('tutors:list.noClinic.description'),
           }}
           page={0}
           totalPages={0}
@@ -103,10 +105,10 @@ export function TutorListPage() {
   return (
     <div>
       <PageHeader
-        title="Tutors"
+        title={t('tutors:list.title')}
         actions={
           <Link to="/tutors/new">
-            <Button leftIcon={<Plus size={16} />}>New tutor</Button>
+            <Button leftIcon={<Plus size={16} />}>{t('tutors:list.newTutor')}</Button>
           </Link>
         }
       />
@@ -117,14 +119,14 @@ export function TutorListPage() {
         keyExtractor={(row) => row.id}
         isLoading={isLoading}
         isError={isError}
-        errorMessage="Failed to load tutors"
+        errorMessage={t('tutors:list.error')}
         onRetry={() => refetch()}
         emptyState={{
-          title: "No tutors registered",
-          description: "Start by registering the first tutor for this clinic.",
+          title: t('tutors:list.empty.title'),
+          description: t('tutors:list.empty.description'),
           action: (
             <Link to="/tutors/new">
-              <Button leftIcon={<Plus size={16} />}>New tutor</Button>
+              <Button leftIcon={<Plus size={16} />}>{t('tutors:list.newTutor')}</Button>
             </Link>
           ),
         }}
@@ -133,22 +135,22 @@ export function TutorListPage() {
         onPageChange={setPage}
         searchValue={search}
         onSearchChange={setSearch}
-        searchPlaceholder="Search tutors..."
+        searchPlaceholder={t('tutors:list.searchPlaceholder')}
       />
 
       {deletingTutor && (
         <Dialog
           open={!!deletingTutor}
           onClose={() => setDeletingTutor(null)}
-          title="Delete tutor"
+          title={t('tutors:list.deleteDialog.title')}
         >
-          <p>Are you sure you want to delete tutor <strong>{deletingTutor.name}</strong>?</p>
+          <p dangerouslySetInnerHTML={{ __html: t('tutors:list.deleteDialog.message', { name: deletingTutor.name }) }} />
           <p className={styles.dialogWarning}>
-            The tutor must have no linked patients to be deleted.
+            {t('tutors:list.deleteDialog.warning')}
           </p>
           <div className={styles.dialogActions}>
-            <Button variant="secondary" onClick={() => setDeletingTutor(null)}>Cancel</Button>
-            <Button variant="danger" isLoading={deleteMutation.isPending} onClick={() => deleteMutation.mutate(deletingTutor.id)}>Delete</Button>
+            <Button variant="secondary" onClick={() => setDeletingTutor(null)}>{t('common:actions.cancel')}</Button>
+            <Button variant="danger" isLoading={deleteMutation.isPending} onClick={() => deleteMutation.mutate(deletingTutor.id)}>{t('common:actions.delete')}</Button>
           </div>
         </Dialog>
       )}

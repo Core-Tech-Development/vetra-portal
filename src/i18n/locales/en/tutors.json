@@ -1,0 +1,107 @@
+{
+  "list": {
+    "title": "Tutors",
+    "newTutor": "New tutor",
+    "columns": {
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "document": "Document"
+    },
+    "searchPlaceholder": "Search tutors...",
+    "error": "Failed to load tutors",
+    "empty": {
+      "title": "No tutors registered",
+      "description": "Start by registering the first tutor for this clinic."
+    },
+    "noClinic": {
+      "title": "No clinic selected",
+      "description": "Please select a clinic first."
+    },
+    "deleteDialog": {
+      "title": "Delete tutor",
+      "message": "Are you sure you want to delete tutor <strong>{{name}}</strong>?",
+      "warning": "The tutor must have no linked patients to be deleted."
+    }
+  },
+  "create": {
+    "title": "New tutor",
+    "subtitle": "Register a new pet tutor for the clinic.",
+    "backLink": "Back to tutors",
+    "sections": {
+      "personalInformation": "Personal information",
+      "address": "Address"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "validEmailRequired": "Valid email required"
+    },
+    "fields": {
+      "fullName": "Full name",
+      "fullNamePlaceholder": "e.g. Joao da Silva",
+      "phone": "Phone",
+      "phonePlaceholder": "(11) 99999-9999",
+      "email": "Email",
+      "emailPlaceholder": "tutor@email.com",
+      "document": "Document",
+      "documentPlaceholder": "CPF",
+      "address": "Address",
+      "addressPlaceholder": "Rua das Flores, 123",
+      "city": "City",
+      "cityPlaceholder": "Sao Paulo",
+      "state": "State",
+      "statePlaceholder": "SP",
+      "zipCode": "Zip code",
+      "zipCodePlaceholder": "01001-000"
+    },
+    "submitButton": "Create tutor",
+    "toast": {
+      "success": "Tutor created successfully.",
+      "error": "Failed to create tutor. Please check the information and try again."
+    }
+  },
+  "edit": {
+    "title": "Edit tutor",
+    "subtitle": "Update tutor information.",
+    "backLink": "Back to tutors",
+    "submitButton": "Save changes",
+    "toast": {
+      "success": "Tutor updated successfully.",
+      "error": "Failed to update tutor. Please try again."
+    }
+  },
+  "detail": {
+    "backLink": "Back to tutors",
+    "sections": {
+      "tutorInformation": "Tutor information",
+      "patients": "Patients"
+    },
+    "fields": {
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "document": "Document",
+      "address": "Address",
+      "city": "City",
+      "state": "State",
+      "zipCode": "Zip code",
+      "registered": "Registered"
+    },
+    "patientColumns": {
+      "name": "Name",
+      "species": "Species",
+      "breed": "Breed",
+      "sex": "Sex"
+    },
+    "patientsEmpty": {
+      "title": "No patients registered",
+      "description": "This tutor has no patients yet."
+    },
+    "newPatient": "New patient",
+    "error": {
+      "title": "Failed to load tutor",
+      "detail": "The tutor could not be found or an error occurred.",
+      "backButton": "Back to tutors"
+    }
+  }
+}

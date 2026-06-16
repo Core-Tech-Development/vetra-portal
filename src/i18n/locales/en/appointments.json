@@ -1,0 +1,126 @@
+{
+  "list": {
+    "title": "Appointments",
+    "columns": {
+      "id": "ID",
+      "specialist": "Specialist",
+      "scheduledDate": "Scheduled Date",
+      "status": "Status",
+      "created": "Created"
+    },
+    "searchPlaceholder": "Search appointments...",
+    "error": "Failed to load appointments",
+    "empty": {
+      "title": "No appointments found",
+      "description": "There are no appointments matching the current filter."
+    },
+    "statusFilter": {
+      "all": "All",
+      "WAITING_SPECIALIST_ACCEPTANCE": "Waiting specialist acceptance",
+      "ACCEPTED": "Accepted",
+      "IN_TRANSIT": "In transit",
+      "IN_SERVICE": "In service",
+      "WAITING_REPORT": "Waiting report",
+      "REPORT_ISSUED": "Report issued",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    }
+  },
+  "detail": {
+    "titlePrefix": "Appointment",
+    "backLink": "Back to appointments",
+    "sections": {
+      "appointmentInformation": "Appointment information",
+      "examFiles": "Exam Files",
+      "laudo": "Laudo",
+      "notes": "Notes"
+    },
+    "fields": {
+      "appointmentId": "Appointment ID",
+      "examRequestId": "Exam Request ID",
+      "specialistId": "Specialist ID",
+      "availabilitySlotId": "Availability Slot ID",
+      "scheduledStart": "Scheduled Start",
+      "scheduledEnd": "Scheduled End",
+      "actualStart": "Actual Start",
+      "actualEnd": "Actual End",
+      "notes": "Notes",
+      "cancelReason": "Cancel Reason",
+      "created": "Created",
+      "updated": "Updated"
+    },
+    "actions": {
+      "accept": "Accept",
+      "decline": "Decline",
+      "startTransit": "Start transit",
+      "startService": "Start service",
+      "completeExam": "Complete exam",
+      "createLaudo": "Create laudo",
+      "completeAppointment": "Complete appointment",
+      "uploadFiles": "Upload files",
+      "createNote": "Create note",
+      "viewFullLaudo": "View full laudo"
+    },
+    "toast": {
+      "accepted": "Appointment accepted.",
+      "acceptFailed": "Failed to accept appointment.",
+      "declined": "Appointment declined.",
+      "declineFailed": "Failed to decline appointment.",
+      "transitStarted": "Transit started.",
+      "transitFailed": "Failed to start transit.",
+      "serviceStarted": "Service started.",
+      "serviceFailed": "Failed to start service.",
+      "examCompleted": "Exam completed. Awaiting report.",
+      "examCompleteFailed": "Failed to complete exam.",
+      "appointmentCompleted": "Appointment completed.",
+      "appointmentCompleteFailed": "Failed to complete appointment.",
+      "cancelled": "Appointment cancelled.",
+      "cancelFailed": "Failed to cancel appointment.",
+      "fileUploaded": "File uploaded successfully.",
+      "fileUploadFailed": "Failed to upload file.",
+      "noteCreated": "Note created.",
+      "noteCreateFailed": "Failed to create note."
+    },
+    "files": {
+      "empty": {
+        "title": "No files uploaded",
+        "description": "No exam files have been uploaded for this appointment yet."
+      }
+    },
+    "laudo": {
+      "fields": {
+        "status": "Status",
+        "issuedAt": "Issued At",
+        "findings": "Findings",
+        "conclusion": "Conclusion"
+      },
+      "empty": {
+        "title": "No laudo yet",
+        "description": "A laudo has not been created for this appointment."
+      }
+    },
+    "notesSection": {
+      "empty": {
+        "title": "No notes",
+        "description": "No observation notes have been recorded for this appointment."
+      }
+    },
+    "createNoteDialog": {
+      "title": "Create note",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Note title...",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Describe the observation or incident..."
+    },
+    "cancelDialog": {
+      "title": "Cancel appointment",
+      "message": "Please provide a reason for cancellation:",
+      "confirmButton": "Confirm cancellation"
+    },
+    "error": {
+      "title": "Failed to load appointment",
+      "detail": "The appointment could not be found or an error occurred.",
+      "backButton": "Back to appointments"
+    }
+  }
+}

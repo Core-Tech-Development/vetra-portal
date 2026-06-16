@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -23,6 +24,7 @@ import {
 } from "../../components/ui";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
+import { formatDate } from "../../i18n/formatting";
 import styles from "./SpecialistProfilePage.module.css";
 
 const BRAZILIAN_STATES = [
@@ -69,6 +71,7 @@ interface LocationForm {
 }
 
 export function SpecialistProfilePage() {
+  const { t } = useTranslation(['specialists', 'common']);
   const queryClient = useQueryClient();
   const { showToast } = useToast();
 
@@ -117,48 +120,48 @@ export function SpecialistProfilePage() {
   const updateMutation = useMutation({
     mutationFn: updateMyProfile,
     onSuccess: () => {
-      showToast("Profile updated successfully.", "success");
+      showToast(t('specialists:profile.toast.profileUpdated'), "success");
       queryClient.invalidateQueries({ queryKey: ["my-profile"] });
     },
     onError: () => {
-      showToast("Failed to update profile.", "error");
+      showToast(t('specialists:profile.toast.profileUpdateFailed'), "error");
     },
   });
 
   const addAreaMutation = useMutation({
     mutationFn: addMyCoverageArea,
     onSuccess: () => {
-      showToast("Coverage area added.", "success");
+      showToast(t('specialists:profile.toast.areaAdded'), "success");
       setAreaCity("");
       setAreaState("");
       setAreaRadius("");
       queryClient.invalidateQueries({ queryKey: ["my-coverage-areas"] });
     },
     onError: () => {
-      showToast("Failed to add coverage area.", "error");
+      showToast(t('specialists:profile.toast.areaAddFailed'), "error");
     },
   });
 
   const toggleAreaMutation = useMutation({
     mutationFn: toggleMyCoverageArea,
     onSuccess: () => {
-      showToast("Coverage area status updated.", "success");
+      showToast(t('specialists:profile.toast.areaToggled'), "success");
       queryClient.invalidateQueries({ queryKey: ["my-coverage-areas"] });
     },
     onError: () => {
-      showToast("Failed to update coverage area.", "error");
+      showToast(t('specialists:profile.toast.areaToggleFailed'), "error");
     },
   });
 
   const removeAreaMutation = useMutation({
     mutationFn: removeMyCoverageArea,
     onSuccess: () => {
-      showToast("Coverage area removed.", "success");
+      showToast(t('specialists:profile.toast.areaRemoved'), "success");
       setRemoveAreaId(null);
       queryClient.invalidateQueries({ queryKey: ["my-coverage-areas"] });
     },
     onError: () => {
-      showToast("Failed to remove coverage area.", "error");
+      showToast(t('specialists:profile.toast.areaRemoveFailed'), "error");
       setRemoveAreaId(null);
     },
   });
@@ -211,13 +214,13 @@ export function SpecialistProfilePage() {
   if (isError || !profile) {
     return (
       <div className={styles.errorBox}>
-        <div className={styles.errorTitle}>Failed to load profile</div>
+        <div className={styles.errorTitle}>{t('specialists:profile.error.title')}</div>
         <p className={styles.errorDetail}>
-          Your profile could not be loaded. Please try again.
+          {t('specialists:profile.error.detail')}
         </p>
         <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
-            Retry
+            {t('common:actions.retry')}
           </Button>
         </div>
       </div>
@@ -228,58 +231,58 @@ export function SpecialistProfilePage() {
 
   return (
     <div>
-      <PageHeader title={profile.name} subtitle="Specialist profile" />
+      <PageHeader title={profile.name} subtitle={t('specialists:profile.subtitle')} />
 
-      <DetailSection title="Professional information" columns={2}>
-        <FieldDisplay label="Email" value={profile.email} />
+      <DetailSection title={t('specialists:profile.sections.professionalInformation')} columns={2}>
+        <FieldDisplay label={t('specialists:profile.fields.email')} value={profile.email} />
         <FieldDisplay
-          label="CRMV"
+          label={t('specialists:profile.fields.crmv')}
           value={`${profile.crmv} / ${profile.crmvState}`}
         />
         <FieldDisplay
-          label="Specialty"
+          label={t('specialists:profile.fields.specialty')}
           value={profile.specialty.replace(/_/g, " ")}
         />
         <FieldDisplay
-          label="Status"
+          label={t('specialists:profile.fields.status')}
           value={<StatusBadge status={profile.status} />}
         />
         <FieldDisplay
-          label="Registered"
-          value={new Date(profile.createdAt).toLocaleDateString()}
+          label={t('specialists:profile.fields.registered')}
+          value={formatDate(profile.createdAt)}
         />
       </DetailSection>
 
       <div className={styles.section}>
-        <Card title="Personal information">
+        <Card title={t('specialists:profile.sections.personalInformation')}>
           <form
             className={styles.form}
             onSubmit={handlePersonalSubmit}
             noValidate
           >
             <Input
-              label="Name"
-              placeholder="Your full name"
+              label={t('specialists:profile.fields.name')}
+              placeholder={t('specialists:profile.fields.namePlaceholder')}
               error={personalForm.formState.errors.name?.message}
               {...personalForm.register("name", {
-                required: "Name is required",
+                required: t('common:validation.required', { field: t('specialists:profile.fields.name') }),
               })}
             />
             <Input
-              label="Phone"
+              label={t('specialists:profile.fields.phone')}
               type="tel"
-              placeholder="(11) 99999-9999"
+              placeholder={t('specialists:profile.fields.phonePlaceholder')}
               {...personalForm.register("phone")}
             />
             <Textarea
-              label="Bio"
-              placeholder="A short professional bio..."
+              label={t('specialists:profile.fields.bio')}
+              placeholder={t('specialists:profile.fields.bioPlaceholder')}
               rows={3}
               {...personalForm.register("bio")}
             />
             <div className={styles.actions}>
               <Button type="submit" isLoading={updateMutation.isPending}>
-                Save changes
+                {t('common:actions.saveChanges')}
               </Button>
             </div>
           </form>
@@ -287,7 +290,7 @@ export function SpecialistProfilePage() {
       </div>
 
       <div className={styles.section}>
-        <Card title="Location & mobility">
+        <Card title={t('specialists:profile.sections.locationMobility')}>
           <form
             className={styles.form}
             onSubmit={handleLocationSubmit}
@@ -295,15 +298,15 @@ export function SpecialistProfilePage() {
           >
             <div className={styles.formRow}>
               <Input
-                label="Base city"
-                placeholder="e.g. Sao Paulo"
+                label={t('specialists:profile.fields.baseCity')}
+                placeholder={t('specialists:profile.fields.baseCityPlaceholder')}
                 {...locationForm.register("baseCity")}
               />
               <Select
-                label="Base state"
+                label={t('specialists:profile.fields.baseState')}
                 {...locationForm.register("baseState")}
               >
-                <option value="">Select</option>
+                <option value="">{t('specialists:profile.coverageAreas.selectState')}</option>
                 {BRAZILIAN_STATES.map((st) => (
                   <option key={st.value} value={st.value}>
                     {st.label}
@@ -313,22 +316,22 @@ export function SpecialistProfilePage() {
             </div>
             <div className={styles.formRow}>
               <Input
-                label="Max travel radius (km)"
+                label={t('specialists:profile.fields.maxTravelRadius')}
                 type="number"
-                placeholder="e.g. 50"
+                placeholder={t('specialists:profile.fields.maxTravelRadiusPlaceholder')}
                 {...locationForm.register("maxTravelRadiusKm")}
               />
               <Select
-                label="Own equipment"
+                label={t('specialists:profile.fields.ownEquipment')}
                 {...locationForm.register("hasOwnEquipment")}
               >
-                <option value="true">Yes</option>
-                <option value="false">No</option>
+                <option value="true">{t('common:common.yes')}</option>
+                <option value="false">{t('common:common.no')}</option>
               </Select>
             </div>
             <div className={styles.actions}>
               <Button type="submit" isLoading={updateMutation.isPending}>
-                Save changes
+                {t('common:actions.saveChanges')}
               </Button>
             </div>
           </form>
@@ -336,26 +339,26 @@ export function SpecialistProfilePage() {
       </div>
 
       <div className={styles.section}>
-        <Card title="Coverage areas">
+        <Card title={t('specialists:profile.sections.coverageAreas')}>
           <div className={styles.addAreaForm}>
             <div className={styles.addAreaField}>
-              <label className={styles.addAreaLabel}>City</label>
+              <label className={styles.addAreaLabel}>{t('specialists:profile.coverageAreas.city')}</label>
               <input
                 className={styles.addAreaInput}
                 type="text"
-                placeholder="e.g. Sao Paulo"
+                placeholder={t('specialists:profile.coverageAreas.cityPlaceholder')}
                 value={areaCity}
                 onChange={(e) => setAreaCity(e.target.value)}
               />
             </div>
             <div className={styles.addAreaField}>
-              <label className={styles.addAreaLabel}>State</label>
+              <label className={styles.addAreaLabel}>{t('specialists:profile.coverageAreas.state')}</label>
               <select
                 className={styles.addAreaInput}
                 value={areaState}
                 onChange={(e) => setAreaState(e.target.value)}
               >
-                <option value="">Select</option>
+                <option value="">{t('specialists:profile.coverageAreas.selectState')}</option>
                 {BRAZILIAN_STATES.map((st) => (
                   <option key={st.value} value={st.value}>
                     {st.label}
@@ -364,11 +367,11 @@ export function SpecialistProfilePage() {
               </select>
             </div>
             <div className={styles.addAreaField}>
-              <label className={styles.addAreaLabel}>Radius (km)</label>
+              <label className={styles.addAreaLabel}>{t('specialists:profile.coverageAreas.radius')}</label>
               <input
                 className={styles.addAreaInput}
                 type="number"
-                placeholder="e.g. 30"
+                placeholder={t('specialists:profile.coverageAreas.radiusPlaceholder')}
                 value={areaRadius}
                 onChange={(e) => setAreaRadius(e.target.value)}
               />
@@ -379,7 +382,7 @@ export function SpecialistProfilePage() {
               isLoading={addAreaMutation.isPending}
               disabled={!areaCity.trim() || !areaState.trim()}
             >
-              Add
+              {t('specialists:profile.coverageAreas.addButton')}
             </Button>
           </div>
 
@@ -392,8 +395,8 @@ export function SpecialistProfilePage() {
           {!areasLoading && coverageAreas && coverageAreas.length === 0 && (
             <div className={styles.areasEmptyContainer}>
               <EmptyState
-                title="No coverage areas"
-                description="Add your first coverage area above to let clinics find you."
+                title={t('specialists:profile.coverageAreas.empty.title')}
+                description={t('specialists:profile.coverageAreas.empty.description')}
               />
             </div>
           )}
@@ -402,11 +405,11 @@ export function SpecialistProfilePage() {
             <table className={styles.areaTable}>
               <thead>
                 <tr>
-                  <th>City</th>
-                  <th>State</th>
-                  <th>Radius</th>
-                  <th>Status</th>
-                  <th className={styles.areaTableActionsHeader}>Actions</th>
+                  <th>{t('specialists:profile.coverageAreas.city')}</th>
+                  <th>{t('specialists:profile.coverageAreas.state')}</th>
+                  <th>{t('specialists:profile.coverageAreas.radius')}</th>
+                  <th>{t('specialists:profile.coverageAreas.status')}</th>
+                  <th className={styles.areaTableActionsHeader}>{t('specialists:profile.coverageAreas.actions')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -417,7 +420,7 @@ export function SpecialistProfilePage() {
                     <td>{area.radiusKm != null ? `${area.radiusKm} km` : "--"}</td>
                     <td>
                       <Badge variant={area.active ? "success" : "neutral"}>
-                        {area.active ? "Active" : "Inactive"}
+                        {area.active ? t('common:status.ACTIVE') : t('common:status.INACTIVE')}
                       </Badge>
                     </td>
                     <td>
@@ -428,14 +431,14 @@ export function SpecialistProfilePage() {
                           onClick={() => toggleAreaMutation.mutate(area.id)}
                           isLoading={toggleAreaMutation.isPending}
                         >
-                          {area.active ? "Deactivate" : "Activate"}
+                          {area.active ? t('specialists:profile.coverageAreas.deactivate') : t('specialists:profile.coverageAreas.activate')}
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => setRemoveAreaId(area.id)}
                         >
-                          Remove
+                          {t('specialists:profile.coverageAreas.remove')}
                         </Button>
                       </div>
                     </td>
@@ -451,28 +454,30 @@ export function SpecialistProfilePage() {
         <Dialog
           open={!!removeAreaId}
           onClose={() => setRemoveAreaId(null)}
-          title="Remove coverage area"
+          title={t('specialists:profile.coverageAreas.removeDialog.title')}
         >
-          <p>
-            Are you sure you want to remove{" "}
-            <strong>
-              {areaToRemove.city}, {areaToRemove.state}
-            </strong>{" "}
-            from your coverage areas?
-          </p>
+          <p
+            dangerouslySetInnerHTML={{
+              __html: t('specialists:profile.coverageAreas.removeDialog.message', {
+                city: areaToRemove.city,
+                state: areaToRemove.state,
+                interpolation: { escapeValue: false },
+              }),
+            }}
+          />
           <div className={styles.dialogActions}>
             <Button
               variant="secondary"
               onClick={() => setRemoveAreaId(null)}
             >
-              Cancel
+              {t('common:actions.cancel')}
             </Button>
             <Button
               variant="danger"
               isLoading={removeAreaMutation.isPending}
               onClick={() => removeAreaMutation.mutate(removeAreaId)}
             >
-              Remove
+              {t('common:actions.remove')}
             </Button>
           </div>
         </Dialog>

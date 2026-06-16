@@ -1,0 +1,98 @@
+{
+  "dashboard": {
+    "title": "Admin Dashboard",
+    "totalClinics": "Total clinics",
+    "totalSpecialists": "Total specialists",
+    "pendingClinicApprovals": "Pending clinic approvals",
+    "pendingSpecialistApprovals": "Pending specialist approvals",
+    "appointmentsToday": "Appointments today",
+    "activeAppointments": "Active appointments",
+    "viewApprovals": "View approvals",
+    "viewClinics": "View clinics",
+    "viewSpecialists": "View specialists"
+  },
+  "approvals": {
+    "title": "Pending approvals",
+    "clinicApprovalsTab": "Clinic Approvals ({{count}})",
+    "specialistApprovalsTab": "Specialist Approvals ({{count}})",
+    "columns": {
+      "name": "Name",
+      "document": "Document",
+      "location": "Location",
+      "crmv": "CRMV",
+      "specialty": "Specialty"
+    },
+    "approveButton": "Approve",
+    "clinicApproved": "Clinic approved.",
+    "clinicApproveFailed": "Failed to approve clinic.",
+    "specialistApproved": "Specialist approved.",
+    "specialistApproveFailed": "Failed to approve specialist.",
+    "emptyClinic": {
+      "title": "No clinics pending approval",
+      "description": "All clinic registrations have been reviewed."
+    },
+    "emptySpecialist": {
+      "title": "No specialists pending approval",
+      "description": "All specialist registrations have been reviewed."
+    },
+    "errorClinic": "Failed to load clinics pending approval",
+    "errorSpecialist": "Failed to load specialists pending approval",
+    "searchClinics": "Search clinics...",
+    "searchSpecialists": "Search specialists..."
+  },
+  "auditLog": {
+    "title": "Audit log",
+    "columns": {
+      "actor": "Actor",
+      "entityType": "Entity type",
+      "entityId": "Entity ID",
+      "action": "Action",
+      "date": "Date"
+    },
+    "error": "Failed to load audit logs",
+    "searchPlaceholder": "Search audit logs...",
+    "empty": {
+      "title": "No audit entries",
+      "description": "Audit log entries will appear here as actions are performed on the platform."
+    }
+  },
+  "pricing": {
+    "title": "Exam pricing",
+    "addPricing": "Add pricing",
+    "columns": {
+      "examType": "Exam type",
+      "price": "Price",
+      "platformFee": "Platform fee",
+      "feeAmount": "Fee amount",
+      "status": "Status"
+    },
+    "error": "Failed to load pricings",
+    "empty": {
+      "title": "No pricings configured",
+      "description": "Add exam type pricings to enable billing when laudos are issued."
+    },
+    "createDialog": {
+      "title": "Add exam pricing",
+      "examTypeLabel": "Exam type",
+      "examTypePlaceholder": "e.g. ABDOMINAL_ULTRASOUND",
+      "priceLabel": "Price (R$)",
+      "pricePlaceholder": "150.00",
+      "platformFeeLabel": "Platform fee (%)",
+      "platformFeePlaceholder": "12.00",
+      "createButton": "Create",
+      "creatingButton": "Creating..."
+    },
+    "editDialog": {
+      "title": "Edit exam pricing",
+      "activeLabel": "Active",
+      "savingButton": "Saving..."
+    },
+    "toast": {
+      "created": "Pricing created successfully",
+      "createFailed": "Failed to create pricing",
+      "updated": "Pricing updated successfully",
+      "updateFailed": "Failed to update pricing",
+      "invalidPrice": "Invalid price value"
+    }
+  }
+}

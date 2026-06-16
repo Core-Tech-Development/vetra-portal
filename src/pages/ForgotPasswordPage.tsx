@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Mail, ArrowLeft, CheckCircle } from "lucide-react";
+import { useTranslation, Trans } from "react-i18next";
+import i18next from "i18next";
 import { useAuth } from "../auth/useAuth";
 import { Button, Input, Alert } from "../components/ui";
 import styles from "./ForgotPasswordPage.module.css";
@@ -12,13 +14,17 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080/api/v1";
 
 const forgotSchema = z.object({
-  email: z.string().min(1, "Email is required").email("Enter a valid email address"),
+  email: z
+    .string()
+    .min(1, i18next.t("auth:forgotPassword.emailRequired"))
+    .email(i18next.t("auth:forgotPassword.invalidEmail")),
 });
 
 type ForgotForm = z.infer<typeof forgotSchema>;
 
 export function ForgotPasswordPage() {
   const { isAuthenticated } = useAuth();
+  const { t } = useTranslation("auth");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -51,7 +57,7 @@ export function ForgotPasswordPage() {
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
         throw new Error(
-          errorData?.message || "An error occurred. Please try again.",
+          errorData?.message || t("common:errors.genericError"),
         );
       }
 
@@ -61,7 +67,7 @@ export function ForgotPasswordPage() {
       setError(
         err instanceof Error
           ? err.message
-          : "An unexpected error occurred. Please try again.",
+          : t("common:errors.unexpectedError"),
       );
     } finally {
       setIsSubmitting(false);
@@ -74,11 +80,10 @@ export function ForgotPasswordPage() {
       <div className={styles.brandingPanel}>
         <img src="/logo.png" alt="Vetra" className={styles.brandingLogo} />
         <h1 className={styles.brandingTagline}>
-          Veterinary Diagnostic Imaging Platform
+          {t("branding.tagline")}
         </h1>
         <p className={styles.brandingDescription}>
-          Connecting veterinary clinics to specialist diagnosticians — anytime,
-          anywhere.
+          {t("branding.description")}
         </p>
       </div>
 
@@ -96,14 +101,17 @@ export function ForgotPasswordPage() {
               <div className={styles.successIcon}>
                 <CheckCircle size={48} />
               </div>
-              <h2 className={styles.heading}>Check your email</h2>
+              <h2 className={styles.heading}>{t("forgotPassword.successHeading")}</h2>
               <p className={styles.successMessage}>
-                If an account exists for <strong>{submittedEmail}</strong>, you
-                will receive a password reset link shortly.
+                <Trans
+                  i18nKey="forgotPassword.successMessage"
+                  ns="auth"
+                  values={{ email: submittedEmail }}
+                  components={{ strong: <strong /> }}
+                />
               </p>
               <p className={styles.successHint}>
-                Didn't receive an email? Check your spam folder or make sure you
-                entered the correct address.
+                {t("forgotPassword.successHint")}
               </p>
               <div className={styles.successActions}>
                 <Button
@@ -114,21 +122,20 @@ export function ForgotPasswordPage() {
                     setSubmittedEmail("");
                   }}
                 >
-                  Try another email
+                  {t("forgotPassword.tryAnotherEmail")}
                 </Button>
                 <Link to="/login" className={styles.backLink}>
                   <ArrowLeft size={16} />
-                  Back to sign in
+                  {t("forgotPassword.backToSignIn")}
                 </Link>
               </div>
             </div>
           ) : (
             /* Form state */
             <>
-              <h2 className={styles.heading}>Reset your password</h2>
+              <h2 className={styles.heading}>{t("forgotPassword.heading")}</h2>
               <p className={styles.subtitle}>
-                Enter the email address associated with your account and we'll
-                send you a link to reset your password.
+                {t("forgotPassword.subtitle")}
               </p>
 
               <form
@@ -139,9 +146,9 @@ export function ForgotPasswordPage() {
                 {error && <Alert variant="danger">{error}</Alert>}
 
                 <Input
-                  label="Email address"
+                  label={t("forgotPassword.emailLabel")}
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder={t("forgotPassword.emailPlaceholder")}
                   autoComplete="email"
                   leftIcon={<Mail size={18} />}
                   error={errors.email?.message}
@@ -155,19 +162,19 @@ export function ForgotPasswordPage() {
                   isLoading={isSubmitting}
                   className={styles.submitButton}
                 >
-                  Send reset link
+                  {t("forgotPassword.submitButton")}
                 </Button>
               </form>
 
               <Link to="/login" className={styles.backLink}>
                 <ArrowLeft size={16} />
-                Back to sign in
+                {t("forgotPassword.backToSignIn")}
               </Link>
             </>
           )}
 
           <div className={styles.divider} />
-          <p className={styles.footer}>Secured by Keycloak</p>
+          <p className={styles.footer}>{t("footer")}</p>
         </div>
       </div>
     </div>

@@ -1,0 +1,116 @@
+{
+  "list": {
+    "title": "Solicitações de exame",
+    "newExamRequest": "Nova solicitação de exame",
+    "columns": {
+      "id": "ID",
+      "examType": "Tipo de exame",
+      "priority": "Prioridade",
+      "status": "Status",
+      "appointment": "Agendamento",
+      "created": "Criado"
+    },
+    "searchPlaceholder": "Buscar solicitações de exame...",
+    "error": "Falha ao carregar solicitações de exame",
+    "empty": {
+      "title": "Nenhuma solicitação de exame",
+      "description": "Comece criando a primeira solicitação de exame desta clínica."
+    },
+    "noClinic": {
+      "title": "Nenhuma clínica selecionada",
+      "description": "Selecione uma clínica para visualizar as solicitações de exame."
+    }
+  },
+  "create": {
+    "title": "Nova solicitação de exame",
+    "subtitle": "Solicite um exame de diagnóstico por imagem para um paciente.",
+    "backLink": "Voltar para solicitações de exame",
+    "sections": {
+      "examDetails": "Detalhes do exame",
+      "clinicalInformation": "Informações clínicas"
+    },
+    "validation": {
+      "patientRequired": "Selecione um paciente",
+      "examTypeRequired": "Selecione um tipo de exame",
+      "priorityRequired": "Selecione uma prioridade"
+    },
+    "fields": {
+      "patient": "Paciente",
+      "patientPlaceholder": "Selecione um paciente",
+      "patientLoading": "Carregando pacientes...",
+      "examType": "Tipo de exame",
+      "examTypePlaceholder": "Selecione o tipo de exame",
+      "priority": "Prioridade",
+      "diagnosticHypothesis": "Hipótese diagnóstica",
+      "diagnosticHypothesisPlaceholder": "Descreva a hipótese diagnóstica...",
+      "clinicalHistory": "Histórico clínico",
+      "clinicalHistoryPlaceholder": "Descreva o histórico clínico...",
+      "additionalNotes": "Observações adicionais",
+      "additionalNotesPlaceholder": "Quaisquer observações ou notas adicionais..."
+    },
+    "submitButton": "Criar solicitação de exame",
+    "toast": {
+      "success": "Solicitação de exame criada com sucesso.",
+      "error": "Falha ao criar solicitação de exame. Verifique as informações e tente novamente."
+    }
+  },
+  "detail": {
+    "titlePrefix": "Solicitação de exame",
+    "backLink": "Voltar para solicitações de exame",
+    "sections": {
+      "requestDetails": "Detalhes da solicitação",
+      "availableSpecialists": "Especialistas disponíveis"
+    },
+    "fields": {
+      "examType": "Tipo de exame",
+      "priority": "Prioridade",
+      "status": "Status",
+      "patient": "Paciente",
+      "requestedBy": "Solicitado por",
+      "created": "Criado",
+      "diagnosticHypothesis": "Hipótese diagnóstica",
+      "clinicalHistory": "Histórico clínico",
+      "additionalNotes": "Observações adicionais"
+    },
+    "cancelRequest": "Cancelar solicitação",
+    "cancelSuccess": "Solicitação de exame cancelada com sucesso.",
+    "cancelError": "Falha ao cancelar solicitação de exame.",
+    "pending": {
+      "title": "Aguardando aceite do especialista",
+      "description": "Um agendamento foi enviado ao especialista. Se o especialista recusar ou o agendamento for cancelado, você pode atribuir outro especialista."
+    },
+    "specialists": {
+      "findButton": "Buscar especialistas disponíveis",
+      "filterBySpecialty": "Filtrar por especialidade ({{specialty}})",
+      "columns": {
+        "name": "Nome",
+        "crmv": "CRMV",
+        "specialty": "Especialidade",
+        "baseCity": "Cidade base",
+        "equipment": "Equipamento"
+      },
+      "equipmentOwn": "Próprio",
+      "equipmentNo": "Não",
+      "scheduleButton": "Agendar",
+      "searchError": "Falha ao buscar especialistas.",
+      "empty": {
+        "title": "Nenhum especialista disponível",
+        "descriptionWithLocation": "Nenhum especialista encontrado cobrindo {{city}} / {{state}} para {{examType}}.",
+        "descriptionGeneric": "Nenhum especialista encontrado para esta região e tipo de exame."
+      }
+    },
+    "scheduleDialog": {
+      "title": "Agendar atendimento",
+      "message": "Agendar um atendimento com <strong>{{name}}</strong> (CRMV {{crmv}} / {{crmvState}}) para esta solicitação de exame?",
+      "detail": "O especialista receberá a solicitação e poderá aceitar ou recusar.",
+      "confirmButton": "Confirmar agendamento",
+      "success": "Agendamento realizado com sucesso.",
+      "error": "Falha ao agendar atendimento."
+    },
+    "error": {
+      "title": "Falha ao carregar solicitação de exame",
+      "detail": "A solicitação de exame não foi encontrada ou ocorreu um erro.",
+      "backButton": "Voltar para solicitações de exame"
+    }
+  }
+}

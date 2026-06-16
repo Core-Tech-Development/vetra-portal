@@ -1,0 +1,169 @@
+{
+  "list": {
+    "title": "Specialists",
+    "newSpecialist": "New specialist",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "crmv": "CRMV",
+      "specialty": "Specialty",
+      "status": "Status"
+    },
+    "searchPlaceholder": "Search specialists...",
+    "error": "Failed to load specialists",
+    "empty": {
+      "title": "No specialists registered",
+      "description": "Start by registering the first specialist on the platform."
+    }
+  },
+  "create": {
+    "title": "New specialist",
+    "subtitle": "Register a new imaging specialist on the platform.",
+    "backLink": "Back to specialists",
+    "sections": {
+      "personalInformation": "Personal information",
+      "professionalRegistration": "Professional registration",
+      "coverageArea": "Coverage area",
+      "bio": "Bio"
+    },
+    "fields": {
+      "fullName": "Full name",
+      "fullNamePlaceholder": "e.g. Dr. Maria Silva",
+      "email": "Email",
+      "emailPlaceholder": "specialist@email.com",
+      "phone": "Phone",
+      "phonePlaceholder": "(11) 99999-9999",
+      "crmv": "CRMV",
+      "crmvPlaceholder": "e.g. 12345",
+      "crmvState": "CRMV State",
+      "crmvStatePlaceholder": "Select state",
+      "specialty": "Specialty",
+      "specialtyPlaceholder": "Select specialty",
+      "baseCity": "Base city",
+      "baseCityPlaceholder": "e.g. Sao Paulo",
+      "baseState": "Base state",
+      "baseStatePlaceholder": "Select state",
+      "maxTravelRadius": "Max travel radius (km)",
+      "maxTravelRadiusPlaceholder": "e.g. 50",
+      "hasOwnEquipment": "Has own equipment",
+      "bio": "Bio",
+      "bioPlaceholder": "Brief professional description..."
+    },
+    "specialties": {
+      "ABDOMINAL_ULTRASOUND": "Abdominal Ultrasound",
+      "GESTATIONAL_ULTRASOUND": "Gestational Ultrasound",
+      "MUSCULOSKELETAL_ULTRASOUND": "Musculoskeletal Ultrasound"
+    },
+    "submitButton": "Create specialist",
+    "toast": {
+      "success": "Specialist created successfully.",
+      "error": "Failed to create specialist. Please check the information and try again."
+    }
+  },
+  "detail": {
+    "backLink": "Back to specialists",
+    "sections": {
+      "specialistInformation": "Specialist information",
+      "coverageAreas": "Coverage areas"
+    },
+    "fields": {
+      "email": "Email",
+      "phone": "Phone",
+      "crmv": "CRMV",
+      "specialty": "Specialty",
+      "baseLocation": "Base location",
+      "maxTravelRadius": "Max travel radius",
+      "ownEquipment": "Own equipment",
+      "registered": "Registered",
+      "bio": "Bio"
+    },
+    "coverageAreas": {
+      "empty": "No coverage areas registered yet.",
+      "city": "City",
+      "state": "State",
+      "radiusKm": "Radius (km)",
+      "cityPlaceholder": "e.g. Sao Paulo",
+      "selectState": "Select",
+      "radiusPlaceholder": "e.g. 30",
+      "addArea": "Add area",
+      "remove": "Remove"
+    },
+    "toast": {
+      "approved": "Specialist approved successfully.",
+      "approveFailed": "Failed to approve specialist.",
+      "areaAdded": "Coverage area added.",
+      "areaAddFailed": "Failed to add coverage area.",
+      "areaRemoved": "Coverage area removed.",
+      "areaRemoveFailed": "Failed to remove coverage area."
+    },
+    "error": {
+      "title": "Failed to load specialist",
+      "detail": "The specialist could not be found or an error occurred.",
+      "backButton": "Back to specialists"
+    }
+  },
+  "profile": {
+    "subtitle": "Specialist profile",
+    "sections": {
+      "professionalInformation": "Professional information",
+      "personalInformation": "Personal information",
+      "locationMobility": "Location & mobility",
+      "coverageAreas": "Coverage areas"
+    },
+    "fields": {
+      "email": "Email",
+      "crmv": "CRMV",
+      "specialty": "Specialty",
+      "status": "Status",
+      "registered": "Registered",
+      "name": "Name",
+      "namePlaceholder": "Your full name",
+      "phone": "Phone",
+      "phonePlaceholder": "(11) 99999-9999",
+      "bio": "Bio",
+      "bioPlaceholder": "A short professional bio...",
+      "baseCity": "Base city",
+      "baseCityPlaceholder": "e.g. Sao Paulo",
+      "baseState": "Base state",
+      "maxTravelRadius": "Max travel radius (km)",
+      "maxTravelRadiusPlaceholder": "e.g. 50",
+      "ownEquipment": "Own equipment"
+    },
+    "coverageAreas": {
+      "city": "City",
+      "state": "State",
+      "radius": "Radius",
+      "status": "Status",
+      "actions": "Actions",
+      "cityPlaceholder": "e.g. Sao Paulo",
+      "selectState": "Select",
+      "radiusPlaceholder": "e.g. 30",
+      "addButton": "Add",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "remove": "Remove",
+      "empty": {
+        "title": "No coverage areas",
+        "description": "Add your first coverage area above to let clinics find you."
+      },
+      "removeDialog": {
+        "title": "Remove coverage area",
+        "message": "Are you sure you want to remove <strong>{{city}}, {{state}}</strong> from your coverage areas?"
+      }
+    },
+    "toast": {
+      "profileUpdated": "Profile updated successfully.",
+      "profileUpdateFailed": "Failed to update profile.",
+      "areaAdded": "Coverage area added.",
+      "areaAddFailed": "Failed to add coverage area.",
+      "areaToggled": "Coverage area status updated.",
+      "areaToggleFailed": "Failed to update coverage area.",
+      "areaRemoved": "Coverage area removed.",
+      "areaRemoveFailed": "Failed to remove coverage area."
+    },
+    "error": {
+      "title": "Failed to load profile",
+      "detail": "Your profile could not be loaded. Please try again."
+    }
+  }
+}

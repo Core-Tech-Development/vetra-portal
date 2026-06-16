@@ -1,0 +1,96 @@
+{
+  "list": {
+    "title": "Staff",
+    "newCollaborator": "New collaborator",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status"
+    },
+    "searchPlaceholder": "Search staff...",
+    "error": "Failed to load staff",
+    "empty": {
+      "title": "No staff registered",
+      "description": "Start by registering the first collaborator for this clinic."
+    },
+    "noClinic": {
+      "title": "No clinic selected",
+      "description": "Please select a clinic first."
+    },
+    "deactivateDialog": {
+      "title": "Deactivate collaborator",
+      "message": "Are you sure you want to deactivate <strong>{{name}}</strong>? They will no longer be able to access the platform."
+    }
+  },
+  "create": {
+    "title": "New collaborator",
+    "subtitle": "Register a new staff member for the clinic.",
+    "backLink": "Back to staff",
+    "sections": {
+      "personalInformation": "Personal information",
+      "credentials": "Credentials"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "emailRequired": "Email is required",
+      "validEmailRequired": "Valid email required",
+      "roleRequired": "Role is required",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "confirmPasswordRequired": "Confirm password is required",
+      "passwordsDoNotMatch": "Passwords do not match"
+    },
+    "fields": {
+      "fullName": "Full name",
+      "fullNamePlaceholder": "e.g. Maria Silva",
+      "email": "Email",
+      "emailPlaceholder": "collaborator@clinic.com",
+      "phone": "Phone",
+      "phonePlaceholder": "(11) 99999-9999",
+      "role": "Role",
+      "rolePlaceholder": "Select role",
+      "password": "Password",
+      "passwordPlaceholder": "Minimum 8 characters",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Repeat password"
+    },
+    "submitButton": "Create collaborator",
+    "toast": {
+      "success": "Collaborator created successfully.",
+      "error": "Failed to create collaborator. Please check the information and try again."
+    }
+  },
+  "edit": {
+    "title": "Edit collaborator",
+    "subtitle": "Update collaborator information.",
+    "backLink": "Back to staff",
+    "submitButton": "Save changes",
+    "validation": {
+      "nameRequired": "Name is required",
+      "roleRequired": "Role is required"
+    },
+    "toast": {
+      "success": "Collaborator updated successfully.",
+      "error": "Failed to update collaborator. Please try again."
+    }
+  },
+  "detail": {
+    "backLink": "Back to staff",
+    "sections": {
+      "collaboratorInformation": "Collaborator information"
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "role": "Role",
+      "status": "Status",
+      "registered": "Registered"
+    },
+    "error": {
+      "title": "Failed to load collaborator",
+      "detail": "The collaborator could not be found or an error occurred.",
+      "backButton": "Back to staff"
+    }
+  }
+}

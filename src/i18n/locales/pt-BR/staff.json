@@ -1,0 +1,96 @@
+{
+  "list": {
+    "title": "Equipe",
+    "newCollaborator": "Novo colaborador",
+    "columns": {
+      "name": "Nome",
+      "email": "E-mail",
+      "role": "Função",
+      "status": "Status"
+    },
+    "searchPlaceholder": "Buscar equipe...",
+    "error": "Falha ao carregar equipe",
+    "empty": {
+      "title": "Nenhum colaborador cadastrado",
+      "description": "Comece cadastrando o primeiro colaborador desta clínica."
+    },
+    "noClinic": {
+      "title": "Nenhuma clínica selecionada",
+      "description": "Selecione uma clínica primeiro."
+    },
+    "deactivateDialog": {
+      "title": "Desativar colaborador",
+      "message": "Tem certeza de que deseja desativar <strong>{{name}}</strong>? Ele(a) não poderá mais acessar a plataforma."
+    }
+  },
+  "create": {
+    "title": "Novo colaborador",
+    "subtitle": "Cadastre um novo membro da equipe para a clínica.",
+    "backLink": "Voltar para equipe",
+    "sections": {
+      "personalInformation": "Informações pessoais",
+      "credentials": "Credenciais"
+    },
+    "validation": {
+      "nameRequired": "Nome é obrigatório",
+      "emailRequired": "E-mail é obrigatório",
+      "validEmailRequired": "E-mail válido é obrigatório",
+      "roleRequired": "Função é obrigatória",
+      "passwordMinLength": "A senha deve ter pelo menos 8 caracteres",
+      "confirmPasswordRequired": "Confirmação de senha é obrigatória",
+      "passwordsDoNotMatch": "As senhas não coincidem"
+    },
+    "fields": {
+      "fullName": "Nome completo",
+      "fullNamePlaceholder": "ex. Maria Silva",
+      "email": "E-mail",
+      "emailPlaceholder": "colaborador@clinica.com",
+      "phone": "Telefone",
+      "phonePlaceholder": "(11) 99999-9999",
+      "role": "Função",
+      "rolePlaceholder": "Selecione a função",
+      "password": "Senha",
+      "passwordPlaceholder": "Mínimo de 8 caracteres",
+      "confirmPassword": "Confirmar senha",
+      "confirmPasswordPlaceholder": "Repita a senha"
+    },
+    "submitButton": "Criar colaborador",
+    "toast": {
+      "success": "Colaborador criado com sucesso.",
+      "error": "Falha ao criar colaborador. Verifique as informações e tente novamente."
+    }
+  },
+  "edit": {
+    "title": "Editar colaborador",
+    "subtitle": "Atualize as informações do colaborador.",
+    "backLink": "Voltar para equipe",
+    "submitButton": "Salvar alterações",
+    "validation": {
+      "nameRequired": "Nome é obrigatório",
+      "roleRequired": "Função é obrigatória"
+    },
+    "toast": {
+      "success": "Colaborador atualizado com sucesso.",
+      "error": "Falha ao atualizar colaborador. Tente novamente."
+    }
+  },
+  "detail": {
+    "backLink": "Voltar para equipe",
+    "sections": {
+      "collaboratorInformation": "Informações do colaborador"
+    },
+    "fields": {
+      "name": "Nome",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "role": "Função",
+      "status": "Status",
+      "registered": "Cadastrado"
+    },
+    "error": {
+      "title": "Falha ao carregar colaborador",
+      "detail": "O colaborador não foi encontrado ou ocorreu um erro.",
+      "backButton": "Voltar para equipe"
+    }
+  }
+}

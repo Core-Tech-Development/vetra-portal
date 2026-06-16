@@ -1,0 +1,35 @@
+{
+  "welcome": "Welcome, {{name}}",
+  "clinic": {
+    "upcomingAppointments": "Upcoming appointments",
+    "pendingReports": "Pending reports",
+    "activeExamRequests": "Active exam requests",
+    "newExamRequest": "New exam request",
+    "viewSchedule": "View schedule",
+    "recentActivity": "Recent activity",
+    "emptyActivity": "No recent activity to display. Start by creating an exam request or registering a new tutor."
+  },
+  "specialist": {
+    "todaysAppointments": "Today's appointments",
+    "pendingRequests": "Pending requests",
+    "reportsToIssue": "Reports to issue",
+    "viewSchedule": "View schedule",
+    "recentActivity": "Recent activity",
+    "emptyActivity": "No recent activity to display. Check your schedule for upcoming appointments."
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "totalClinics": "Total clinics",
+    "totalSpecialists": "Total specialists",
+    "pendingApprovals": "Pending approvals",
+    "pendingClinicApprovals": "Pending clinic approvals",
+    "pendingSpecialistApprovals": "Pending specialist approvals",
+    "appointmentsToday": "Appointments today",
+    "activeAppointments": "Active appointments",
+    "platformOverview": "Platform overview",
+    "emptyOverview": "Monitor platform activity, manage approvals, and review audit logs from the admin panel.",
+    "viewApprovals": "View approvals",
+    "viewClinics": "View clinics",
+    "viewSpecialists": "View specialists"
+  }
+}

@@ -1,5 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import {
   getAppointment,
   acceptAppointment,
@@ -17,12 +18,8 @@ import { Button, Card, StatusBadge, Spinner, Dialog, EmptyState } from "../../co
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
 import { useState, useRef } from "react";
+import { formatDate, formatDateTime } from "../../i18n/formatting";
 import styles from "./AppointmentDetailPage.module.css";
-
-function formatDateTime(value: string | null): string {
-  if (!value) return "\u2014";
-  return new Date(value).toLocaleString();
-}
 
 function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -31,6 +28,7 @@ function formatFileSize(bytes: number): string {
 }
 
 export function AppointmentDetailPage() {
+  const { t } = useTranslation(['appointments', 'common']);
   const { id } = useParams<{ id: string }>();
   const { showToast } = useToast();
   const queryClient = useQueryClient();
@@ -79,13 +77,13 @@ export function AppointmentDetailPage() {
   const createNoteMutation = useMutation({
     mutationFn: () => createNote(id!, noteTitle, noteContent),
     onSuccess: () => {
-      showToast("Note created.", "success");
+      showToast(t('appointments:detail.toast.noteCreated'), "success");
       setNoteTitle("");
       setNoteContent("");
       setShowCreateNoteDialog(false);
       queryClient.invalidateQueries({ queryKey: ["appointment-notes", id] });
     },
-    onError: () => showToast("Failed to create note.", "error"),
+    onError: () => showToast(t('appointments:detail.toast.noteCreateFailed'), "error"),
   });
 
   const invalidateAppointment = () => {
@@ -96,82 +94,82 @@ export function AppointmentDetailPage() {
   const acceptMutation = useMutation({
     mutationFn: () => acceptAppointment(id!),
     onSuccess: () => {
-      showToast("Appointment accepted.", "success");
+      showToast(t('appointments:detail.toast.accepted'), "success");
       invalidateAppointment();
       refetch();
     },
-    onError: () => showToast("Failed to accept appointment.", "error"),
+    onError: () => showToast(t('appointments:detail.toast.acceptFailed'), "error"),
   });
 
   const declineMutation = useMutation({
     mutationFn: () => declineAppointment(id!),
     onSuccess: () => {
-      showToast("Appointment declined.", "success");
+      showToast(t('appointments:detail.toast.declined'), "success");
       invalidateAppointment();
       refetch();
     },
-    onError: () => showToast("Failed to decline appointment.", "error"),
+    onError: () => showToast(t('appointments:detail.toast.declineFailed'), "error"),
   });
 
   const transitMutation = useMutation({
     mutationFn: () => startTransit(id!),
     onSuccess: () => {
-      showToast("Transit started.", "success");
+      showToast(t('appointments:detail.toast.transitStarted'), "success");
       invalidateAppointment();
       refetch();
     },
-    onError: () => showToast("Failed to start transit.", "error"),
+    onError: () => showToast(t('appointments:detail.toast.transitFailed'), "error"),
   });
 
   const serviceMutation = useMutation({
     mutationFn: () => startService(id!),
     onSuccess: () => {
-      showToast("Service started.", "success");
+      showToast(t('appointments:detail.toast.serviceStarted'), "success");
       invalidateAppointment();
       refetch();
     },
-    onError: () => showToast("Failed to start service.", "error"),
+    onError: () => showToast(t('appointments:detail.toast.serviceFailed'), "error"),
   });
 
   const completeMutation = useMutation({
     mutationFn: () => completeExam(id!),
     onSuccess: () => {
-      showToast("Exam completed. Awaiting report.", "success");
+      showToast(t('appointments:detail.toast.examCompleted'), "success");
       invalidateAppointment();
       refetch();
     },
-    onError: () => showToast("Failed to complete exam.", "error"),
+    onError: () => showToast(t('appointments:detail.toast.examCompleteFailed'), "error"),
   });
 
   const completeAppointmentMutation = useMutation({
     mutationFn: () => completeAppointment(id!),
     onSuccess: () => {
-      showToast("Appointment completed.", "success");
+      showToast(t('appointments:detail.toast.appointmentCompleted'), "success");
       invalidateAppointment();
       refetch();
     },
-    onError: () => showToast("Failed to complete appointment.", "error"),
+    onError: () => showToast(t('appointments:detail.toast.appointmentCompleteFailed'), "error"),
   });
 
   const cancelMutation = useMutation({
     mutationFn: () => cancelAppointment(id!, cancelReason),
     onSuccess: () => {
-      showToast("Appointment cancelled.", "success");
+      showToast(t('appointments:detail.toast.cancelled'), "success");
       setShowCancelDialog(false);
       setCancelReason("");
       invalidateAppointment();
       refetch();
     },
-    onError: () => showToast("Failed to cancel appointment.", "error"),
+    onError: () => showToast(t('appointments:detail.toast.cancelFailed'), "error"),
   });
 
   const uploadMutation = useMutation({
     mutationFn: (file: File) => uploadFile(id!, file),
     onSuccess: () => {
-      showToast("File uploaded successfully.", "success");
+      showToast(t('appointments:detail.toast.fileUploaded'), "success");
       queryClient.invalidateQueries({ queryKey: ["appointment-files", id] });
     },
-    onError: () => showToast("Failed to upload file.", "error"),
+    onError: () => showToast(t('appointments:detail.toast.fileUploadFailed'), "error"),
   });
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -196,16 +194,16 @@ export function AppointmentDetailPage() {
   if (isError || !appointment) {
     return (
       <div className={styles.errorBox}>
-        <div className={styles.errorTitle}>Failed to load appointment</div>
+        <div className={styles.errorTitle}>{t('appointments:detail.error.title')}</div>
         <p className={styles.errorDetail}>
-          The appointment could not be found or an error occurred.
+          {t('appointments:detail.error.detail')}
         </p>
         <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
-            Retry
+            {t('common:actions.retry')}
           </Button>
           <Link to="/appointments">
-            <Button variant="outline">Back to appointments</Button>
+            <Button variant="outline">{t('appointments:detail.error.backButton')}</Button>
           </Link>
         </div>
       </div>
@@ -215,56 +213,56 @@ export function AppointmentDetailPage() {
   return (
     <div>
       <PageHeader
-        title={`Appointment ${appointment.id.substring(0, 8)}`}
+        title={`${t('appointments:detail.titlePrefix')} ${appointment.id.substring(0, 8)}`}
         subtitle={appointment.status}
-        backLink={{ label: "Back to appointments", to: "/appointments" }}
+        backLink={{ label: t('appointments:detail.backLink'), to: "/appointments" }}
         actions={
           <StatusBadge status={appointment.status} />
         }
       />
 
       {/* Appointment Information */}
-      <DetailSection title="Appointment information" columns={2}>
-        <FieldDisplay label="Appointment ID" value={appointment.id} />
-        <FieldDisplay label="Exam Request ID" value={appointment.examRequestId} />
-        <FieldDisplay label="Specialist ID" value={appointment.specialistId} />
+      <DetailSection title={t('appointments:detail.sections.appointmentInformation')} columns={2}>
+        <FieldDisplay label={t('appointments:detail.fields.appointmentId')} value={appointment.id} />
+        <FieldDisplay label={t('appointments:detail.fields.examRequestId')} value={appointment.examRequestId} />
+        <FieldDisplay label={t('appointments:detail.fields.specialistId')} value={appointment.specialistId} />
         <FieldDisplay
-          label="Availability Slot ID"
+          label={t('appointments:detail.fields.availabilitySlotId')}
           value={appointment.availabilitySlotId ?? "\u2014"}
         />
         <FieldDisplay
-          label="Scheduled Start"
-          value={formatDateTime(appointment.scheduledStartAt)}
+          label={t('appointments:detail.fields.scheduledStart')}
+          value={appointment.scheduledStartAt ? formatDateTime(appointment.scheduledStartAt) : "\u2014"}
         />
         <FieldDisplay
-          label="Scheduled End"
-          value={formatDateTime(appointment.scheduledEndAt)}
+          label={t('appointments:detail.fields.scheduledEnd')}
+          value={appointment.scheduledEndAt ? formatDateTime(appointment.scheduledEndAt) : "\u2014"}
         />
         <FieldDisplay
-          label="Actual Start"
-          value={formatDateTime(appointment.actualStartAt)}
+          label={t('appointments:detail.fields.actualStart')}
+          value={appointment.actualStartAt ? formatDateTime(appointment.actualStartAt) : "\u2014"}
         />
         <FieldDisplay
-          label="Actual End"
-          value={formatDateTime(appointment.actualEndAt)}
+          label={t('appointments:detail.fields.actualEnd')}
+          value={appointment.actualEndAt ? formatDateTime(appointment.actualEndAt) : "\u2014"}
         />
         <FieldDisplay
-          label="Notes"
+          label={t('appointments:detail.fields.notes')}
           value={appointment.notes ?? "\u2014"}
         />
         {appointment.cancelReason && (
           <FieldDisplay
-            label="Cancel Reason"
+            label={t('appointments:detail.fields.cancelReason')}
             value={appointment.cancelReason}
           />
         )}
         <FieldDisplay
-          label="Created"
-          value={new Date(appointment.createdAt).toLocaleDateString()}
+          label={t('appointments:detail.fields.created')}
+          value={formatDate(appointment.createdAt)}
         />
         <FieldDisplay
-          label="Updated"
-          value={new Date(appointment.updatedAt).toLocaleDateString()}
+          label={t('appointments:detail.fields.updated')}
+          value={formatDate(appointment.updatedAt)}
         />
       </DetailSection>
 
@@ -276,14 +274,14 @@ export function AppointmentDetailPage() {
               onClick={() => acceptMutation.mutate()}
               isLoading={acceptMutation.isPending}
             >
-              Accept
+              {t('appointments:detail.actions.accept')}
             </Button>
             <Button
               variant="danger"
               onClick={() => declineMutation.mutate()}
               isLoading={declineMutation.isPending}
             >
-              Decline
+              {t('appointments:detail.actions.decline')}
             </Button>
           </>
         )}
@@ -292,7 +290,7 @@ export function AppointmentDetailPage() {
             onClick={() => transitMutation.mutate()}
             isLoading={transitMutation.isPending}
           >
-            Start transit
+            {t('appointments:detail.actions.startTransit')}
           </Button>
         )}
         {appointment.status === "IN_TRANSIT" && (
@@ -300,7 +298,7 @@ export function AppointmentDetailPage() {
             onClick={() => serviceMutation.mutate()}
             isLoading={serviceMutation.isPending}
           >
-            Start service
+            {t('appointments:detail.actions.startService')}
           </Button>
         )}
         {appointment.status === "IN_SERVICE" && (
@@ -308,12 +306,12 @@ export function AppointmentDetailPage() {
             onClick={() => completeMutation.mutate()}
             isLoading={completeMutation.isPending}
           >
-            Complete exam
+            {t('appointments:detail.actions.completeExam')}
           </Button>
         )}
         {appointment.status === "WAITING_REPORT" && (
           <Link to={`/laudos/new/${id}`}>
-            <Button>Create laudo</Button>
+            <Button>{t('appointments:detail.actions.createLaudo')}</Button>
           </Link>
         )}
         {appointment.status === "REPORT_ISSUED" && (
@@ -321,12 +319,12 @@ export function AppointmentDetailPage() {
             onClick={() => completeAppointmentMutation.mutate()}
             isLoading={completeAppointmentMutation.isPending}
           >
-            Complete appointment
+            {t('appointments:detail.actions.completeAppointment')}
           </Button>
         )}
         {!["COMPLETED", "CANCELLED", "NO_SHOW"].includes(appointment.status) && (
           <Button variant="danger" onClick={() => setShowCancelDialog(true)}>
-            Cancel
+            {t('common:actions.cancel')}
           </Button>
         )}
       </div>
@@ -334,7 +332,7 @@ export function AppointmentDetailPage() {
       {/* Files Section */}
       <div className={styles.section}>
         <div className={styles.sectionHeader}>
-          <h3 className={styles.sectionTitle}>Exam Files</h3>
+          <h3 className={styles.sectionTitle}>{t('appointments:detail.sections.examFiles')}</h3>
           {appointment.status === "WAITING_REPORT" && (
             <>
               <input
@@ -351,7 +349,7 @@ export function AppointmentDetailPage() {
                 onClick={() => fileInputRef.current?.click()}
                 isLoading={uploadMutation.isPending}
               >
-                Upload files
+                {t('appointments:detail.actions.uploadFiles')}
               </Button>
             </>
           )}
@@ -371,8 +369,8 @@ export function AppointmentDetailPage() {
             ))
           ) : (
             <EmptyState
-              title="No files uploaded"
-              description="No exam files have been uploaded for this appointment yet."
+              title={t('appointments:detail.files.empty.title')}
+              description={t('appointments:detail.files.empty.description')}
             />
           )}
         </Card>
@@ -380,27 +378,27 @@ export function AppointmentDetailPage() {
 
       {/* Laudo Section */}
       <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>Laudo</h3>
+        <h3 className={styles.sectionTitle}>{t('appointments:detail.sections.laudo')}</h3>
         {laudo ? (
           <DetailSection columns={2}>
             <FieldDisplay
-              label="Status"
+              label={t('appointments:detail.laudo.fields.status')}
               value={<StatusBadge status={laudo.status} />}
             />
             <FieldDisplay
-              label="Issued At"
-              value={formatDateTime(laudo.issuedAt)}
+              label={t('appointments:detail.laudo.fields.issuedAt')}
+              value={laudo.issuedAt ? formatDateTime(laudo.issuedAt) : "\u2014"}
             />
             {laudo.findings && (
               <FieldDisplay
-                label="Findings"
+                label={t('appointments:detail.laudo.fields.findings')}
                 value={laudo.findings}
                 fullWidth
               />
             )}
             {laudo.conclusion && (
               <FieldDisplay
-                label="Conclusion"
+                label={t('appointments:detail.laudo.fields.conclusion')}
                 value={laudo.conclusion}
                 fullWidth
               />
@@ -408,7 +406,7 @@ export function AppointmentDetailPage() {
             <div>
               <Link to={`/laudos/${laudo.id}`}>
                 <Button variant="secondary" size="sm">
-                  View full laudo
+                  {t('appointments:detail.actions.viewFullLaudo')}
                 </Button>
               </Link>
             </div>
@@ -416,8 +414,8 @@ export function AppointmentDetailPage() {
         ) : (
           <Card>
             <EmptyState
-              title="No laudo yet"
-              description="A laudo has not been created for this appointment."
+              title={t('appointments:detail.laudo.empty.title')}
+              description={t('appointments:detail.laudo.empty.description')}
             />
           </Card>
         )}
@@ -426,13 +424,13 @@ export function AppointmentDetailPage() {
       {/* Notes Section */}
       <div className={styles.section}>
         <div className={styles.sectionHeader}>
-          <h3 className={styles.sectionTitle}>Notes</h3>
+          <h3 className={styles.sectionTitle}>{t('appointments:detail.sections.notes')}</h3>
           {!["COMPLETED", "CANCELLED", "NO_SHOW"].includes(appointment.status) && (
             <Button
               size="sm"
               onClick={() => setShowCreateNoteDialog(true)}
             >
-              Create note
+              {t('appointments:detail.actions.createNote')}
             </Button>
           )}
         </div>
@@ -466,14 +464,14 @@ export function AppointmentDetailPage() {
                 <div className={styles.noteTitle}>{note.title}</div>
                 <div className={styles.noteMeta}>
                   {note.authorUserId} &middot;{" "}
-                  {new Date(note.createdAt).toLocaleString()}
+                  {formatDateTime(note.createdAt)}
                 </div>
               </div>
             ))
           ) : (
             <EmptyState
-              title="No notes"
-              description="No observation notes have been recorded for this appointment."
+              title={t('appointments:detail.notesSection.empty.title')}
+              description={t('appointments:detail.notesSection.empty.description')}
             />
           )}
         </Card>
@@ -487,7 +485,7 @@ export function AppointmentDetailPage() {
           setNoteTitle("");
           setNoteContent("");
         }}
-        title="Create note"
+        title={t('appointments:detail.createNoteDialog.title')}
         actions={
           <>
             <Button
@@ -498,36 +496,36 @@ export function AppointmentDetailPage() {
                 setNoteContent("");
               }}
             >
-              Cancel
+              {t('common:actions.cancel')}
             </Button>
             <Button
               onClick={() => createNoteMutation.mutate()}
               isLoading={createNoteMutation.isPending}
               disabled={!noteTitle.trim() || !noteContent.trim()}
             >
-              Save
+              {t('common:actions.save')}
             </Button>
           </>
         }
       >
         <div className={styles.dialogForm}>
           <div>
-            <label className={styles.dialogLabel}>Title</label>
+            <label className={styles.dialogLabel}>{t('appointments:detail.createNoteDialog.titleLabel')}</label>
             <input
               type="text"
               value={noteTitle}
               onChange={(e) => setNoteTitle(e.target.value)}
-              placeholder="Note title..."
+              placeholder={t('appointments:detail.createNoteDialog.titlePlaceholder')}
               className={styles.dialogInput}
               autoFocus
             />
           </div>
           <div>
-            <label className={styles.dialogLabel}>Description</label>
+            <label className={styles.dialogLabel}>{t('appointments:detail.createNoteDialog.descriptionLabel')}</label>
             <textarea
               value={noteContent}
               onChange={(e) => setNoteContent(e.target.value)}
-              placeholder="Describe the observation or incident..."
+              placeholder={t('appointments:detail.createNoteDialog.descriptionPlaceholder')}
               className={styles.dialogTextarea}
             />
           </div>
@@ -541,7 +539,7 @@ export function AppointmentDetailPage() {
         title={viewingNote?.title ?? ""}
         actions={
           <Button variant="secondary" onClick={() => setViewingNote(null)}>
-            Close
+            {t('common:actions.close')}
           </Button>
         }
       >
@@ -549,7 +547,7 @@ export function AppointmentDetailPage() {
           <div className={styles.dialogNoteView}>
             <div className={styles.noteMeta}>
               {viewingNote.authorUserId} &middot;{" "}
-              {new Date(viewingNote.createdAt).toLocaleString()}
+              {formatDateTime(viewingNote.createdAt)}
             </div>
             <div className={styles.viewNoteContent}>{viewingNote.content}</div>
           </div>
@@ -560,28 +558,28 @@ export function AppointmentDetailPage() {
       <Dialog
         open={showCancelDialog}
         onClose={() => setShowCancelDialog(false)}
-        title="Cancel appointment"
+        title={t('appointments:detail.cancelDialog.title')}
         actions={
           <>
             <Button
               variant="secondary"
               onClick={() => setShowCancelDialog(false)}
             >
-              Back
+              {t('common:actions.back')}
             </Button>
             <Button
               variant="danger"
               onClick={() => cancelMutation.mutate()}
               isLoading={cancelMutation.isPending}
             >
-              Confirm cancellation
+              {t('appointments:detail.cancelDialog.confirmButton')}
             </Button>
           </>
         }
       >
         <div className={styles.dialogForm}>
           <p className={styles.cancelDialogText}>
-            Please provide a reason for cancellation:
+            {t('appointments:detail.cancelDialog.message')}
           </p>
           <textarea
             value={cancelReason}

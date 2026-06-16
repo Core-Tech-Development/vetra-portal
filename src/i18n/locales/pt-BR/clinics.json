@@ -1,0 +1,67 @@
+{
+  "list": {
+    "title": "Clínicas",
+    "newClinic": "Nova clínica",
+    "columns": {
+      "name": "Nome",
+      "document": "Documento",
+      "city": "Cidade",
+      "status": "Status"
+    },
+    "searchPlaceholder": "Buscar clínicas...",
+    "error": "Falha ao carregar clínicas",
+    "empty": {
+      "title": "Nenhuma clínica cadastrada",
+      "description": "Comece cadastrando a primeira clínica na plataforma."
+    }
+  },
+  "create": {
+    "title": "Nova clínica",
+    "subtitle": "Cadastre uma nova clínica veterinária na plataforma.",
+    "backLink": "Voltar para clínicas",
+    "sections": {
+      "clinicInformation": "Informações da clínica",
+      "address": "Endereço"
+    },
+    "fields": {
+      "clinicName": "Nome da clínica",
+      "clinicNamePlaceholder": "ex. Clínica Veterinária PetVida",
+      "cnpj": "CNPJ",
+      "cnpjPlaceholder": "00.000.000/0000-00",
+      "email": "E-mail",
+      "emailPlaceholder": "contato@clinica.com",
+      "phone": "Telefone",
+      "phonePlaceholder": "(11) 99999-9999",
+      "address": "Endereço",
+      "addressPlaceholder": "Endereço completo",
+      "city": "Cidade",
+      "cityPlaceholder": "ex. São Paulo",
+      "state": "Estado",
+      "statePlaceholder": "Selecione o estado"
+    },
+    "submitButton": "Criar clínica",
+    "toast": {
+      "success": "Clínica criada com sucesso.",
+      "error": "Falha ao criar clínica. Verifique as informações e tente novamente."
+    }
+  },
+  "detail": {
+    "backLink": "Voltar para clínicas",
+    "sections": {
+      "clinicInformation": "Informações da clínica"
+    },
+    "fields": {
+      "documentCnpj": "Documento (CNPJ)",
+      "email": "E-mail",
+      "phone": "Telefone",
+      "location": "Localização",
+      "address": "Endereço",
+      "registered": "Cadastrado"
+    },
+    "error": {
+      "title": "Falha ao carregar clínica",
+      "detail": "A clínica não foi encontrada ou ocorreu um erro.",
+      "backButton": "Voltar para clínicas"
+    }
+  }
+}

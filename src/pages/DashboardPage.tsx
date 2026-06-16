@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth/useAuth";
 import { ROLES, filterAppRoles, getRoleLabel } from "../auth/roles";
 import { Card, Button } from "../components/ui";
@@ -19,6 +20,7 @@ import styles from "./DashboardPage.module.css";
 
 function ClinicDashboard() {
   const navigate = useNavigate();
+  const { t } = useTranslation("dashboard");
 
   const { data: appointmentsData, isLoading } = useQuery({
     queryKey: ["appointments", "upcoming"],
@@ -33,37 +35,36 @@ function ClinicDashboard() {
         <StatCard
           icon={<Calendar size={20} />}
           value={upcomingCount}
-          label="Upcoming appointments"
+          label={t("clinic.upcomingAppointments")}
           isLoading={isLoading}
           href="/appointments"
         />
         <StatCard
           icon={<FileText size={20} />}
           value="--"
-          label="Pending reports"
+          label={t("clinic.pendingReports")}
           href="/reports"
         />
         <StatCard
           icon={<ClipboardCheck size={20} />}
           value="--"
-          label="Active exam requests"
+          label={t("clinic.activeExamRequests")}
           href="/exam-requests"
         />
       </div>
 
       <div className={styles.quickActions}>
         <Button onClick={() => navigate("/exam-requests/new")}>
-          New exam request
+          {t("clinic.newExamRequest")}
         </Button>
         <Button variant="secondary" onClick={() => navigate("/appointments")}>
-          View schedule
+          {t("clinic.viewSchedule")}
         </Button>
       </div>
 
-      <Card title="Recent activity">
+      <Card title={t("clinic.recentActivity")}>
         <p className={styles.emptyText}>
-          No recent activity to display. Start by creating an exam request or
-          registering a new tutor.
+          {t("clinic.emptyActivity")}
         </p>
       </Card>
     </>
@@ -72,6 +73,7 @@ function ClinicDashboard() {
 
 function SpecialistDashboard() {
   const navigate = useNavigate();
+  const { t } = useTranslation("dashboard");
 
   const { data: appointmentsData, isLoading } = useQuery({
     queryKey: ["appointments", "specialist", "today"],
@@ -86,32 +88,31 @@ function SpecialistDashboard() {
         <StatCard
           icon={<Stethoscope size={20} />}
           value={todayCount}
-          label="Today's appointments"
+          label={t("specialist.todaysAppointments")}
           isLoading={isLoading}
           href="/appointments"
         />
         <StatCard
           icon={<Clock size={20} />}
           value="--"
-          label="Pending requests"
+          label={t("specialist.pendingRequests")}
           href="/exam-requests"
         />
         <StatCard
           icon={<FileText size={20} />}
           value="--"
-          label="Reports to issue"
+          label={t("specialist.reportsToIssue")}
           href="/reports"
         />
       </div>
 
       <div className={styles.quickActions}>
-        <Button onClick={() => navigate("/schedule")}>View schedule</Button>
+        <Button onClick={() => navigate("/schedule")}>{t("specialist.viewSchedule")}</Button>
       </div>
 
-      <Card title="Recent activity">
+      <Card title={t("specialist.recentActivity")}>
         <p className={styles.emptyText}>
-          No recent activity to display. Check your schedule for upcoming
-          appointments.
+          {t("specialist.emptyActivity")}
         </p>
       </Card>
     </>
@@ -119,6 +120,8 @@ function SpecialistDashboard() {
 }
 
 function AdminDashboard() {
+  const { t } = useTranslation("dashboard");
+
   const { data: dashboardData, isLoading } = useQuery({
     queryKey: ["admin", "dashboard"],
     queryFn: getDashboard,
@@ -130,14 +133,14 @@ function AdminDashboard() {
         <StatCard
           icon={<Building2 size={20} />}
           value={dashboardData?.totalClinics ?? 0}
-          label="Total clinics"
+          label={t("admin.totalClinics")}
           isLoading={isLoading}
           href="/clinics"
         />
         <StatCard
           icon={<Users size={20} />}
           value={dashboardData?.totalSpecialists ?? 0}
-          label="Total specialists"
+          label={t("admin.totalSpecialists")}
           isLoading={isLoading}
           href="/specialists"
         />
@@ -147,23 +150,22 @@ function AdminDashboard() {
             (dashboardData?.pendingClinicApprovals ?? 0) +
             (dashboardData?.pendingSpecialistApprovals ?? 0)
           }
-          label="Pending approvals"
+          label={t("admin.pendingApprovals")}
           isLoading={isLoading}
           href="/admin/approvals"
         />
         <StatCard
           icon={<Calendar size={20} />}
           value={dashboardData?.totalActiveAppointments ?? 0}
-          label="Active appointments"
+          label={t("admin.activeAppointments")}
           isLoading={isLoading}
           href="/appointments"
         />
       </div>
 
-      <Card title="Platform overview">
+      <Card title={t("admin.platformOverview")}>
         <p className={styles.emptyText}>
-          Monitor platform activity, manage approvals, and review audit logs
-          from the admin panel.
+          {t("admin.emptyOverview")}
         </p>
       </Card>
     </>
@@ -172,6 +174,7 @@ function AdminDashboard() {
 
 export function DashboardPage() {
   const { user, roles } = useAuth();
+  const { t } = useTranslation("dashboard");
 
   const displayName = user?.name ?? user?.preferredUsername ?? "User";
   const appRoles = filterAppRoles(roles);
@@ -186,7 +189,7 @@ export function DashboardPage() {
   return (
     <div>
       <PageHeader
-        title={`Welcome, ${displayName}`}
+        title={t("welcome", { name: displayName })}
         subtitle={displayRole}
       />
 

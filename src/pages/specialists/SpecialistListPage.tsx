@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
@@ -10,6 +11,7 @@ import type { SpecialistResponse } from "../../api/types";
 import styles from "./SpecialistListPage.module.css";
 
 export function SpecialistListPage() {
+  const { t } = useTranslation('specialists');
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
 
@@ -21,7 +23,7 @@ export function SpecialistListPage() {
   const columns: TableColumn<SpecialistResponse>[] = [
     {
       key: "name",
-      header: "Name",
+      header: t('list.columns.name'),
       render: (row) => (
         <Link to={`/specialists/${row.id}`} className={styles.tableLink}>
           {row.name}
@@ -30,22 +32,22 @@ export function SpecialistListPage() {
     },
     {
       key: "email",
-      header: "Email",
+      header: t('list.columns.email'),
       render: (row) => row.email,
     },
     {
       key: "crmv",
-      header: "CRMV",
+      header: t('list.columns.crmv'),
       render: (row) => `${row.crmv} / ${row.crmvState}`,
     },
     {
       key: "specialty",
-      header: "Specialty",
+      header: t('list.columns.specialty'),
       render: (row) => row.specialty.replace(/_/g, " "),
     },
     {
       key: "status",
-      header: "Status",
+      header: t('list.columns.status'),
       render: (row) => <StatusBadge status={row.status} />,
     },
   ];
@@ -53,10 +55,10 @@ export function SpecialistListPage() {
   return (
     <div>
       <PageHeader
-        title="Specialists"
+        title={t('list.title')}
         actions={
           <Link to="/specialists/new">
-            <Button leftIcon={<Plus size={16} />}>New specialist</Button>
+            <Button leftIcon={<Plus size={16} />}>{t('list.newSpecialist')}</Button>
           </Link>
         }
       />
@@ -67,14 +69,14 @@ export function SpecialistListPage() {
         keyExtractor={(row) => row.id}
         isLoading={isLoading}
         isError={isError}
-        errorMessage="Failed to load specialists"
+        errorMessage={t('list.error')}
         onRetry={() => refetch()}
         emptyState={{
-          title: "No specialists registered",
-          description: "Start by registering the first specialist on the platform.",
+          title: t('list.empty.title'),
+          description: t('list.empty.description'),
           action: (
             <Link to="/specialists/new">
-              <Button leftIcon={<Plus size={16} />}>New specialist</Button>
+              <Button leftIcon={<Plus size={16} />}>{t('list.newSpecialist')}</Button>
             </Link>
           ),
         }}
@@ -83,7 +85,7 @@ export function SpecialistListPage() {
         onPageChange={setPage}
         searchValue={search}
         onSearchChange={setSearch}
-        searchPlaceholder="Search specialists..."
+        searchPlaceholder={t('list.searchPlaceholder')}
       />
     </div>
   );

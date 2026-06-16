@@ -1,0 +1,86 @@
+{
+  "list": {
+    "title": "Laudos",
+    "columns": {
+      "id": "ID",
+      "appointment": "Appointment",
+      "status": "Status",
+      "issuedDate": "Issued date",
+      "created": "Created"
+    },
+    "searchPlaceholder": "Search laudos...",
+    "error": "Failed to load laudos",
+    "empty": {
+      "title": "No laudos yet",
+      "description": "Laudos will appear here after you create them from an appointment."
+    },
+    "noSpecialist": {
+      "title": "No specialist found",
+      "description": "No specialist ID found. Please log in as a specialist to view laudos."
+    }
+  },
+  "create": {
+    "title": "New laudo",
+    "subtitle": "Create a diagnostic laudo for appointment {{appointmentId}}.",
+    "backLink": "Back to appointment",
+    "sections": {
+      "examFiles": "Exam files",
+      "diagnosticContent": "Diagnostic content",
+      "findingsAndConclusion": "Findings and conclusion"
+    },
+    "fields": {
+      "findings": "Findings",
+      "findingsPlaceholder": "Describe the diagnostic findings...",
+      "conclusion": "Conclusion",
+      "conclusionPlaceholder": "Summarize the diagnostic conclusion...",
+      "recommendations": "Recommendations",
+      "recommendationsPlaceholder": "Provide any recommendations for the clinic..."
+    },
+    "dropZone": {
+      "uploading": "Uploading...",
+      "text": "Drop files here or click to upload",
+      "hint": "Images, videos, and PDFs accepted"
+    },
+    "noFilesYet": "No files uploaded yet.",
+    "removeFile": "Remove file",
+    "saveDraft": "Save as draft",
+    "saveAndIssue": "Save and issue",
+    "toast": {
+      "draftSaved": "Laudo saved as draft.",
+      "draftFailed": "Failed to save laudo.",
+      "issued": "Laudo issued successfully.",
+      "issueFailed": "Failed to issue laudo.",
+      "uploadFailed": "Failed to upload file.",
+      "fileRemoved": "File removed.",
+      "fileRemoveFailed": "Failed to remove file."
+    }
+  },
+  "detail": {
+    "titlePrefix": "Laudo",
+    "backLink": "Back to laudos",
+    "sections": {
+      "laudoInformation": "Laudo information"
+    },
+    "fields": {
+      "laudoId": "Laudo ID",
+      "appointmentId": "Appointment ID",
+      "specialistId": "Specialist ID",
+      "status": "Status",
+      "issuedDate": "Issued date",
+      "created": "Created",
+      "findings": "Findings",
+      "conclusion": "Conclusion",
+      "recommendations": "Recommendations"
+    },
+    "issueLaudo": "Issue laudo",
+    "toast": {
+      "issued": "Laudo issued successfully.",
+      "issueFailed": "Failed to issue laudo."
+    },
+    "error": {
+      "title": "Failed to load laudo",
+      "detail": "The laudo could not be found or an error occurred.",
+      "backButton": "Back to laudos"
+    }
+  }
+}

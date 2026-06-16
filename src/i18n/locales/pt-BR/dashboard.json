@@ -1,0 +1,35 @@
+{
+  "welcome": "Bem-vindo, {{name}}",
+  "clinic": {
+    "upcomingAppointments": "Próximos agendamentos",
+    "pendingReports": "Laudos pendentes",
+    "activeExamRequests": "Solicitações de exame ativas",
+    "newExamRequest": "Nova solicitação de exame",
+    "viewSchedule": "Ver agenda",
+    "recentActivity": "Atividade recente",
+    "emptyActivity": "Nenhuma atividade recente para exibir. Comece criando uma solicitação de exame ou cadastrando um novo tutor."
+  },
+  "specialist": {
+    "todaysAppointments": "Agendamentos de hoje",
+    "pendingRequests": "Solicitações pendentes",
+    "reportsToIssue": "Laudos a emitir",
+    "viewSchedule": "Ver agenda",
+    "recentActivity": "Atividade recente",
+    "emptyActivity": "Nenhuma atividade recente para exibir. Consulte sua agenda para os próximos agendamentos."
+  },
+  "admin": {
+    "title": "Painel Administrativo",
+    "totalClinics": "Total de clínicas",
+    "totalSpecialists": "Total de especialistas",
+    "pendingApprovals": "Aprovações pendentes",
+    "pendingClinicApprovals": "Aprovações de clínicas pendentes",
+    "pendingSpecialistApprovals": "Aprovações de especialistas pendentes",
+    "appointmentsToday": "Agendamentos hoje",
+    "activeAppointments": "Agendamentos ativos",
+    "platformOverview": "Visão geral da plataforma",
+    "emptyOverview": "Monitore a atividade da plataforma, gerencie aprovações e revise logs de auditoria no painel administrativo.",
+    "viewApprovals": "Ver aprovações",
+    "viewClinics": "Ver clínicas",
+    "viewSpecialists": "Ver especialistas"
+  }
+}

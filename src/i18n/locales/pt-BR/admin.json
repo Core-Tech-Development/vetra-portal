@@ -1,0 +1,98 @@
+{
+  "dashboard": {
+    "title": "Painel Administrativo",
+    "totalClinics": "Total de clínicas",
+    "totalSpecialists": "Total de especialistas",
+    "pendingClinicApprovals": "Aprovações de clínicas pendentes",
+    "pendingSpecialistApprovals": "Aprovações de especialistas pendentes",
+    "appointmentsToday": "Agendamentos hoje",
+    "activeAppointments": "Agendamentos ativos",
+    "viewApprovals": "Ver aprovações",
+    "viewClinics": "Ver clínicas",
+    "viewSpecialists": "Ver especialistas"
+  },
+  "approvals": {
+    "title": "Aprovações pendentes",
+    "clinicApprovalsTab": "Aprovações de Clínicas ({{count}})",
+    "specialistApprovalsTab": "Aprovações de Especialistas ({{count}})",
+    "columns": {
+      "name": "Nome",
+      "document": "Documento",
+      "location": "Localização",
+      "crmv": "CRMV",
+      "specialty": "Especialidade"
+    },
+    "approveButton": "Aprovar",
+    "clinicApproved": "Clínica aprovada.",
+    "clinicApproveFailed": "Falha ao aprovar clínica.",
+    "specialistApproved": "Especialista aprovado.",
+    "specialistApproveFailed": "Falha ao aprovar especialista.",
+    "emptyClinic": {
+      "title": "Nenhuma clínica aguardando aprovação",
+      "description": "Todos os cadastros de clínicas foram analisados."
+    },
+    "emptySpecialist": {
+      "title": "Nenhum especialista aguardando aprovação",
+      "description": "Todos os cadastros de especialistas foram analisados."
+    },
+    "errorClinic": "Falha ao carregar clínicas aguardando aprovação",
+    "errorSpecialist": "Falha ao carregar especialistas aguardando aprovação",
+    "searchClinics": "Buscar clínicas...",
+    "searchSpecialists": "Buscar especialistas..."
+  },
+  "auditLog": {
+    "title": "Log de auditoria",
+    "columns": {
+      "actor": "Ator",
+      "entityType": "Tipo de entidade",
+      "entityId": "ID da entidade",
+      "action": "Ação",
+      "date": "Data"
+    },
+    "error": "Falha ao carregar logs de auditoria",
+    "searchPlaceholder": "Buscar logs de auditoria...",
+    "empty": {
+      "title": "Nenhum registro de auditoria",
+      "description": "Registros de auditoria aparecerão aqui conforme ações forem realizadas na plataforma."
+    }
+  },
+  "pricing": {
+    "title": "Precificação de exames",
+    "addPricing": "Adicionar precificação",
+    "columns": {
+      "examType": "Tipo de exame",
+      "price": "Preço",
+      "platformFee": "Taxa da plataforma",
+      "feeAmount": "Valor da taxa",
+      "status": "Status"
+    },
+    "error": "Falha ao carregar precificações",
+    "empty": {
+      "title": "Nenhuma precificação configurada",
+      "description": "Adicione precificações de tipos de exame para habilitar o faturamento quando laudos forem emitidos."
+    },
+    "createDialog": {
+      "title": "Adicionar precificação de exame",
+      "examTypeLabel": "Tipo de exame",
+      "examTypePlaceholder": "ex. ABDOMINAL_ULTRASOUND",
+      "priceLabel": "Preço (R$)",
+      "pricePlaceholder": "150,00",
+      "platformFeeLabel": "Taxa da plataforma (%)",
+      "platformFeePlaceholder": "12,00",
+      "createButton": "Criar",
+      "creatingButton": "Criando..."
+    },
+    "editDialog": {
+      "title": "Editar precificação de exame",
+      "activeLabel": "Ativo",
+      "savingButton": "Salvando..."
+    },
+    "toast": {
+      "created": "Precificação criada com sucesso",
+      "createFailed": "Falha ao criar precificação",
+      "updated": "Precificação atualizada com sucesso",
+      "updateFailed": "Falha ao atualizar precificação",
+      "invalidPrice": "Valor de preço inválido"
+    }
+  }
+}

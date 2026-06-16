@@ -1,0 +1,116 @@
+{
+  "list": {
+    "title": "Exam requests",
+    "newExamRequest": "New exam request",
+    "columns": {
+      "id": "ID",
+      "examType": "Exam type",
+      "priority": "Priority",
+      "status": "Status",
+      "appointment": "Appointment",
+      "created": "Created"
+    },
+    "searchPlaceholder": "Search exam requests...",
+    "error": "Failed to load exam requests",
+    "empty": {
+      "title": "No exam requests",
+      "description": "Start by creating the first exam request for this clinic."
+    },
+    "noClinic": {
+      "title": "No clinic selected",
+      "description": "Please select a clinic to view exam requests."
+    }
+  },
+  "create": {
+    "title": "New exam request",
+    "subtitle": "Request a diagnostic imaging exam for a patient.",
+    "backLink": "Back to exam requests",
+    "sections": {
+      "examDetails": "Exam details",
+      "clinicalInformation": "Clinical information"
+    },
+    "validation": {
+      "patientRequired": "Select a patient",
+      "examTypeRequired": "Select an exam type",
+      "priorityRequired": "Select a priority"
+    },
+    "fields": {
+      "patient": "Patient",
+      "patientPlaceholder": "Select a patient",
+      "patientLoading": "Loading patients...",
+      "examType": "Exam type",
+      "examTypePlaceholder": "Select exam type",
+      "priority": "Priority",
+      "diagnosticHypothesis": "Diagnostic hypothesis",
+      "diagnosticHypothesisPlaceholder": "Describe the diagnostic hypothesis...",
+      "clinicalHistory": "Clinical history",
+      "clinicalHistoryPlaceholder": "Describe the clinical history...",
+      "additionalNotes": "Additional notes",
+      "additionalNotesPlaceholder": "Any additional notes or observations..."
+    },
+    "submitButton": "Create exam request",
+    "toast": {
+      "success": "Exam request created successfully.",
+      "error": "Failed to create exam request. Please check the information and try again."
+    }
+  },
+  "detail": {
+    "titlePrefix": "Exam request",
+    "backLink": "Back to exam requests",
+    "sections": {
+      "requestDetails": "Request details",
+      "availableSpecialists": "Available specialists"
+    },
+    "fields": {
+      "examType": "Exam type",
+      "priority": "Priority",
+      "status": "Status",
+      "patient": "Patient",
+      "requestedBy": "Requested by",
+      "created": "Created",
+      "diagnosticHypothesis": "Diagnostic hypothesis",
+      "clinicalHistory": "Clinical history",
+      "additionalNotes": "Additional notes"
+    },
+    "cancelRequest": "Cancel request",
+    "cancelSuccess": "Exam request cancelled successfully.",
+    "cancelError": "Failed to cancel exam request.",
+    "pending": {
+      "title": "Waiting for specialist acceptance",
+      "description": "An appointment has been sent to the specialist. If the specialist declines or the appointment is cancelled, you can assign another specialist."
+    },
+    "specialists": {
+      "findButton": "Find available specialists",
+      "filterBySpecialty": "Filter by specialty ({{specialty}})",
+      "columns": {
+        "name": "Name",
+        "crmv": "CRMV",
+        "specialty": "Specialty",
+        "baseCity": "Base city",
+        "equipment": "Equipment"
+      },
+      "equipmentOwn": "Own",
+      "equipmentNo": "No",
+      "scheduleButton": "Schedule",
+      "searchError": "Failed to search specialists.",
+      "empty": {
+        "title": "No specialists available",
+        "descriptionWithLocation": "No specialists found covering {{city}} / {{state}} for {{examType}}.",
+        "descriptionGeneric": "No specialists found for this region and exam type."
+      }
+    },
+    "scheduleDialog": {
+      "title": "Schedule appointment",
+      "message": "Schedule an appointment with <strong>{{name}}</strong> (CRMV {{crmv}} / {{crmvState}}) for this exam request?",
+      "detail": "The specialist will receive the request and can accept or decline.",
+      "confirmButton": "Confirm schedule",
+      "success": "Appointment scheduled successfully.",
+      "error": "Failed to schedule appointment."
+    },
+    "error": {
+      "title": "Failed to load exam request",
+      "detail": "The exam request could not be found or an error occurred.",
+      "backButton": "Back to exam requests"
+    }
+  }
+}

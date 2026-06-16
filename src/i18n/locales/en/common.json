@@ -1,0 +1,196 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "patients": "Patients",
+    "tutors": "Tutors",
+    "staff": "Staff",
+    "examRequests": "Exam requests",
+    "appointments": "Appointments",
+    "laudos": "Laudos",
+    "billing": "Billing",
+    "schedule": "Schedule",
+    "profile": "Profile",
+    "admin": "Admin",
+    "approvals": "Approvals",
+    "auditLog": "Audit log",
+    "pricing": "Pricing",
+    "clinics": "Clinics",
+    "specialists": "Specialists"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "retry": "Retry",
+    "create": "Create",
+    "close": "Close",
+    "confirm": "Confirm",
+    "approve": "Approve",
+    "remove": "Remove",
+    "add": "Add",
+    "search": "Search",
+    "signOut": "Sign out",
+    "signIn": "Sign in",
+    "saveChanges": "Save changes",
+    "goBack": "Go back",
+    "previous": "Previous",
+    "next": "Next",
+    "deactivate": "Deactivate",
+    "block": "Block",
+    "decline": "Decline",
+    "accept": "Accept",
+    "upload": "Upload",
+    "view": "View"
+  },
+  "status": {
+    "CREATED": "Created",
+    "PENDING_APPROVAL": "Pending approval",
+    "ACTIVE": "Active",
+    "INACTIVE": "Inactive",
+    "SUSPENDED": "Suspended",
+    "WAITING_SPECIALIST_ACCEPTANCE": "Waiting specialist acceptance",
+    "ACCEPTED": "Accepted",
+    "SCHEDULED": "Scheduled",
+    "IN_TRANSIT": "In transit",
+    "IN_SERVICE": "In service",
+    "IN_PROGRESS": "In progress",
+    "EXAM_DONE": "Exam done",
+    "WAITING_REPORT": "Waiting report",
+    "REPORT_ISSUED": "Report issued",
+    "COMPLETED": "Completed",
+    "FINISHED": "Finished",
+    "CANCELLED": "Cancelled",
+    "CANCELED": "Canceled",
+    "NOT_PERFORMED": "Not performed",
+    "REJECTED": "Rejected",
+    "PENDING_PAYMENT_CREATION": "Pending",
+    "PAYMENT_CREATED": "Awaiting payment",
+    "PAYMENT_CONFIRMED": "Confirmed",
+    "PAYMENT_RECEIVED": "Received",
+    "PAYMENT_OVERDUE": "Overdue",
+    "PAYMENT_REFUNDED": "Refunded",
+    "FAILED": "Failed"
+  },
+  "roles": {
+    "PLATFORM_ADMIN": "Admin Vetra",
+    "PLATFORM_OPERATOR": "Operador Vetra",
+    "CLINIC_ADMIN": "Clinic Admin",
+    "CLINIC_STAFF": "Clinic Staff",
+    "SPECIALIST": "Specialist"
+  },
+  "staffRoles": {
+    "VETERINARIAN": "Veterinarian",
+    "SECRETARY": "Secretary"
+  },
+  "breadcrumbs": {
+    "dashboard": "Dashboard",
+    "patients": "Patients",
+    "new": "New",
+    "edit": "Edit",
+    "tutors": "Tutors",
+    "staff": "Staff",
+    "examRequests": "Exam Requests",
+    "appointments": "Appointments",
+    "laudos": "Laudos",
+    "schedule": "Schedule",
+    "profile": "Profile",
+    "clinics": "Clinics",
+    "specialists": "Specialists",
+    "admin": "Admin",
+    "approvals": "Approvals",
+    "auditLog": "Audit Log",
+    "details": "Details",
+    "billing": "Billing",
+    "pricing": "Pricing"
+  },
+  "pagination": {
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "page": "Page",
+    "pageOf": "Page {{current}} of {{total}}",
+    "pageLabel": "Page {{page}}"
+  },
+  "search": {
+    "placeholder": "Search...",
+    "clearSearch": "Clear search"
+  },
+  "sidebar": {
+    "closeMenu": "Close navigation menu",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar"
+  },
+  "topbar": {
+    "toggleMenu": "Toggle navigation menu",
+    "notifications": "Notifications"
+  },
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "loading": "Loading...",
+    "noData": "-",
+    "thisActionCannotBeUndone": "This action cannot be undone."
+  },
+  "species": {
+    "DOG": "Dog",
+    "CAT": "Cat",
+    "BIRD": "Bird",
+    "HORSE": "Horse",
+    "RABBIT": "Rabbit",
+    "REPTILE": "Reptile",
+    "OTHER": "Other"
+  },
+  "sex": {
+    "MALE": "Male",
+    "FEMALE": "Female"
+  },
+  "priority": {
+    "ROUTINE": "Routine",
+    "PRIORITY": "Priority",
+    "URGENT": "Urgent"
+  },
+  "examTypes": {
+    "ABDOMINAL_ULTRASOUND": "Abdominal ultrasound",
+    "GESTATIONAL_ULTRASOUND": "Gestational ultrasound",
+    "MUSCULOSKELETAL_ULTRASOUND": "Musculoskeletal ultrasound"
+  },
+  "validation": {
+    "required": "{{field}} is required",
+    "invalidEmail": "Enter a valid email address",
+    "validEmailRequired": "Valid email required",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "confirmPasswordRequired": "Please confirm your password",
+    "confirmPasswordIsRequired": "Confirm password is required",
+    "nameMinLength": "Name must have at least 2 characters",
+    "invalidCnpj": "Enter a valid CNPJ",
+    "invalidPhone": "Enter a valid phone number",
+    "enterFullAddress": "Enter the full address",
+    "enterCity": "Enter the city",
+    "selectState": "Select a state",
+    "selectPatient": "Select a patient",
+    "selectExamType": "Select an exam type",
+    "selectPriority": "Select a priority"
+  },
+  "labels": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "document": "Document",
+    "address": "Address",
+    "city": "City",
+    "state": "State",
+    "status": "Status",
+    "role": "Role",
+    "registered": "Registered",
+    "created": "Created",
+    "updated": "Updated",
+    "date": "Date",
+    "location": "Location"
+  },
+  "errors": {
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "genericError": "An error occurred. Please try again."
+  }
+}

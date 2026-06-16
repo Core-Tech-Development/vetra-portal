@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { getClinicStaff, deactivateClinicStaff } from "../../api/clinicStaff";
 import {
   Button,
@@ -11,18 +12,8 @@ import {
 } from "../../components/ui";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { Pencil, Trash2 } from "lucide-react";
+import { formatDate } from "../../i18n/formatting";
 import styles from "./StaffDetailPage.module.css";
-
-function getRoleLabel(role: string): string {
-  switch (role) {
-    case "VETERINARIAN":
-      return "Veterinarian";
-    case "SECRETARY":
-      return "Secretary";
-    default:
-      return role.replace(/_/g, " ").toLowerCase();
-  }
-}
 
 function getRoleBadgeVariant(role: string): "neutral" | "info" {
   switch (role) {
@@ -36,6 +27,7 @@ function getRoleBadgeVariant(role: string): "neutral" | "info" {
 }
 
 export function StaffDetailPage() {
+  const { t } = useTranslation(['staff', 'common']);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -75,16 +67,16 @@ export function StaffDetailPage() {
   if (isError || !staff) {
     return (
       <div className={styles.errorBox}>
-        <div className={styles.errorTitle}>Failed to load collaborator</div>
+        <div className={styles.errorTitle}>{t('staff:detail.error.title')}</div>
         <p className={styles.errorDetail}>
-          The collaborator could not be found or an error occurred.
+          {t('staff:detail.error.detail')}
         </p>
         <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
-            Retry
+            {t('common:actions.retry')}
           </Button>
           <Link to="/staff">
-            <Button variant="outline">Back to staff</Button>
+            <Button variant="outline">{t('staff:detail.error.backButton')}</Button>
           </Link>
         </div>
       </div>
@@ -95,42 +87,42 @@ export function StaffDetailPage() {
     <div>
       <PageHeader
         title={staff.name}
-        backLink={{ label: "Back to staff", to: "/staff" }}
+        backLink={{ label: t('staff:detail.backLink'), to: "/staff" }}
         actions={
           <div className={styles.headerActions}>
             <Link to={`/staff/${id}/edit`}>
-              <Button variant="secondary" leftIcon={<Pencil size={16} />}>Edit</Button>
+              <Button variant="secondary" leftIcon={<Pencil size={16} />}>{t('common:actions.edit')}</Button>
             </Link>
             <Button
               variant="danger"
               leftIcon={<Trash2 size={16} />}
               onClick={() => setShowDeactivateDialog(true)}
             >
-              Deactivate
+              {t('common:actions.deactivate')}
             </Button>
           </div>
         }
       />
 
-      <DetailSection title="Collaborator information" columns={3}>
-        <FieldDisplay label="Name" value={staff.name} />
-        <FieldDisplay label="Email" value={staff.email} />
-        <FieldDisplay label="Phone" value={staff.phone ?? "-"} />
+      <DetailSection title={t('staff:detail.sections.collaboratorInformation')} columns={3}>
+        <FieldDisplay label={t('staff:detail.fields.name')} value={staff.name} />
+        <FieldDisplay label={t('staff:detail.fields.email')} value={staff.email} />
+        <FieldDisplay label={t('staff:detail.fields.phone')} value={staff.phone ?? "-"} />
         <FieldDisplay
-          label="Role"
+          label={t('staff:detail.fields.role')}
           value={
             <Badge variant={getRoleBadgeVariant(staff.role)}>
-              {getRoleLabel(staff.role)}
+              {t(`common:staffRoles.${staff.role}`, staff.role)}
             </Badge>
           }
         />
         <FieldDisplay
-          label="Status"
+          label={t('staff:detail.fields.status')}
           value={<StatusBadge status={staff.status} />}
         />
         <FieldDisplay
-          label="Registered"
-          value={new Date(staff.createdAt).toLocaleDateString()}
+          label={t('staff:detail.fields.registered')}
+          value={formatDate(staff.createdAt)}
         />
       </DetailSection>
 
@@ -138,26 +130,22 @@ export function StaffDetailPage() {
         <Dialog
           open={showDeactivateDialog}
           onClose={() => setShowDeactivateDialog(false)}
-          title="Deactivate collaborator"
+          title={t('staff:list.deactivateDialog.title')}
         >
-          <p>
-            Are you sure you want to deactivate{" "}
-            <strong>{staff.name}</strong>?
-            They will no longer be able to access the platform.
-          </p>
+          <p dangerouslySetInnerHTML={{ __html: t('staff:list.deactivateDialog.message', { name: staff.name }) }} />
           <div className={styles.dialogActions}>
             <Button
               variant="secondary"
               onClick={() => setShowDeactivateDialog(false)}
             >
-              Cancel
+              {t('common:actions.cancel')}
             </Button>
             <Button
               variant="danger"
               isLoading={deactivateMutation.isPending}
               onClick={() => deactivateMutation.mutate(id!)}
             >
-              Deactivate
+              {t('common:actions.deactivate')}
             </Button>
           </div>
         </Dialog>

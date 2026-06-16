@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { getExamRequest, cancelExamRequest } from "../../api/examRequests";
 import { getClinic } from "../../api/clinics";
 import { getPatient } from "../../api/patients";
@@ -20,6 +21,7 @@ import type { BadgeVariant, TableColumn } from "../../components/ui";
 import type { SpecialistResponse } from "../../api/types";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
+import { formatDate } from "../../i18n/formatting";
 import styles from "./ExamRequestDetailPage.module.css";
 
 const PRIORITY_VARIANT: Record<string, BadgeVariant> = {
@@ -29,6 +31,7 @@ const PRIORITY_VARIANT: Record<string, BadgeVariant> = {
 };
 
 export function ExamRequestDetailPage() {
+  const { t } = useTranslation(['examRequests', 'common']);
   const { id } = useParams<{ id: string }>();
   const { showToast } = useToast();
   const queryClient = useQueryClient();
@@ -82,11 +85,11 @@ export function ExamRequestDetailPage() {
   const cancelMutation = useMutation({
     mutationFn: () => cancelExamRequest(id!),
     onSuccess: () => {
-      showToast("Exam request cancelled successfully.", "success");
+      showToast(t('examRequests:detail.cancelSuccess'), "success");
       queryClient.invalidateQueries({ queryKey: ["exam-request", id] });
     },
     onError: () => {
-      showToast("Failed to cancel exam request.", "error");
+      showToast(t('examRequests:detail.cancelError'), "error");
     },
   });
 
@@ -95,36 +98,36 @@ export function ExamRequestDetailPage() {
       createAppointment({ examRequestId: id!, specialistId }),
     onSuccess: () => {
       setSchedulingSpecialist(null);
-      showToast("Appointment scheduled successfully.", "success");
+      showToast(t('examRequests:detail.scheduleDialog.success'), "success");
       queryClient.invalidateQueries({ queryKey: ["exam-request", id] });
     },
     onError: () => {
       setSchedulingSpecialist(null);
-      showToast("Failed to schedule appointment.", "error");
+      showToast(t('examRequests:detail.scheduleDialog.error'), "error");
     },
   });
 
   const specialistColumns: TableColumn<SpecialistResponse>[] = [
     {
       key: "name",
-      header: "Name",
+      header: t('examRequests:detail.specialists.columns.name'),
       render: (row) => (
         <span className={styles.specialistName}>{row.name}</span>
       ),
     },
     {
       key: "crmv",
-      header: "CRMV",
+      header: t('examRequests:detail.specialists.columns.crmv'),
       render: (row) => `${row.crmv} / ${row.crmvState}`,
     },
     {
       key: "specialty",
-      header: "Specialty",
+      header: t('examRequests:detail.specialists.columns.specialty'),
       render: (row) => row.specialty.replace(/_/g, " "),
     },
     {
       key: "baseCity",
-      header: "Base city",
+      header: t('examRequests:detail.specialists.columns.baseCity'),
       render: (row) =>
         row.baseCity && row.baseState
           ? `${row.baseCity} / ${row.baseState}`
@@ -132,10 +135,10 @@ export function ExamRequestDetailPage() {
     },
     {
       key: "equipment",
-      header: "Equipment",
+      header: t('examRequests:detail.specialists.columns.equipment'),
       render: (row) => (
         <Badge variant={row.hasOwnEquipment ? "success" : "neutral"}>
-          {row.hasOwnEquipment ? "Own" : "No"}
+          {row.hasOwnEquipment ? t('examRequests:detail.specialists.equipmentOwn') : t('examRequests:detail.specialists.equipmentNo')}
         </Badge>
       ),
     },
@@ -147,7 +150,7 @@ export function ExamRequestDetailPage() {
           size="sm"
           onClick={() => setSchedulingSpecialist(row)}
         >
-          Schedule
+          {t('examRequests:detail.specialists.scheduleButton')}
         </Button>
       ),
     },
@@ -164,16 +167,16 @@ export function ExamRequestDetailPage() {
   if (isError || !examRequest) {
     return (
       <div className={styles.errorBox}>
-        <div className={styles.errorTitle}>Failed to load exam request</div>
+        <div className={styles.errorTitle}>{t('examRequests:detail.error.title')}</div>
         <p className={styles.errorDetail}>
-          The exam request could not be found or an error occurred.
+          {t('examRequests:detail.error.detail')}
         </p>
         <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
-            Retry
+            {t('common:actions.retry')}
           </Button>
           <Link to="/exam-requests">
-            <Button variant="outline">Back to exam requests</Button>
+            <Button variant="outline">{t('examRequests:detail.error.backButton')}</Button>
           </Link>
         </div>
       </div>
@@ -183,8 +186,8 @@ export function ExamRequestDetailPage() {
   return (
     <div>
       <PageHeader
-        title={`Exam request — ${examRequest.examType.replace(/_/g, " ")}`}
-        backLink={{ label: "Back to exam requests", to: "/exam-requests" }}
+        title={`${t('examRequests:detail.titlePrefix')} — ${t(`common:examTypes.${examRequest.examType}`, examRequest.examType.replace(/_/g, " "))}`}
+        backLink={{ label: t('examRequests:detail.backLink'), to: "/exam-requests" }}
         actions={
           examRequest.status === "CREATED" ? (
             <div className={styles.headerActions}>
@@ -193,34 +196,34 @@ export function ExamRequestDetailPage() {
                 onClick={() => cancelMutation.mutate()}
                 isLoading={cancelMutation.isPending}
               >
-                Cancel request
+                {t('examRequests:detail.cancelRequest')}
               </Button>
             </div>
           ) : undefined
         }
       />
 
-      <DetailSection title="Request details" columns={2}>
+      <DetailSection title={t('examRequests:detail.sections.requestDetails')} columns={2}>
         <FieldDisplay
-          label="Exam type"
-          value={examRequest.examType.replace(/_/g, " ")}
+          label={t('examRequests:detail.fields.examType')}
+          value={t(`common:examTypes.${examRequest.examType}`, examRequest.examType.replace(/_/g, " "))}
         />
         <FieldDisplay
-          label="Priority"
+          label={t('examRequests:detail.fields.priority')}
           value={
             <Badge
               variant={PRIORITY_VARIANT[examRequest.priority] ?? "neutral"}
             >
-              {examRequest.priority}
+              {t(`common:priority.${examRequest.priority}`, examRequest.priority)}
             </Badge>
           }
         />
         <FieldDisplay
-          label="Status"
+          label={t('examRequests:detail.fields.status')}
           value={<StatusBadge status={examRequest.status} />}
         />
         <FieldDisplay
-          label="Patient"
+          label={t('examRequests:detail.fields.patient')}
           value={
             <Link
               to={`/patients/${examRequest.patientId}`}
@@ -231,30 +234,30 @@ export function ExamRequestDetailPage() {
           }
         />
         <FieldDisplay
-          label="Requested by"
+          label={t('examRequests:detail.fields.requestedBy')}
           value={examRequest.requestedBy ?? "-"}
         />
         <FieldDisplay
-          label="Created"
-          value={new Date(examRequest.createdAt).toLocaleDateString()}
+          label={t('examRequests:detail.fields.created')}
+          value={formatDate(examRequest.createdAt)}
         />
         {examRequest.diagnosticHypothesis && (
           <FieldDisplay
-            label="Diagnostic hypothesis"
+            label={t('examRequests:detail.fields.diagnosticHypothesis')}
             value={examRequest.diagnosticHypothesis}
             fullWidth
           />
         )}
         {examRequest.clinicalHistory && (
           <FieldDisplay
-            label="Clinical history"
+            label={t('examRequests:detail.fields.clinicalHistory')}
             value={examRequest.clinicalHistory}
             fullWidth
           />
         )}
         {examRequest.additionalNotes && (
           <FieldDisplay
-            label="Additional notes"
+            label={t('examRequests:detail.fields.additionalNotes')}
             value={examRequest.additionalNotes}
             fullWidth
           />
@@ -266,10 +269,10 @@ export function ExamRequestDetailPage() {
           <Card>
             <div className={styles.pendingInfo}>
               <p className={styles.pendingInfoText}>
-                Waiting for specialist acceptance
+                {t('examRequests:detail.pending.title')}
               </p>
               <p className={styles.pendingInfoDetail}>
-                An appointment has been sent to the specialist. If the specialist declines or the appointment is cancelled, you can assign another specialist.
+                {t('examRequests:detail.pending.description')}
               </p>
             </div>
           </Card>
@@ -279,10 +282,10 @@ export function ExamRequestDetailPage() {
       {examRequest.status === "CREATED" && (
         <div className={styles.section}>
           <div className={styles.sectionHeader}>
-            <h3 className={styles.sectionTitle}>Available specialists</h3>
+            <h3 className={styles.sectionTitle}>{t('examRequests:detail.sections.availableSpecialists')}</h3>
             {!showSpecialists && (
               <Button onClick={() => setShowSpecialists(true)}>
-                Find available specialists
+                {t('examRequests:detail.specialists.findButton')}
               </Button>
             )}
           </div>
@@ -296,7 +299,7 @@ export function ExamRequestDetailPage() {
                     checked={filterBySpecialty}
                     onChange={(e) => setFilterBySpecialty(e.target.checked)}
                   />
-                  Filter by specialty ({examRequest.examType.replace(/_/g, " ").toLowerCase()})
+                  {t('examRequests:detail.specialists.filterBySpecialty', { specialty: examRequest.examType.replace(/_/g, " ").toLowerCase() })}
                 </label>
               </div>
               {isLoadingSpecialists && (
@@ -308,25 +311,29 @@ export function ExamRequestDetailPage() {
               {isErrorSpecialists && (
                 <div className={styles.specialistError}>
                   <p className={styles.specialistErrorText}>
-                    Failed to search specialists.
+                    {t('examRequests:detail.specialists.searchError')}
                   </p>
                   <Button
                     variant="secondary"
                     size="sm"
                     onClick={() => refetchSpecialists()}
                   >
-                    Retry
+                    {t('common:actions.retry')}
                   </Button>
                 </div>
               )}
 
               {specialists && specialists.length === 0 && (
                 <EmptyState
-                  title="No specialists available"
+                  title={t('examRequests:detail.specialists.empty.title')}
                   description={
                     clinic
-                      ? `No specialists found covering ${clinic.city} / ${clinic.state} for ${examRequest.examType.replace(/_/g, " ").toLowerCase()}.`
-                      : "No specialists found for this region and exam type."
+                      ? t('examRequests:detail.specialists.empty.descriptionWithLocation', {
+                          city: clinic.city,
+                          state: clinic.state,
+                          examType: t(`common:examTypes.${examRequest.examType}`, examRequest.examType.replace(/_/g, " ").toLowerCase()),
+                        })
+                      : t('examRequests:detail.specialists.empty.descriptionGeneric')
                   }
                 />
               )}
@@ -347,23 +354,22 @@ export function ExamRequestDetailPage() {
         <Dialog
           open={!!schedulingSpecialist}
           onClose={() => setSchedulingSpecialist(null)}
-          title="Schedule appointment"
+          title={t('examRequests:detail.scheduleDialog.title')}
         >
-          <p>
-            Schedule an appointment with{" "}
-            <strong>{schedulingSpecialist.name}</strong> (CRMV{" "}
-            {schedulingSpecialist.crmv} / {schedulingSpecialist.crmvState}) for
-            this exam request?
-          </p>
+          <p dangerouslySetInnerHTML={{ __html: t('examRequests:detail.scheduleDialog.message', {
+            name: schedulingSpecialist.name,
+            crmv: schedulingSpecialist.crmv,
+            crmvState: schedulingSpecialist.crmvState,
+          }) }} />
           <p className={styles.dialogText}>
-            The specialist will receive the request and can accept or decline.
+            {t('examRequests:detail.scheduleDialog.detail')}
           </p>
           <div className={styles.dialogActions}>
             <Button
               variant="secondary"
               onClick={() => setSchedulingSpecialist(null)}
             >
-              Cancel
+              {t('common:actions.cancel')}
             </Button>
             <Button
               isLoading={scheduleMutation.isPending}
@@ -371,7 +377,7 @@ export function ExamRequestDetailPage() {
                 scheduleMutation.mutate(schedulingSpecialist.id)
               }
             >
-              Confirm schedule
+              {t('examRequests:detail.scheduleDialog.confirmButton')}
             </Button>
           </div>
         </Dialog>

@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 import { createClinicStaff } from "../../api/clinicStaff";
 import { Card, Input, Select, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
@@ -15,20 +17,21 @@ function getClinicId(): string {
 }
 
 const createStaffSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z.string().min(1, "Email is required").email("Valid email required"),
+  name: z.string().min(1, i18next.t('staff:create.validation.nameRequired')),
+  email: z.string().min(1, i18next.t('staff:create.validation.emailRequired')).email(i18next.t('staff:create.validation.validEmailRequired')),
   phone: z.string().optional(),
-  role: z.string().min(1, "Role is required"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  confirmPassword: z.string().min(1, "Confirm password is required"),
+  role: z.string().min(1, i18next.t('staff:create.validation.roleRequired')),
+  password: z.string().min(8, i18next.t('staff:create.validation.passwordMinLength')),
+  confirmPassword: z.string().min(1, i18next.t('staff:create.validation.confirmPasswordRequired')),
 }).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
+  message: i18next.t('staff:create.validation.passwordsDoNotMatch'),
   path: ["confirmPassword"],
 });
 
 type CreateStaffForm = z.infer<typeof createStaffSchema>;
 
 export function CreateStaffPage() {
+  const { t } = useTranslation(['staff', 'common']);
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [apiError, setApiError] = useState<string | null>(null);
@@ -60,13 +63,11 @@ export function CreateStaffPage() {
         password: data.password,
       }),
     onSuccess: () => {
-      showToast("Collaborator created successfully.", "success");
+      showToast(t('staff:create.toast.success'), "success");
       navigate("/staff");
     },
     onError: () => {
-      setApiError(
-        "Failed to create collaborator. Please check the information and try again."
-      );
+      setApiError(t('staff:create.toast.error'));
     },
   });
 
@@ -78,9 +79,9 @@ export function CreateStaffPage() {
   return (
     <div>
       <PageHeader
-        title="New collaborator"
-        subtitle="Register a new staff member for the clinic."
-        backLink={{ label: "Back to staff", to: "/staff" }}
+        title={t('staff:create.title')}
+        subtitle={t('staff:create.subtitle')}
+        backLink={{ label: t('staff:create.backLink'), to: "/staff" }}
       />
 
       <Card>
@@ -91,55 +92,55 @@ export function CreateStaffPage() {
         >
           {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <FormSection title="Personal information">
+          <FormSection title={t('staff:create.sections.personalInformation')}>
             <Input
-              label="Full name"
-              placeholder="e.g. Maria Silva"
+              label={t('staff:create.fields.fullName')}
+              placeholder={t('staff:create.fields.fullNamePlaceholder')}
               error={errors.name?.message}
               {...register("name")}
             />
 
             <div className={styles.row}>
               <Input
-                label="Email"
+                label={t('staff:create.fields.email')}
                 type="email"
-                placeholder="collaborator@clinic.com"
+                placeholder={t('staff:create.fields.emailPlaceholder')}
                 error={errors.email?.message}
                 {...register("email")}
               />
               <Input
-                label="Phone"
+                label={t('staff:create.fields.phone')}
                 type="tel"
-                placeholder="(11) 99999-9999"
+                placeholder={t('staff:create.fields.phonePlaceholder')}
                 error={errors.phone?.message}
                 {...register("phone")}
               />
             </div>
 
             <Select
-              label="Role"
+              label={t('staff:create.fields.role')}
               error={errors.role?.message}
               {...register("role")}
             >
-              <option value="">Select role</option>
-              <option value="VETERINARIAN">Veterinarian</option>
-              <option value="SECRETARY">Secretary</option>
+              <option value="">{t('staff:create.fields.rolePlaceholder')}</option>
+              <option value="VETERINARIAN">{t('common:staffRoles.VETERINARIAN')}</option>
+              <option value="SECRETARY">{t('common:staffRoles.SECRETARY')}</option>
             </Select>
           </FormSection>
 
-          <FormSection title="Credentials">
+          <FormSection title={t('staff:create.sections.credentials')}>
             <div className={styles.row}>
               <Input
-                label="Password"
+                label={t('staff:create.fields.password')}
                 type="password"
-                placeholder="Minimum 8 characters"
+                placeholder={t('staff:create.fields.passwordPlaceholder')}
                 error={errors.password?.message}
                 {...register("password")}
               />
               <Input
-                label="Confirm password"
+                label={t('staff:create.fields.confirmPassword')}
                 type="password"
-                placeholder="Repeat password"
+                placeholder={t('staff:create.fields.confirmPasswordPlaceholder')}
                 error={errors.confirmPassword?.message}
                 {...register("confirmPassword")}
               />
@@ -148,7 +149,7 @@ export function CreateStaffPage() {
 
           <FormActions
             onCancel={() => navigate("/staff")}
-            submitLabel="Create collaborator"
+            submitLabel={t('staff:create.submitButton')}
             isSubmitting={mutation.isPending}
           />
         </form>

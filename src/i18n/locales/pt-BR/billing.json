@@ -1,0 +1,62 @@
+{
+  "clinicBilling": {
+    "title": "Faturamento",
+    "columns": {
+      "examType": "Tipo de exame",
+      "amount": "Valor",
+      "status": "Status",
+      "date": "Data"
+    },
+    "searchPlaceholder": "Buscar registros de faturamento...",
+    "error": "Falha ao carregar registros de faturamento",
+    "empty": {
+      "title": "Nenhum registro de faturamento",
+      "description": "Registros de faturamento aparecerão aqui quando laudos forem emitidos para seus exames."
+    }
+  },
+  "adminDashboard": {
+    "title": "Faturamento",
+    "totalRevenue": "Receita total",
+    "platformFees": "Taxas da plataforma",
+    "pendingPayments": "Pagamentos pendentes",
+    "overdue": "Vencidos",
+    "totalRecords": "Total de registros",
+    "columns": {
+      "examType": "Tipo de exame",
+      "total": "Total",
+      "platformFee": "Taxa da plataforma",
+      "status": "Status",
+      "date": "Data"
+    },
+    "searchPlaceholder": "Buscar registros de faturamento...",
+    "error": "Falha ao carregar registros de faturamento",
+    "empty": {
+      "title": "Nenhum registro de faturamento",
+      "description": "Registros de faturamento aparecerão aqui quando laudos forem emitidos."
+    }
+  },
+  "recordDetail": {
+    "title": "Registro de faturamento",
+    "sections": {
+      "financialDetails": "Detalhes financeiros",
+      "references": "Referências",
+      "error": "Erro",
+      "timestamps": "Datas"
+    },
+    "fields": {
+      "total": "Total",
+      "platformFee": "Taxa da plataforma",
+      "specialistShare": "Parte do especialista",
+      "status": "Status",
+      "examType": "Tipo de exame",
+      "laudoId": "ID do laudo",
+      "appointmentId": "ID do agendamento",
+      "clinicId": "ID da clínica",
+      "specialistId": "ID do especialista",
+      "asaasPayment": "Pagamento Asaas",
+      "created": "Criado",
+      "updated": "Atualizado"
+    },
+    "errorLoading": "Falha ao carregar registro de faturamento."
+  }
+}

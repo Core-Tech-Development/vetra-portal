@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { getTutor, deleteTutor } from "../../api/tutors";
 import { listPatientsByTutor } from "../../api/patients";
 import {
@@ -15,9 +16,11 @@ import { PageHeader, DetailSection, FieldDisplay } from "../../components/patter
 import { Pencil, Trash2 } from "lucide-react";
 import type { TableColumn } from "../../components/ui";
 import type { PatientResponse } from "../../api/types";
+import { formatDate } from "../../i18n/formatting";
 import styles from "./TutorDetailPage.module.css";
 
 export function TutorDetailPage() {
+  const { t } = useTranslation(['tutors', 'common']);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -55,7 +58,7 @@ export function TutorDetailPage() {
   const patientColumns: TableColumn<PatientResponse>[] = [
     {
       key: "name",
-      header: "Name",
+      header: t('tutors:detail.patientColumns.name'),
       render: (row) => (
         <Link to={`/patients/${row.id}`} className={styles.tableLink}>
           {row.name}
@@ -64,18 +67,18 @@ export function TutorDetailPage() {
     },
     {
       key: "species",
-      header: "Species",
-      render: (row) => row.species.replace(/_/g, " "),
+      header: t('tutors:detail.patientColumns.species'),
+      render: (row) => t(`common:species.${row.species}`, row.species.replace(/_/g, " ")),
     },
     {
       key: "breed",
-      header: "Breed",
+      header: t('tutors:detail.patientColumns.breed'),
       render: (row) => row.breed ?? "-",
     },
     {
       key: "sex",
-      header: "Sex",
-      render: (row) => row.sex ?? "-",
+      header: t('tutors:detail.patientColumns.sex'),
+      render: (row) => row.sex ? t(`common:sex.${row.sex}`, row.sex) : "-",
     },
   ];
 
@@ -90,16 +93,16 @@ export function TutorDetailPage() {
   if (isError || !tutor) {
     return (
       <div className={styles.errorBox}>
-        <div className={styles.errorTitle}>Failed to load tutor</div>
+        <div className={styles.errorTitle}>{t('tutors:detail.error.title')}</div>
         <p className={styles.errorDetail}>
-          The tutor could not be found or an error occurred.
+          {t('tutors:detail.error.detail')}
         </p>
         <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
-            Retry
+            {t('common:actions.retry')}
           </Button>
           <Link to="/tutors">
-            <Button variant="outline">Back to tutors</Button>
+            <Button variant="outline">{t('tutors:detail.error.backButton')}</Button>
           </Link>
         </div>
       </div>
@@ -110,53 +113,53 @@ export function TutorDetailPage() {
     <div>
       <PageHeader
         title={tutor.name}
-        backLink={{ label: "Back to tutors", to: "/tutors" }}
+        backLink={{ label: t('tutors:detail.backLink'), to: "/tutors" }}
         actions={
           <div className={styles.headerActions}>
             <Link to={`/tutors/${id}/edit`}>
-              <Button variant="secondary" leftIcon={<Pencil size={16} />}>Edit</Button>
+              <Button variant="secondary" leftIcon={<Pencil size={16} />}>{t('common:actions.edit')}</Button>
             </Link>
             <Button
               variant="danger"
               leftIcon={<Trash2 size={16} />}
               onClick={() => setShowDeleteDialog(true)}
             >
-              Delete
+              {t('common:actions.delete')}
             </Button>
           </div>
         }
       />
 
-      <DetailSection title="Tutor information" columns={3}>
-        <FieldDisplay label="Name" value={tutor.name} />
-        <FieldDisplay label="Phone" value={tutor.phone ?? "-"} />
-        <FieldDisplay label="Email" value={tutor.email ?? "-"} />
-        <FieldDisplay label="Document" value={tutor.document ?? "-"} />
-        <FieldDisplay label="Address" value={tutor.address ?? "-"} />
-        <FieldDisplay label="City" value={tutor.city ?? "-"} />
-        <FieldDisplay label="State" value={tutor.state ?? "-"} />
-        <FieldDisplay label="Zip code" value={tutor.zipCode ?? "-"} />
+      <DetailSection title={t('tutors:detail.sections.tutorInformation')} columns={3}>
+        <FieldDisplay label={t('tutors:detail.fields.name')} value={tutor.name} />
+        <FieldDisplay label={t('tutors:detail.fields.phone')} value={tutor.phone ?? "-"} />
+        <FieldDisplay label={t('tutors:detail.fields.email')} value={tutor.email ?? "-"} />
+        <FieldDisplay label={t('tutors:detail.fields.document')} value={tutor.document ?? "-"} />
+        <FieldDisplay label={t('tutors:detail.fields.address')} value={tutor.address ?? "-"} />
+        <FieldDisplay label={t('tutors:detail.fields.city')} value={tutor.city ?? "-"} />
+        <FieldDisplay label={t('tutors:detail.fields.state')} value={tutor.state ?? "-"} />
+        <FieldDisplay label={t('tutors:detail.fields.zipCode')} value={tutor.zipCode ?? "-"} />
         <FieldDisplay
-          label="Registered"
-          value={new Date(tutor.createdAt).toLocaleDateString()}
+          label={t('tutors:detail.fields.registered')}
+          value={formatDate(tutor.createdAt)}
         />
       </DetailSection>
 
       <div className={styles.section}>
         <div className={styles.sectionHeader}>
-          <h3 className={styles.sectionTitle}>Patients</h3>
+          <h3 className={styles.sectionTitle}>{t('tutors:detail.sections.patients')}</h3>
           <Link to="/patients/new">
-            <Button size="sm">New patient</Button>
+            <Button size="sm">{t('tutors:detail.newPatient')}</Button>
           </Link>
         </div>
         <Card noPadding>
           {patientsData && patientsData.content.length === 0 && (
             <EmptyState
-              title="No patients registered"
-              description="This tutor has no patients yet."
+              title={t('tutors:detail.patientsEmpty.title')}
+              description={t('tutors:detail.patientsEmpty.description')}
               action={
                 <Link to="/patients/new">
-                  <Button>New patient</Button>
+                  <Button>{t('tutors:detail.newPatient')}</Button>
                 </Link>
               }
             />
@@ -175,28 +178,25 @@ export function TutorDetailPage() {
         <Dialog
           open={showDeleteDialog}
           onClose={() => setShowDeleteDialog(false)}
-          title="Delete tutor"
+          title={t('tutors:list.deleteDialog.title')}
         >
-          <p>
-            Are you sure you want to delete tutor{" "}
-            <strong>{tutor.name}</strong>?
-          </p>
+          <p dangerouslySetInnerHTML={{ __html: t('tutors:list.deleteDialog.message', { name: tutor.name }) }} />
           <p className={styles.dialogWarning}>
-            The tutor must have no linked patients to be deleted.
+            {t('tutors:list.deleteDialog.warning')}
           </p>
           <div className={styles.dialogActions}>
             <Button
               variant="secondary"
               onClick={() => setShowDeleteDialog(false)}
             >
-              Cancel
+              {t('common:actions.cancel')}
             </Button>
             <Button
               variant="danger"
               isLoading={deleteMutation.isPending}
               onClick={() => deleteMutation.mutate(id!)}
             >
-              Delete
+              {t('common:actions.delete')}
             </Button>
           </div>
         </Dialog>

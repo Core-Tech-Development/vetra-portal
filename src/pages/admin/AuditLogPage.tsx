@@ -1,11 +1,14 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { listAuditLogs } from "../../api/admin";
 import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { AuditLogResponse } from "../../api/types";
+import { formatDateTime } from "../../i18n/formatting";
 
 export function AuditLogPage() {
+  const { t } = useTranslation('admin');
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
 
@@ -17,35 +20,35 @@ export function AuditLogPage() {
   const columns: TableColumn<AuditLogResponse>[] = [
     {
       key: "actorUserId",
-      header: "Actor",
+      header: t('auditLog.columns.actor'),
       render: (row) =>
         row.actorUserId ? row.actorUserId.substring(0, 8) : "-",
     },
     {
       key: "entityType",
-      header: "Entity type",
+      header: t('auditLog.columns.entityType'),
       render: (row) => row.entityType,
     },
     {
       key: "entityId",
-      header: "Entity ID",
+      header: t('auditLog.columns.entityId'),
       render: (row) => row.entityId.substring(0, 8),
     },
     {
       key: "action",
-      header: "Action",
+      header: t('auditLog.columns.action'),
       render: (row) => row.action,
     },
     {
       key: "createdAt",
-      header: "Date",
-      render: (row) => new Date(row.createdAt).toLocaleString(),
+      header: t('auditLog.columns.date'),
+      render: (row) => formatDateTime(row.createdAt),
     },
   ];
 
   return (
     <div>
-      <PageHeader title="Audit log" />
+      <PageHeader title={t('auditLog.title')} />
 
       <DataTableLayout
         columns={columns}
@@ -53,18 +56,18 @@ export function AuditLogPage() {
         keyExtractor={(row) => row.id}
         isLoading={isLoading}
         isError={isError}
-        errorMessage="Failed to load audit logs"
+        errorMessage={t('auditLog.error')}
         onRetry={() => refetch()}
         emptyState={{
-          title: "No audit entries",
-          description: "Audit log entries will appear here as actions are performed on the platform.",
+          title: t('auditLog.empty.title'),
+          description: t('auditLog.empty.description'),
         }}
         page={page}
         totalPages={data?.totalPages ?? 0}
         onPageChange={setPage}
         searchValue={search}
         onSearchChange={setSearch}
-        searchPlaceholder="Search audit logs..."
+        searchPlaceholder={t('auditLog.searchPlaceholder')}
       />
     </div>
   );

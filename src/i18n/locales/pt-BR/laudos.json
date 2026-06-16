@@ -1,0 +1,86 @@
+{
+  "list": {
+    "title": "Laudos",
+    "columns": {
+      "id": "ID",
+      "appointment": "Agendamento",
+      "status": "Status",
+      "issuedDate": "Data de emissão",
+      "created": "Criado"
+    },
+    "searchPlaceholder": "Buscar laudos...",
+    "error": "Falha ao carregar laudos",
+    "empty": {
+      "title": "Nenhum laudo ainda",
+      "description": "Os laudos aparecerão aqui após você criá-los a partir de um agendamento."
+    },
+    "noSpecialist": {
+      "title": "Nenhum especialista encontrado",
+      "description": "Nenhum ID de especialista encontrado. Faça login como especialista para visualizar laudos."
+    }
+  },
+  "create": {
+    "title": "Novo laudo",
+    "subtitle": "Crie um laudo diagnóstico para o agendamento {{appointmentId}}.",
+    "backLink": "Voltar para agendamento",
+    "sections": {
+      "examFiles": "Arquivos do exame",
+      "diagnosticContent": "Conteúdo diagnóstico",
+      "findingsAndConclusion": "Achados e conclusão"
+    },
+    "fields": {
+      "findings": "Achados",
+      "findingsPlaceholder": "Descreva os achados diagnósticos...",
+      "conclusion": "Conclusão",
+      "conclusionPlaceholder": "Resuma a conclusão diagnóstica...",
+      "recommendations": "Recomendações",
+      "recommendationsPlaceholder": "Forneça recomendações para a clínica..."
+    },
+    "dropZone": {
+      "uploading": "Enviando...",
+      "text": "Solte arquivos aqui ou clique para enviar",
+      "hint": "Imagens, vídeos e PDFs aceitos"
+    },
+    "noFilesYet": "Nenhum arquivo enviado ainda.",
+    "removeFile": "Remover arquivo",
+    "saveDraft": "Salvar como rascunho",
+    "saveAndIssue": "Salvar e emitir",
+    "toast": {
+      "draftSaved": "Laudo salvo como rascunho.",
+      "draftFailed": "Falha ao salvar laudo.",
+      "issued": "Laudo emitido com sucesso.",
+      "issueFailed": "Falha ao emitir laudo.",
+      "uploadFailed": "Falha ao enviar arquivo.",
+      "fileRemoved": "Arquivo removido.",
+      "fileRemoveFailed": "Falha ao remover arquivo."
+    }
+  },
+  "detail": {
+    "titlePrefix": "Laudo",
+    "backLink": "Voltar para laudos",
+    "sections": {
+      "laudoInformation": "Informações do laudo"
+    },
+    "fields": {
+      "laudoId": "ID do laudo",
+      "appointmentId": "ID do agendamento",
+      "specialistId": "ID do especialista",
+      "status": "Status",
+      "issuedDate": "Data de emissão",
+      "created": "Criado",
+      "findings": "Achados",
+      "conclusion": "Conclusão",
+      "recommendations": "Recomendações"
+    },
+    "issueLaudo": "Emitir laudo",
+    "toast": {
+      "issued": "Laudo emitido com sucesso.",
+      "issueFailed": "Falha ao emitir laudo."
+    },
+    "error": {
+      "title": "Falha ao carregar laudo",
+      "detail": "O laudo não foi encontrado ou ocorreu um erro.",
+      "backButton": "Voltar para laudos"
+    }
+  }
+}

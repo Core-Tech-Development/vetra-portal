@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,18 +19,19 @@ const BRAZILIAN_STATES = [
 ];
 
 const createClinicSchema = z.object({
-  name: z.string().min(2, "Name must have at least 2 characters"),
-  document: z.string().min(14, "Enter a valid CNPJ"),
-  email: z.string().email("Enter a valid email"),
-  phone: z.string().min(10, "Enter a valid phone number"),
-  address: z.string().min(5, "Enter the full address"),
-  city: z.string().min(2, "Enter the city"),
-  state: z.string().min(2, "Select a state"),
+  name: z.string().min(2, i18next.t('common:validation.nameMinLength')),
+  document: z.string().min(14, i18next.t('common:validation.invalidCnpj')),
+  email: z.string().email(i18next.t('common:validation.invalidEmail')),
+  phone: z.string().min(10, i18next.t('common:validation.invalidPhone')),
+  address: z.string().min(5, i18next.t('common:validation.enterFullAddress')),
+  city: z.string().min(2, i18next.t('common:validation.enterCity')),
+  state: z.string().min(2, i18next.t('common:validation.selectState')),
 });
 
 type CreateClinicForm = z.infer<typeof createClinicSchema>;
 
 export function CreateClinicPage() {
+  const { t } = useTranslation('clinics');
   const navigate = useNavigate();
   const { showToast } = useToast();
   const [apiError, setApiError] = useState<string | null>(null);
@@ -53,13 +56,11 @@ export function CreateClinicPage() {
   const mutation = useMutation({
     mutationFn: (data: CreateClinicRequest) => createClinic(data),
     onSuccess: () => {
-      showToast("Clinic created successfully.", "success");
+      showToast(t('create.toast.success'), "success");
       navigate("/clinics");
     },
     onError: () => {
-      setApiError(
-        "Failed to create clinic. Please check the information and try again."
-      );
+      setApiError(t('create.toast.error'));
     },
   });
 
@@ -71,9 +72,9 @@ export function CreateClinicPage() {
   return (
     <div>
       <PageHeader
-        title="New clinic"
-        subtitle="Register a new veterinary clinic on the platform."
-        backLink={{ label: "Back to clinics", to: "/clinics" }}
+        title={t('create.title')}
+        subtitle={t('create.subtitle')}
+        backLink={{ label: t('create.backLink'), to: "/clinics" }}
       />
 
       <Card>
@@ -84,60 +85,60 @@ export function CreateClinicPage() {
         >
           {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <FormSection title="Clinic information">
+          <FormSection title={t('create.sections.clinicInformation')}>
             <Input
-              label="Clinic name"
-              placeholder="e.g. PetVida Veterinary Clinic"
+              label={t('create.fields.clinicName')}
+              placeholder={t('create.fields.clinicNamePlaceholder')}
               error={errors.name?.message}
               {...register("name")}
             />
 
             <div className={styles.row}>
               <Input
-                label="CNPJ"
-                placeholder="00.000.000/0000-00"
+                label={t('create.fields.cnpj')}
+                placeholder={t('create.fields.cnpjPlaceholder')}
                 error={errors.document?.message}
                 {...register("document")}
               />
               <Input
-                label="Email"
+                label={t('create.fields.email')}
                 type="email"
-                placeholder="contact@clinic.com"
+                placeholder={t('create.fields.emailPlaceholder')}
                 error={errors.email?.message}
                 {...register("email")}
               />
             </div>
 
             <Input
-              label="Phone"
+              label={t('create.fields.phone')}
               type="tel"
-              placeholder="(11) 99999-9999"
+              placeholder={t('create.fields.phonePlaceholder')}
               error={errors.phone?.message}
               {...register("phone")}
             />
           </FormSection>
 
-          <FormSection title="Address">
+          <FormSection title={t('create.sections.address')}>
             <Input
-              label="Address"
-              placeholder="Full address"
+              label={t('create.fields.address')}
+              placeholder={t('create.fields.addressPlaceholder')}
               error={errors.address?.message}
               {...register("address")}
             />
 
             <div className={styles.row}>
               <Input
-                label="City"
-                placeholder="e.g. Sao Paulo"
+                label={t('create.fields.city')}
+                placeholder={t('create.fields.cityPlaceholder')}
                 error={errors.city?.message}
                 {...register("city")}
               />
               <Select
-                label="State"
+                label={t('create.fields.state')}
                 error={errors.state?.message}
                 {...register("state")}
               >
-                <option value="">Select state</option>
+                <option value="">{t('create.fields.statePlaceholder')}</option>
                 {BRAZILIAN_STATES.map((st) => (
                   <option key={st} value={st}>
                     {st}
@@ -149,7 +150,7 @@ export function CreateClinicPage() {
 
           <FormActions
             onCancel={() => navigate("/clinics")}
-            submitLabel="Create clinic"
+            submitLabel={t('create.submitButton')}
             isSubmitting={mutation.isPending}
           />
         </form>

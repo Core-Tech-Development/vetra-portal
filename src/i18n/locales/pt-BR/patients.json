@@ -1,0 +1,108 @@
+{
+  "list": {
+    "title": "Pacientes",
+    "newPatient": "Novo paciente",
+    "columns": {
+      "name": "Nome",
+      "species": "Espécie",
+      "breed": "Raça",
+      "sex": "Sexo"
+    },
+    "searchPlaceholder": "Buscar pacientes...",
+    "error": "Falha ao carregar pacientes",
+    "empty": {
+      "title": "Nenhum paciente cadastrado",
+      "description": "Comece cadastrando o primeiro paciente desta clínica."
+    },
+    "noClinic": {
+      "title": "Nenhuma clínica selecionada",
+      "description": "Selecione uma clínica para visualizar os pacientes."
+    },
+    "deleteDialog": {
+      "title": "Excluir paciente",
+      "message": "Tem certeza de que deseja excluir o paciente <strong>{{name}}</strong>?",
+      "warning": "Esta ação não pode ser desfeita."
+    }
+  },
+  "create": {
+    "title": "Novo paciente",
+    "subtitle": "Cadastre um novo paciente para a clínica.",
+    "backLink": "Voltar para pacientes",
+    "sections": {
+      "general": "Geral",
+      "details": "Detalhes"
+    },
+    "validation": {
+      "tutorRequired": "Tutor é obrigatório",
+      "nameRequired": "Nome é obrigatório",
+      "speciesRequired": "Espécie é obrigatória"
+    },
+    "fields": {
+      "tutor": "Tutor",
+      "tutorPlaceholder": "Selecione um tutor",
+      "patientName": "Nome do paciente",
+      "patientNamePlaceholder": "ex. Rex",
+      "species": "Espécie",
+      "speciesPlaceholder": "Selecione a espécie",
+      "breed": "Raça",
+      "breedPlaceholder": "ex. Labrador Retriever",
+      "sex": "Sexo",
+      "sexPlaceholder": "Selecione o sexo",
+      "birthDate": "Data de nascimento",
+      "weightKg": "Peso (kg)",
+      "weightKgPlaceholder": "ex. 12,5",
+      "microchip": "Microchip",
+      "microchipPlaceholder": "Número do microchip",
+      "neutered": "Castrado",
+      "clinicalNotes": "Observações clínicas",
+      "clinicalNotesPlaceholder": "Observações clínicas relevantes..."
+    },
+    "submitButton": "Criar paciente",
+    "toast": {
+      "success": "Paciente criado com sucesso.",
+      "error": "Falha ao criar paciente. Verifique as informações e tente novamente."
+    }
+  },
+  "edit": {
+    "title": "Editar paciente",
+    "subtitle": "Atualize as informações do paciente.",
+    "backLink": "Voltar para pacientes",
+    "submitButton": "Salvar alterações",
+    "toast": {
+      "success": "Paciente atualizado com sucesso.",
+      "error": "Falha ao atualizar paciente. Verifique as informações e tente novamente."
+    }
+  },
+  "detail": {
+    "backLink": "Voltar para pacientes",
+    "sections": {
+      "patientInformation": "Informações do paciente",
+      "tutor": "Tutor",
+      "examHistory": "Histórico de exames"
+    },
+    "fields": {
+      "species": "Espécie",
+      "breed": "Raça",
+      "sex": "Sexo",
+      "birthDate": "Data de nascimento",
+      "weightKg": "Peso (kg)",
+      "neutered": "Castrado",
+      "microchip": "Microchip",
+      "registered": "Cadastrado",
+      "clinicalNotes": "Observações clínicas",
+      "name": "Nome",
+      "phone": "Telefone",
+      "email": "E-mail",
+      "document": "Documento"
+    },
+    "examEmpty": {
+      "title": "Nenhuma solicitação de exame",
+      "description": "Este paciente ainda não possui solicitações de exame."
+    },
+    "error": {
+      "title": "Falha ao carregar paciente",
+      "detail": "O paciente não foi encontrado ou ocorreu um erro.",
+      "backButton": "Voltar para pacientes"
+    }
+  }
+}

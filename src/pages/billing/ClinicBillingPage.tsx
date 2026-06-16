@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { listClinicBillingRecords } from "../../api/billing";
 import type { BillingRecordResponse } from "../../api/types";
@@ -6,12 +7,10 @@ import { StatusBadge } from "../../components/ui";
 import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import { useClinicId } from "../../hooks/useClinicId";
-
-function formatCurrency(cents: number): string {
-  return `R$ ${(cents / 100).toFixed(2)}`;
-}
+import { formatCurrency, formatDate } from "../../i18n/formatting";
 
 export function ClinicBillingPage() {
+  const { t } = useTranslation('billing');
   const clinicId = useClinicId();
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
@@ -25,29 +24,29 @@ export function ClinicBillingPage() {
   const columns: TableColumn<BillingRecordResponse>[] = [
     {
       key: "examType",
-      header: "Exam type",
+      header: t('clinicBilling.columns.examType'),
       render: (row) => row.examType.replace(/_/g, " "),
     },
     {
       key: "totalCents",
-      header: "Amount",
+      header: t('clinicBilling.columns.amount'),
       render: (row) => formatCurrency(row.totalCents),
     },
     {
       key: "status",
-      header: "Status",
+      header: t('clinicBilling.columns.status'),
       render: (row) => <StatusBadge status={row.status} />,
     },
     {
       key: "createdAt",
-      header: "Date",
-      render: (row) => new Date(row.createdAt).toLocaleDateString(),
+      header: t('clinicBilling.columns.date'),
+      render: (row) => formatDate(row.createdAt),
     },
   ];
 
   return (
     <div>
-      <PageHeader title="Billing" />
+      <PageHeader title={t('clinicBilling.title')} />
 
       <DataTableLayout
         columns={columns}
@@ -55,18 +54,18 @@ export function ClinicBillingPage() {
         keyExtractor={(row) => row.id}
         isLoading={isLoading}
         isError={isError}
-        errorMessage="Failed to load billing records"
+        errorMessage={t('clinicBilling.error')}
         onRetry={() => refetch()}
         emptyState={{
-          title: "No billing records",
-          description: "Billing records will appear here when laudos are issued for your exams.",
+          title: t('clinicBilling.empty.title'),
+          description: t('clinicBilling.empty.description'),
         }}
         page={page}
         totalPages={data?.totalPages ?? 0}
         onPageChange={setPage}
         searchValue={search}
         onSearchChange={setSearch}
-        searchPlaceholder="Search billing records..."
+        searchPlaceholder={t('clinicBilling.searchPlaceholder')}
       />
     </div>
   );

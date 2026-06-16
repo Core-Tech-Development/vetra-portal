@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listClinics } from "../../api/clinics";
 import { listSpecialists, approveSpecialist } from "../../api/specialists";
@@ -11,6 +12,7 @@ import type { ClinicResponse, SpecialistResponse } from "../../api/types";
 import styles from "./AdminApprovalsPage.module.css";
 
 export function AdminApprovalsPage() {
+  const { t } = useTranslation('admin');
   const [activeTab, setActiveTab] = useState("clinics");
   const [clinicPage, setClinicPage] = useState(0);
   const [specialistPage, setSpecialistPage] = useState(0);
@@ -38,41 +40,41 @@ export function AdminApprovalsPage() {
   const approveCMutation = useMutation({
     mutationFn: (id: string) => approveClinic(id),
     onSuccess: () => {
-      showToast("Clinic approved.", "success");
+      showToast(t('approvals.clinicApproved'), "success");
       queryClient.invalidateQueries({ queryKey: ["clinics"] });
       queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
     },
     onError: () => {
-      showToast("Failed to approve clinic.", "error");
+      showToast(t('approvals.clinicApproveFailed'), "error");
     },
   });
 
   const approveSMutation = useMutation({
     mutationFn: (id: string) => approveSpecialist(id),
     onSuccess: () => {
-      showToast("Specialist approved.", "success");
+      showToast(t('approvals.specialistApproved'), "success");
       queryClient.invalidateQueries({ queryKey: ["specialists"] });
       queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
     },
     onError: () => {
-      showToast("Failed to approve specialist.", "error");
+      showToast(t('approvals.specialistApproveFailed'), "error");
     },
   });
 
   const clinicColumns: TableColumn<ClinicResponse>[] = [
     {
       key: "name",
-      header: "Name",
+      header: t('approvals.columns.name'),
       render: (row) => <span className={styles.approvalName}>{row.name}</span>,
     },
     {
       key: "document",
-      header: "Document",
+      header: t('approvals.columns.document'),
       render: (row) => row.document,
     },
     {
       key: "location",
-      header: "Location",
+      header: t('approvals.columns.location'),
       render: (row) => `${row.city}, ${row.state}`,
     },
     {
@@ -89,7 +91,7 @@ export function AdminApprovalsPage() {
             }
             disabled={approveCMutation.isPending}
           >
-            Approve
+            {t('approvals.approveButton')}
           </Button>
         </div>
       ),
@@ -99,17 +101,17 @@ export function AdminApprovalsPage() {
   const specialistColumns: TableColumn<SpecialistResponse>[] = [
     {
       key: "name",
-      header: "Name",
+      header: t('approvals.columns.name'),
       render: (row) => <span className={styles.approvalName}>{row.name}</span>,
     },
     {
       key: "crmv",
-      header: "CRMV",
+      header: t('approvals.columns.crmv'),
       render: (row) => `${row.crmv}/${row.crmvState}`,
     },
     {
       key: "specialty",
-      header: "Specialty",
+      header: t('approvals.columns.specialty'),
       render: (row) => row.specialty,
     },
     {
@@ -126,7 +128,7 @@ export function AdminApprovalsPage() {
             }
             disabled={approveSMutation.isPending}
           >
-            Approve
+            {t('approvals.approveButton')}
           </Button>
         </div>
       ),
@@ -135,12 +137,12 @@ export function AdminApprovalsPage() {
 
   return (
     <div>
-      <PageHeader title="Pending approvals" />
+      <PageHeader title={t('approvals.title')} />
 
       <Tabs value={activeTab} onChange={setActiveTab}>
         <TabList>
-          <Tab value="clinics">Clinic Approvals ({pendingClinics.length})</Tab>
-          <Tab value="specialists">Specialist Approvals ({pendingSpecialists.length})</Tab>
+          <Tab value="clinics">{t('approvals.clinicApprovalsTab', { count: pendingClinics.length })}</Tab>
+          <Tab value="specialists">{t('approvals.specialistApprovalsTab', { count: pendingSpecialists.length })}</Tab>
         </TabList>
 
         <TabPanel value="clinics" activeValue={activeTab}>
@@ -150,18 +152,18 @@ export function AdminApprovalsPage() {
             keyExtractor={(row) => row.id}
             isLoading={clinicsLoading}
             isError={clinicsError}
-            errorMessage="Failed to load clinics pending approval"
+            errorMessage={t('approvals.errorClinic')}
             onRetry={() => refetchClinics()}
             emptyState={{
-              title: "No clinics pending approval",
-              description: "All clinic registrations have been reviewed.",
+              title: t('approvals.emptyClinic.title'),
+              description: t('approvals.emptyClinic.description'),
             }}
             page={clinicPage}
             totalPages={1}
             onPageChange={setClinicPage}
             searchValue={clinicSearch}
             onSearchChange={setClinicSearch}
-            searchPlaceholder="Search clinics..."
+            searchPlaceholder={t('approvals.searchClinics')}
           />
         </TabPanel>
 
@@ -172,18 +174,18 @@ export function AdminApprovalsPage() {
             keyExtractor={(row) => row.id}
             isLoading={specialistsLoading}
             isError={specialistsError}
-            errorMessage="Failed to load specialists pending approval"
+            errorMessage={t('approvals.errorSpecialist')}
             onRetry={() => refetchSpecialists()}
             emptyState={{
-              title: "No specialists pending approval",
-              description: "All specialist registrations have been reviewed.",
+              title: t('approvals.emptySpecialist.title'),
+              description: t('approvals.emptySpecialist.description'),
             }}
             page={specialistPage}
             totalPages={1}
             onPageChange={setSpecialistPage}
             searchValue={specialistSearch}
             onSearchChange={setSpecialistSearch}
-            searchPlaceholder="Search specialists..."
+            searchPlaceholder={t('approvals.searchSpecialists')}
           />
         </TabPanel>
       </Tabs>

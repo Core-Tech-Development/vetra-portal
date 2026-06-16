@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { Plus, Pencil, Trash2 } from "lucide-react";
 import { listPatientsByClinic, deletePatient } from "../../api/patients";
 import { useClinicId } from "../../hooks/useClinicId";
@@ -11,6 +12,7 @@ import type { PatientResponse } from "../../api/types";
 import styles from "./PatientListPage.module.css";
 
 export function PatientListPage() {
+  const { t } = useTranslation(['patients', 'common']);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
   const clinicId = useClinicId();
@@ -38,7 +40,7 @@ export function PatientListPage() {
   const columns: TableColumn<PatientResponse>[] = [
     {
       key: "name",
-      header: "Name",
+      header: t('patients:list.columns.name'),
       render: (row) => (
         <Link to={`/patients/${row.id}`} className={styles.tableLink}>
           {row.name}
@@ -47,18 +49,18 @@ export function PatientListPage() {
     },
     {
       key: "species",
-      header: "Species",
-      render: (row) => row.species.replace(/_/g, " "),
+      header: t('patients:list.columns.species'),
+      render: (row) => t(`common:species.${row.species}`, row.species.replace(/_/g, " ")),
     },
     {
       key: "breed",
-      header: "Breed",
+      header: t('patients:list.columns.breed'),
       render: (row) => row.breed ?? "-",
     },
     {
       key: "sex",
-      header: "Sex",
-      render: (row) => row.sex ?? "-",
+      header: t('patients:list.columns.sex'),
+      render: (row) => row.sex ? t(`common:sex.${row.sex}`, row.sex) : "-",
     },
     {
       key: "actions",
@@ -66,10 +68,10 @@ export function PatientListPage() {
       render: (row) => (
         <div className={styles.tableActions}>
           <Link to={`/patients/${row.id}/edit`}>
-            <Button variant="secondary" size="sm" leftIcon={<Pencil size={14} />}>Edit</Button>
+            <Button variant="secondary" size="sm" leftIcon={<Pencil size={14} />}>{t('common:actions.edit')}</Button>
           </Link>
           <Button variant="danger" size="sm" leftIcon={<Trash2 size={14} />} onClick={() => setDeletingPatient(row)}>
-            Delete
+            {t('common:actions.delete')}
           </Button>
         </div>
       ),
@@ -79,15 +81,15 @@ export function PatientListPage() {
   if (!clinicId) {
     return (
       <div>
-        <PageHeader title="Patients" />
+        <PageHeader title={t('patients:list.title')} />
         <DataTableLayout
           columns={columns}
           data={[]}
           keyExtractor={(row) => row.id}
           isLoading={false}
           emptyState={{
-            title: "No clinic selected",
-            description: "Please select a clinic to view patients.",
+            title: t('patients:list.noClinic.title'),
+            description: t('patients:list.noClinic.description'),
           }}
           page={0}
           totalPages={0}
@@ -100,10 +102,10 @@ export function PatientListPage() {
   return (
     <div>
       <PageHeader
-        title="Patients"
+        title={t('patients:list.title')}
         actions={
           <Link to="/patients/new">
-            <Button leftIcon={<Plus size={16} />}>New patient</Button>
+            <Button leftIcon={<Plus size={16} />}>{t('patients:list.newPatient')}</Button>
           </Link>
         }
       />
@@ -114,14 +116,14 @@ export function PatientListPage() {
         keyExtractor={(row) => row.id}
         isLoading={isLoading}
         isError={isError}
-        errorMessage="Failed to load patients"
+        errorMessage={t('patients:list.error')}
         onRetry={() => refetch()}
         emptyState={{
-          title: "No patients registered",
-          description: "Start by registering the first patient for this clinic.",
+          title: t('patients:list.empty.title'),
+          description: t('patients:list.empty.description'),
           action: (
             <Link to="/patients/new">
-              <Button leftIcon={<Plus size={16} />}>New patient</Button>
+              <Button leftIcon={<Plus size={16} />}>{t('patients:list.newPatient')}</Button>
             </Link>
           ),
         }}
@@ -130,22 +132,22 @@ export function PatientListPage() {
         onPageChange={setPage}
         searchValue={search}
         onSearchChange={setSearch}
-        searchPlaceholder="Search patients..."
+        searchPlaceholder={t('patients:list.searchPlaceholder')}
       />
 
       {deletingPatient && (
         <Dialog
           open={!!deletingPatient}
           onClose={() => setDeletingPatient(null)}
-          title="Delete patient"
+          title={t('patients:list.deleteDialog.title')}
         >
-          <p>Are you sure you want to delete patient <strong>{deletingPatient.name}</strong>?</p>
+          <p dangerouslySetInnerHTML={{ __html: t('patients:list.deleteDialog.message', { name: deletingPatient.name }) }} />
           <p className={styles.dialogWarning}>
-            This action cannot be undone.
+            {t('patients:list.deleteDialog.warning')}
           </p>
           <div className={styles.dialogActions}>
-            <Button variant="secondary" onClick={() => setDeletingPatient(null)}>Cancel</Button>
-            <Button variant="danger" isLoading={deleteMutation.isPending} onClick={() => deleteMutation.mutate(deletingPatient.id)}>Delete</Button>
+            <Button variant="secondary" onClick={() => setDeletingPatient(null)}>{t('common:actions.cancel')}</Button>
+            <Button variant="danger" isLoading={deleteMutation.isPending} onClick={() => deleteMutation.mutate(deletingPatient.id)}>{t('common:actions.delete')}</Button>
           </div>
         </Dialog>
       )}

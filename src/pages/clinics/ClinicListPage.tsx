@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
@@ -10,6 +11,7 @@ import type { ClinicResponse } from "../../api/types";
 import styles from "./ClinicListPage.module.css";
 
 export function ClinicListPage() {
+  const { t } = useTranslation('clinics');
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
 
@@ -21,7 +23,7 @@ export function ClinicListPage() {
   const columns: TableColumn<ClinicResponse>[] = [
     {
       key: "name",
-      header: "Name",
+      header: t('list.columns.name'),
       render: (row) => (
         <Link to={`/clinics/${row.id}`} className={styles.tableLink}>
           {row.name}
@@ -30,17 +32,17 @@ export function ClinicListPage() {
     },
     {
       key: "document",
-      header: "Document",
+      header: t('list.columns.document'),
       render: (row) => row.document,
     },
     {
       key: "city",
-      header: "City",
+      header: t('list.columns.city'),
       render: (row) => `${row.city}, ${row.state}`,
     },
     {
       key: "status",
-      header: "Status",
+      header: t('list.columns.status'),
       render: (row) => <StatusBadge status={row.status} />,
     },
   ];
@@ -48,10 +50,10 @@ export function ClinicListPage() {
   return (
     <div>
       <PageHeader
-        title="Clinics"
+        title={t('list.title')}
         actions={
           <Link to="/clinics/new">
-            <Button leftIcon={<Plus size={16} />}>New clinic</Button>
+            <Button leftIcon={<Plus size={16} />}>{t('list.newClinic')}</Button>
           </Link>
         }
       />
@@ -62,14 +64,14 @@ export function ClinicListPage() {
         keyExtractor={(row) => row.id}
         isLoading={isLoading}
         isError={isError}
-        errorMessage="Failed to load clinics"
+        errorMessage={t('list.error')}
         onRetry={() => refetch()}
         emptyState={{
-          title: "No clinics registered",
-          description: "Start by registering the first clinic on the platform.",
+          title: t('list.empty.title'),
+          description: t('list.empty.description'),
           action: (
             <Link to="/clinics/new">
-              <Button leftIcon={<Plus size={16} />}>New clinic</Button>
+              <Button leftIcon={<Plus size={16} />}>{t('list.newClinic')}</Button>
             </Link>
           ),
         }}
@@ -78,7 +80,7 @@ export function ClinicListPage() {
         onPageChange={setPage}
         searchValue={search}
         onSearchChange={setSearch}
-        searchPlaceholder="Search clinics..."
+        searchPlaceholder={t('list.searchPlaceholder')}
       />
     </div>
   );

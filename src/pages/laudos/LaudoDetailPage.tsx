@@ -1,12 +1,15 @@
 import { useParams, Link } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { getLaudo, issueLaudo } from "../../api/laudos";
 import { Button, Card, StatusBadge, Spinner } from "../../components/ui";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
+import { formatDateTime } from "../../i18n/formatting";
 import styles from "./LaudoDetailPage.module.css";
 
 export function LaudoDetailPage() {
+  const { t } = useTranslation(['laudos', 'common']);
   const { id } = useParams<{ id: string }>();
   const { showToast } = useToast();
   const queryClient = useQueryClient();
@@ -25,11 +28,11 @@ export function LaudoDetailPage() {
   const issueMutation = useMutation({
     mutationFn: () => issueLaudo(id!),
     onSuccess: () => {
-      showToast("Laudo issued successfully.", "success");
+      showToast(t('laudos:detail.toast.issued'), "success");
       queryClient.invalidateQueries({ queryKey: ["laudo", id] });
     },
     onError: () => {
-      showToast("Failed to issue laudo.", "error");
+      showToast(t('laudos:detail.toast.issueFailed'), "error");
     },
   });
 
@@ -44,16 +47,16 @@ export function LaudoDetailPage() {
   if (isError || !laudo) {
     return (
       <div className={styles.errorBox}>
-        <div className={styles.errorTitle}>Failed to load laudo</div>
+        <div className={styles.errorTitle}>{t('laudos:detail.error.title')}</div>
         <p className={styles.errorDetail}>
-          The laudo could not be found or an error occurred.
+          {t('laudos:detail.error.detail')}
         </p>
         <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
-            Retry
+            {t('common:actions.retry')}
           </Button>
           <Link to="/laudos">
-            <Button variant="outline">Back to laudos</Button>
+            <Button variant="outline">{t('laudos:detail.error.backButton')}</Button>
           </Link>
         </div>
       </div>
@@ -63,36 +66,36 @@ export function LaudoDetailPage() {
   return (
     <div>
       <PageHeader
-        title={`Laudo ${laudo.id.substring(0, 8)}`}
-        backLink={{ label: "Back to laudos", to: "/laudos" }}
+        title={`${t('laudos:detail.titlePrefix')} ${laudo.id.substring(0, 8)}`}
+        backLink={{ label: t('laudos:detail.backLink'), to: "/laudos" }}
         actions={
           <StatusBadge status={laudo.status} />
         }
       />
 
-      <DetailSection title="Laudo information" columns={2}>
-        <FieldDisplay label="Laudo ID" value={laudo.id} />
-        <FieldDisplay label="Appointment ID" value={laudo.appointmentId} />
-        <FieldDisplay label="Specialist ID" value={laudo.specialistId} />
-        <FieldDisplay label="Status" value={laudo.status} />
+      <DetailSection title={t('laudos:detail.sections.laudoInformation')} columns={2}>
+        <FieldDisplay label={t('laudos:detail.fields.laudoId')} value={laudo.id} />
+        <FieldDisplay label={t('laudos:detail.fields.appointmentId')} value={laudo.appointmentId} />
+        <FieldDisplay label={t('laudos:detail.fields.specialistId')} value={laudo.specialistId} />
+        <FieldDisplay label={t('laudos:detail.fields.status')} value={laudo.status} />
         <FieldDisplay
-          label="Issued date"
+          label={t('laudos:detail.fields.issuedDate')}
           value={
             laudo.issuedAt
-              ? new Date(laudo.issuedAt).toLocaleString()
+              ? formatDateTime(laudo.issuedAt)
               : "-"
           }
         />
         <FieldDisplay
-          label="Created"
-          value={new Date(laudo.createdAt).toLocaleString()}
+          label={t('laudos:detail.fields.created')}
+          value={formatDateTime(laudo.createdAt)}
         />
       </DetailSection>
 
       {laudo.findings && (
         <div className={styles.section}>
           <Card>
-            <div className={styles.contentLabel}>Findings</div>
+            <div className={styles.contentLabel}>{t('laudos:detail.fields.findings')}</div>
             <div className={styles.contentText}>{laudo.findings}</div>
           </Card>
         </div>
@@ -101,7 +104,7 @@ export function LaudoDetailPage() {
       {laudo.conclusion && (
         <div className={styles.section}>
           <Card>
-            <div className={styles.contentLabel}>Conclusion</div>
+            <div className={styles.contentLabel}>{t('laudos:detail.fields.conclusion')}</div>
             <div className={styles.contentText}>{laudo.conclusion}</div>
           </Card>
         </div>
@@ -110,7 +113,7 @@ export function LaudoDetailPage() {
       {laudo.recommendations && (
         <div className={styles.section}>
           <Card>
-            <div className={styles.contentLabel}>Recommendations</div>
+            <div className={styles.contentLabel}>{t('laudos:detail.fields.recommendations')}</div>
             <div className={styles.contentText}>{laudo.recommendations}</div>
           </Card>
         </div>
@@ -122,7 +125,7 @@ export function LaudoDetailPage() {
             onClick={() => issueMutation.mutate()}
             isLoading={issueMutation.isPending}
           >
-            Issue laudo
+            {t('laudos:detail.issueLaudo')}
           </Button>
         </div>
       )}

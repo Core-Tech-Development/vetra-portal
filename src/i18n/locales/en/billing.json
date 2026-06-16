@@ -1,0 +1,62 @@
+{
+  "clinicBilling": {
+    "title": "Billing",
+    "columns": {
+      "examType": "Exam type",
+      "amount": "Amount",
+      "status": "Status",
+      "date": "Date"
+    },
+    "searchPlaceholder": "Search billing records...",
+    "error": "Failed to load billing records",
+    "empty": {
+      "title": "No billing records",
+      "description": "Billing records will appear here when laudos are issued for your exams."
+    }
+  },
+  "adminDashboard": {
+    "title": "Billing",
+    "totalRevenue": "Total revenue",
+    "platformFees": "Platform fees",
+    "pendingPayments": "Pending payments",
+    "overdue": "Overdue",
+    "totalRecords": "Total records",
+    "columns": {
+      "examType": "Exam type",
+      "total": "Total",
+      "platformFee": "Platform fee",
+      "status": "Status",
+      "date": "Date"
+    },
+    "searchPlaceholder": "Search billing records...",
+    "error": "Failed to load billing records",
+    "empty": {
+      "title": "No billing records",
+      "description": "Billing records will appear here when laudos are issued."
+    }
+  },
+  "recordDetail": {
+    "title": "Billing record",
+    "sections": {
+      "financialDetails": "Financial details",
+      "references": "References",
+      "error": "Error",
+      "timestamps": "Timestamps"
+    },
+    "fields": {
+      "total": "Total",
+      "platformFee": "Platform fee",
+      "specialistShare": "Specialist share",
+      "status": "Status",
+      "examType": "Exam type",
+      "laudoId": "Laudo ID",
+      "appointmentId": "Appointment ID",
+      "clinicId": "Clinic ID",
+      "specialistId": "Specialist ID",
+      "asaasPayment": "Asaas Payment",
+      "created": "Created",
+      "updated": "Updated"
+    },
+    "errorLoading": "Failed to load billing record."
+  }
+}

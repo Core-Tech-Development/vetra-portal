@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { getPatient, deletePatient } from "../../api/patients";
 import { getTutor } from "../../api/tutors";
 import { listExamRequestsByPatient } from "../../api/examRequests";
@@ -16,6 +17,7 @@ import {
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { Pencil, Trash2 } from "lucide-react";
 import type { BadgeVariant } from "../../components/ui";
+import { formatDate } from "../../i18n/formatting";
 import styles from "./PatientDetailPage.module.css";
 
 const PRIORITY_VARIANT: Record<string, BadgeVariant> = {
@@ -25,6 +27,7 @@ const PRIORITY_VARIANT: Record<string, BadgeVariant> = {
 };
 
 export function PatientDetailPage() {
+  const { t } = useTranslation(['patients', 'common']);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -76,16 +79,16 @@ export function PatientDetailPage() {
   if (isError || !patient) {
     return (
       <div className={styles.errorBox}>
-        <div className={styles.errorTitle}>Failed to load patient</div>
+        <div className={styles.errorTitle}>{t('patients:detail.error.title')}</div>
         <p className={styles.errorDetail}>
-          The patient could not be found or an error occurred.
+          {t('patients:detail.error.detail')}
         </p>
         <div className={styles.errorActions}>
           <Button variant="secondary" onClick={() => refetch()}>
-            Retry
+            {t('common:actions.retry')}
           </Button>
           <Link to="/patients">
-            <Button variant="outline">Back to patients</Button>
+            <Button variant="outline">{t('patients:detail.error.backButton')}</Button>
           </Link>
         </div>
       </div>
@@ -96,61 +99,61 @@ export function PatientDetailPage() {
     <div>
       <PageHeader
         title={patient.name}
-        backLink={{ label: "Back to patients", to: "/patients" }}
+        backLink={{ label: t('patients:detail.backLink'), to: "/patients" }}
         actions={
           <div className={styles.headerActions}>
             <Link to={`/patients/${id}/edit`}>
-              <Button variant="secondary" leftIcon={<Pencil size={16} />}>Edit</Button>
+              <Button variant="secondary" leftIcon={<Pencil size={16} />}>{t('common:actions.edit')}</Button>
             </Link>
             <Button
               variant="danger"
               leftIcon={<Trash2 size={16} />}
               onClick={() => setShowDeleteDialog(true)}
             >
-              Delete
+              {t('common:actions.delete')}
             </Button>
           </div>
         }
       />
 
-      <DetailSection title="Patient information" columns={3}>
-        <FieldDisplay label="Species" value={patient.species.replace(/_/g, " ")} />
-        <FieldDisplay label="Breed" value={patient.breed ?? "-"} />
-        <FieldDisplay label="Sex" value={patient.sex ?? "-"} />
+      <DetailSection title={t('patients:detail.sections.patientInformation')} columns={3}>
+        <FieldDisplay label={t('patients:detail.fields.species')} value={t(`common:species.${patient.species}`, patient.species.replace(/_/g, " "))} />
+        <FieldDisplay label={t('patients:detail.fields.breed')} value={patient.breed ?? "-"} />
+        <FieldDisplay label={t('patients:detail.fields.sex')} value={patient.sex ? t(`common:sex.${patient.sex}`, patient.sex) : "-"} />
         <FieldDisplay
-          label="Birth date"
+          label={t('patients:detail.fields.birthDate')}
           value={
             patient.birthDate
-              ? new Date(patient.birthDate).toLocaleDateString()
+              ? formatDate(patient.birthDate)
               : "-"
           }
         />
         <FieldDisplay
-          label="Weight (kg)"
+          label={t('patients:detail.fields.weightKg')}
           value={patient.weightKg != null ? patient.weightKg : "-"}
         />
         <FieldDisplay
-          label="Neutered"
+          label={t('patients:detail.fields.neutered')}
           value={
-            patient.neutered != null ? (patient.neutered ? "Yes" : "No") : "-"
+            patient.neutered != null ? (patient.neutered ? t('common:common.yes') : t('common:common.no')) : "-"
           }
         />
-        <FieldDisplay label="Microchip" value={patient.microchip ?? "-"} />
+        <FieldDisplay label={t('patients:detail.fields.microchip')} value={patient.microchip ?? "-"} />
         <FieldDisplay
-          label="Registered"
-          value={new Date(patient.createdAt).toLocaleDateString()}
+          label={t('patients:detail.fields.registered')}
+          value={formatDate(patient.createdAt)}
         />
       </DetailSection>
 
       {patient.clinicalNotes && (
         <DetailSection columns={2}>
-          <FieldDisplay label="Clinical notes" value={patient.clinicalNotes} fullWidth />
+          <FieldDisplay label={t('patients:detail.fields.clinicalNotes')} value={patient.clinicalNotes} fullWidth />
         </DetailSection>
       )}
 
-      <DetailSection title="Tutor" columns={3}>
+      <DetailSection title={t('patients:detail.sections.tutor')} columns={3}>
         <FieldDisplay
-          label="Name"
+          label={t('patients:detail.fields.name')}
           value={
             tutor ? (
               <Link to={`/tutors/${tutor.id}`} className={styles.tableLink}>
@@ -161,18 +164,18 @@ export function PatientDetailPage() {
             )
           }
         />
-        <FieldDisplay label="Phone" value={tutor?.phone ?? "-"} />
-        <FieldDisplay label="Email" value={tutor?.email ?? "-"} />
-        <FieldDisplay label="Document" value={tutor?.document ?? "-"} />
+        <FieldDisplay label={t('patients:detail.fields.phone')} value={tutor?.phone ?? "-"} />
+        <FieldDisplay label={t('patients:detail.fields.email')} value={tutor?.email ?? "-"} />
+        <FieldDisplay label={t('patients:detail.fields.document')} value={tutor?.document ?? "-"} />
       </DetailSection>
 
       <div className={styles.section}>
-        <h3 className={styles.sectionTitle}>Exam history</h3>
+        <h3 className={styles.sectionTitle}>{t('patients:detail.sections.examHistory')}</h3>
         <Card noPadding>
           {examRequests && examRequests.length === 0 && (
             <EmptyState
-              title="No exam requests"
-              description="This patient has no exam requests yet."
+              title={t('patients:detail.examEmpty.title')}
+              description={t('patients:detail.examEmpty.description')}
             />
           )}
           {examRequests && examRequests.length > 0 && (
@@ -186,15 +189,15 @@ export function PatientDetailPage() {
                   <div className={styles.examItem}>
                     <div className={styles.examInfo}>
                       <span className={styles.examType}>
-                        {exam.examType.replace(/_/g, " ")}
+                        {t(`common:examTypes.${exam.examType}`, exam.examType.replace(/_/g, " "))}
                       </span>
                       <span className={styles.examDate}>
-                        {new Date(exam.createdAt).toLocaleDateString()}
+                        {formatDate(exam.createdAt)}
                       </span>
                     </div>
                     <div className={styles.examBadges}>
                       <Badge variant={PRIORITY_VARIANT[exam.priority] ?? "neutral"}>
-                        {exam.priority}
+                        {t(`common:priority.${exam.priority}`, exam.priority)}
                       </Badge>
                       <StatusBadge status={exam.status} />
                     </div>
@@ -210,15 +213,15 @@ export function PatientDetailPage() {
         <Dialog
           open={showDeleteDialog}
           onClose={() => setShowDeleteDialog(false)}
-          title="Delete patient"
+          title={t('patients:list.deleteDialog.title')}
         >
-          <p>Are you sure you want to delete patient <strong>{patient.name}</strong>?</p>
+          <p dangerouslySetInnerHTML={{ __html: t('patients:list.deleteDialog.message', { name: patient.name }) }} />
           <p className={styles.dialogWarning}>
-            This action cannot be undone.
+            {t('patients:list.deleteDialog.warning')}
           </p>
           <div className={styles.dialogActions}>
-            <Button variant="secondary" onClick={() => setShowDeleteDialog(false)}>Cancel</Button>
-            <Button variant="danger" isLoading={deleteMutation.isPending} onClick={() => deleteMutation.mutate(id!)}>Delete</Button>
+            <Button variant="secondary" onClick={() => setShowDeleteDialog(false)}>{t('common:actions.cancel')}</Button>
+            <Button variant="danger" isLoading={deleteMutation.isPending} onClick={() => deleteMutation.mutate(id!)}>{t('common:actions.delete')}</Button>
           </div>
         </Dialog>
       )}

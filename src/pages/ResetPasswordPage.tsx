@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Lock, ArrowLeft, CheckCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 import { useAuth } from "../auth/useAuth";
 import { Button, Input, Alert } from "../components/ui";
 import styles from "./ResetPasswordPage.module.css";
@@ -15,11 +17,11 @@ const resetSchema = z
   .object({
     newPassword: z
       .string()
-      .min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string().min(1, "Please confirm your password"),
+      .min(8, i18next.t("common:validation.passwordMinLength")),
+    confirmPassword: z.string().min(1, i18next.t("common:validation.confirmPasswordRequired")),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Passwords do not match",
+    message: i18next.t("common:validation.passwordsDoNotMatch"),
     path: ["confirmPassword"],
   });
 
@@ -27,6 +29,7 @@ type ResetForm = z.infer<typeof resetSchema>;
 
 export function ResetPasswordPage() {
   const { isAuthenticated } = useAuth();
+  const { t } = useTranslation("auth");
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
 
@@ -53,11 +56,10 @@ export function ResetPasswordPage() {
         <div className={styles.brandingPanel}>
           <img src="/logo.png" alt="Vetra" className={styles.brandingLogo} />
           <h1 className={styles.brandingTagline}>
-            Veterinary Diagnostic Imaging Platform
+            {t("branding.tagline")}
           </h1>
           <p className={styles.brandingDescription}>
-            Connecting veterinary clinics to specialist diagnosticians — anytime,
-            anywhere.
+            {t("branding.description")}
           </p>
         </div>
         <div className={styles.formPanel}>
@@ -65,16 +67,16 @@ export function ResetPasswordPage() {
             <div className={styles.mobileLogo}>
               <img src="/logo.png" alt="Vetra" className={styles.logoImg} />
             </div>
-            <h2 className={styles.heading}>Invalid link</h2>
+            <h2 className={styles.heading}>{t("resetPassword.invalidLinkHeading")}</h2>
             <p className={styles.subtitle}>
-              This password reset link is invalid or has expired.
+              {t("resetPassword.invalidLinkMessage")}
             </p>
             <Link to="/forgot-password" className={styles.backLink}>
               <ArrowLeft size={16} />
-              Request a new reset link
+              {t("resetPassword.requestNewLink")}
             </Link>
             <div className={styles.divider} />
-            <p className={styles.footer}>Secured by Keycloak</p>
+            <p className={styles.footer}>{t("footer")}</p>
           </div>
         </div>
       </div>
@@ -95,7 +97,7 @@ export function ResetPasswordPage() {
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
         throw new Error(
-          errorData?.message || "An error occurred. Please try again.",
+          errorData?.message || t("common:errors.genericError"),
         );
       }
 
@@ -104,7 +106,7 @@ export function ResetPasswordPage() {
       setError(
         err instanceof Error
           ? err.message
-          : "An unexpected error occurred. Please try again.",
+          : t("common:errors.unexpectedError"),
       );
     } finally {
       setIsSubmitting(false);
@@ -117,11 +119,10 @@ export function ResetPasswordPage() {
       <div className={styles.brandingPanel}>
         <img src="/logo.png" alt="Vetra" className={styles.brandingLogo} />
         <h1 className={styles.brandingTagline}>
-          Veterinary Diagnostic Imaging Platform
+          {t("branding.tagline")}
         </h1>
         <p className={styles.brandingDescription}>
-          Connecting veterinary clinics to specialist diagnosticians — anytime,
-          anywhere.
+          {t("branding.description")}
         </p>
       </div>
 
@@ -139,15 +140,14 @@ export function ResetPasswordPage() {
               <div className={styles.successIcon}>
                 <CheckCircle size={48} />
               </div>
-              <h2 className={styles.heading}>Password reset</h2>
+              <h2 className={styles.heading}>{t("resetPassword.successHeading")}</h2>
               <p className={styles.successMessage}>
-                Your password has been successfully reset. You can now sign in
-                with your new password.
+                {t("resetPassword.successMessage")}
               </p>
               <div className={styles.successActions}>
                 <Link to="/login">
                   <Button variant="primary" fullWidth>
-                    Sign in
+                    {t("resetPassword.signInButton")}
                   </Button>
                 </Link>
               </div>
@@ -155,10 +155,9 @@ export function ResetPasswordPage() {
           ) : (
             /* Form state */
             <>
-              <h2 className={styles.heading}>Create new password</h2>
+              <h2 className={styles.heading}>{t("resetPassword.heading")}</h2>
               <p className={styles.subtitle}>
-                Enter a new password for your account. It must be at least 8
-                characters long.
+                {t("resetPassword.subtitle")}
               </p>
 
               <form
@@ -169,9 +168,9 @@ export function ResetPasswordPage() {
                 {error && <Alert variant="danger">{error}</Alert>}
 
                 <Input
-                  label="New password"
+                  label={t("resetPassword.newPasswordLabel")}
                   type="password"
-                  placeholder="Enter your new password"
+                  placeholder={t("resetPassword.newPasswordPlaceholder")}
                   autoComplete="new-password"
                   leftIcon={<Lock size={18} />}
                   error={errors.newPassword?.message}
@@ -179,9 +178,9 @@ export function ResetPasswordPage() {
                 />
 
                 <Input
-                  label="Confirm password"
+                  label={t("resetPassword.confirmPasswordLabel")}
                   type="password"
-                  placeholder="Confirm your new password"
+                  placeholder={t("resetPassword.confirmPasswordPlaceholder")}
                   autoComplete="new-password"
                   leftIcon={<Lock size={18} />}
                   error={errors.confirmPassword?.message}
@@ -195,19 +194,19 @@ export function ResetPasswordPage() {
                   isLoading={isSubmitting}
                   className={styles.submitButton}
                 >
-                  Reset password
+                  {t("resetPassword.submitButton")}
                 </Button>
               </form>
 
               <Link to="/login" className={styles.backLink}>
                 <ArrowLeft size={16} />
-                Back to sign in
+                {t("resetPassword.backToSignIn")}
               </Link>
             </>
           )}
 
           <div className={styles.divider} />
-          <p className={styles.footer}>Secured by Keycloak</p>
+          <p className={styles.footer}>{t("footer")}</p>
         </div>
       </div>
     </div>

@@ -1,0 +1,196 @@
+{
+  "nav": {
+    "dashboard": "Painel",
+    "patients": "Pacientes",
+    "tutors": "Tutores",
+    "staff": "Equipe",
+    "examRequests": "Solicitações de exame",
+    "appointments": "Agendamentos",
+    "laudos": "Laudos",
+    "billing": "Faturamento",
+    "schedule": "Agenda",
+    "profile": "Perfil",
+    "admin": "Administração",
+    "approvals": "Aprovações",
+    "auditLog": "Log de auditoria",
+    "pricing": "Precificação",
+    "clinics": "Clínicas",
+    "specialists": "Especialistas"
+  },
+  "actions": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "back": "Voltar",
+    "retry": "Tentar novamente",
+    "create": "Criar",
+    "close": "Fechar",
+    "confirm": "Confirmar",
+    "approve": "Aprovar",
+    "remove": "Remover",
+    "add": "Adicionar",
+    "search": "Buscar",
+    "signOut": "Sair",
+    "signIn": "Entrar",
+    "saveChanges": "Salvar alterações",
+    "goBack": "Voltar",
+    "previous": "Anterior",
+    "next": "Próximo",
+    "deactivate": "Desativar",
+    "block": "Bloquear",
+    "decline": "Recusar",
+    "accept": "Aceitar",
+    "upload": "Enviar",
+    "view": "Visualizar"
+  },
+  "status": {
+    "CREATED": "Criado",
+    "PENDING_APPROVAL": "Aguardando aprovação",
+    "ACTIVE": "Ativo",
+    "INACTIVE": "Inativo",
+    "SUSPENDED": "Suspenso",
+    "WAITING_SPECIALIST_ACCEPTANCE": "Aguardando aceite do especialista",
+    "ACCEPTED": "Aceito",
+    "SCHEDULED": "Agendado",
+    "IN_TRANSIT": "Em trânsito",
+    "IN_SERVICE": "Em atendimento",
+    "IN_PROGRESS": "Em andamento",
+    "EXAM_DONE": "Exame realizado",
+    "WAITING_REPORT": "Aguardando laudo",
+    "REPORT_ISSUED": "Laudo emitido",
+    "COMPLETED": "Concluído",
+    "FINISHED": "Finalizado",
+    "CANCELLED": "Cancelado",
+    "CANCELED": "Cancelado",
+    "NOT_PERFORMED": "Não realizado",
+    "REJECTED": "Rejeitado",
+    "PENDING_PAYMENT_CREATION": "Pendente",
+    "PAYMENT_CREATED": "Aguardando pagamento",
+    "PAYMENT_CONFIRMED": "Confirmado",
+    "PAYMENT_RECEIVED": "Recebido",
+    "PAYMENT_OVERDUE": "Vencido",
+    "PAYMENT_REFUNDED": "Reembolsado",
+    "FAILED": "Falhou"
+  },
+  "roles": {
+    "PLATFORM_ADMIN": "Admin Vetra",
+    "PLATFORM_OPERATOR": "Operador Vetra",
+    "CLINIC_ADMIN": "Admin Clínica",
+    "CLINIC_STAFF": "Equipe Clínica",
+    "SPECIALIST": "Especialista"
+  },
+  "staffRoles": {
+    "VETERINARIAN": "Veterinário(a)",
+    "SECRETARY": "Secretário(a)"
+  },
+  "breadcrumbs": {
+    "dashboard": "Painel",
+    "patients": "Pacientes",
+    "new": "Novo",
+    "edit": "Editar",
+    "tutors": "Tutores",
+    "staff": "Equipe",
+    "examRequests": "Solicitações de Exame",
+    "appointments": "Agendamentos",
+    "laudos": "Laudos",
+    "schedule": "Agenda",
+    "profile": "Perfil",
+    "clinics": "Clínicas",
+    "specialists": "Especialistas",
+    "admin": "Administração",
+    "approvals": "Aprovações",
+    "auditLog": "Log de Auditoria",
+    "details": "Detalhes",
+    "billing": "Faturamento",
+    "pricing": "Precificação"
+  },
+  "pagination": {
+    "previousPage": "Página anterior",
+    "nextPage": "Próxima página",
+    "page": "Página",
+    "pageOf": "Página {{current}} de {{total}}",
+    "pageLabel": "Página {{page}}"
+  },
+  "search": {
+    "placeholder": "Buscar...",
+    "clearSearch": "Limpar busca"
+  },
+  "sidebar": {
+    "closeMenu": "Fechar menu de navegação",
+    "expandSidebar": "Expandir barra lateral",
+    "collapseSidebar": "Recolher barra lateral"
+  },
+  "topbar": {
+    "toggleMenu": "Alternar menu de navegação",
+    "notifications": "Notificações"
+  },
+  "common": {
+    "yes": "Sim",
+    "no": "Não",
+    "loading": "Carregando...",
+    "noData": "-",
+    "thisActionCannotBeUndone": "Esta ação não pode ser desfeita."
+  },
+  "species": {
+    "DOG": "Cão",
+    "CAT": "Gato",
+    "BIRD": "Ave",
+    "HORSE": "Cavalo",
+    "RABBIT": "Coelho",
+    "REPTILE": "Réptil",
+    "OTHER": "Outro"
+  },
+  "sex": {
+    "MALE": "Macho",
+    "FEMALE": "Fêmea"
+  },
+  "priority": {
+    "ROUTINE": "Rotina",
+    "PRIORITY": "Prioritário",
+    "URGENT": "Urgente"
+  },
+  "examTypes": {
+    "ABDOMINAL_ULTRASOUND": "Ultrassonografia abdominal",
+    "GESTATIONAL_ULTRASOUND": "Ultrassonografia gestacional",
+    "MUSCULOSKELETAL_ULTRASOUND": "Ultrassonografia musculoesquelética"
+  },
+  "validation": {
+    "required": "{{field}} é obrigatório",
+    "invalidEmail": "Insira um endereço de e-mail válido",
+    "validEmailRequired": "E-mail válido é obrigatório",
+    "passwordMinLength": "A senha deve ter pelo menos 8 caracteres",
+    "passwordsDoNotMatch": "As senhas não coincidem",
+    "confirmPasswordRequired": "Por favor, confirme sua senha",
+    "confirmPasswordIsRequired": "Confirmação de senha é obrigatória",
+    "nameMinLength": "O nome deve ter pelo menos 2 caracteres",
+    "invalidCnpj": "Insira um CNPJ válido",
+    "invalidPhone": "Insira um telefone válido",
+    "enterFullAddress": "Insira o endereço completo",
+    "enterCity": "Insira a cidade",
+    "selectState": "Selecione um estado",
+    "selectPatient": "Selecione um paciente",
+    "selectExamType": "Selecione um tipo de exame",
+    "selectPriority": "Selecione uma prioridade"
+  },
+  "labels": {
+    "name": "Nome",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "document": "Documento",
+    "address": "Endereço",
+    "city": "Cidade",
+    "state": "Estado",
+    "status": "Status",
+    "role": "Função",
+    "registered": "Registrado",
+    "created": "Criado",
+    "updated": "Atualizado",
+    "date": "Data",
+    "location": "Localização"
+  },
+  "errors": {
+    "unexpectedError": "Ocorreu um erro inesperado. Por favor, tente novamente.",
+    "genericError": "Ocorreu um erro. Por favor, tente novamente."
+  }
+}

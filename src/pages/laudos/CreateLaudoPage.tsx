@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { createLaudo, issueLaudo } from "../../api/laudos";
 import { uploadFile, listFiles, deleteFile } from "../../api/examFiles";
 import { Button, Card, Textarea, Spinner, Alert } from "../../components/ui";
@@ -33,6 +34,7 @@ function getFileIcon(contentType: string): string {
 }
 
 export function CreateLaudoPage() {
+  const { t } = useTranslation(['laudos', 'common']);
   const { appointmentId } = useParams<{ appointmentId: string }>();
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -59,18 +61,18 @@ export function CreateLaudoPage() {
         queryKey: ["appointment-files", appointmentId],
       });
     },
-    onError: () => showToast("Failed to upload file.", "error"),
+    onError: () => showToast(t('laudos:create.toast.uploadFailed'), "error"),
   });
 
   const deleteMutation = useMutation({
     mutationFn: (fileId: string) => deleteFile(fileId),
     onSuccess: () => {
-      showToast("File removed.", "success");
+      showToast(t('laudos:create.toast.fileRemoved'), "success");
       queryClient.invalidateQueries({
         queryKey: ["appointment-files", appointmentId],
       });
     },
-    onError: () => showToast("Failed to remove file.", "error"),
+    onError: () => showToast(t('laudos:create.toast.fileRemoveFailed'), "error"),
   });
 
   const handleFiles = useCallback(
@@ -110,10 +112,10 @@ export function CreateLaudoPage() {
   const saveDraftMutation = useMutation({
     mutationFn: (data: FormData) => createLaudo(appointmentId!, data),
     onSuccess: () => {
-      showToast("Laudo saved as draft.", "success");
+      showToast(t('laudos:create.toast.draftSaved'), "success");
       navigate(`/appointments/${appointmentId}`);
     },
-    onError: () => setApiError("Failed to save laudo."),
+    onError: () => setApiError(t('laudos:create.toast.draftFailed')),
   });
 
   const saveAndIssueMutation = useMutation({
@@ -123,10 +125,10 @@ export function CreateLaudoPage() {
       return laudo;
     },
     onSuccess: () => {
-      showToast("Laudo issued successfully.", "success");
+      showToast(t('laudos:create.toast.issued'), "success");
       navigate(`/appointments/${appointmentId}`);
     },
-    onError: () => setApiError("Failed to issue laudo."),
+    onError: () => setApiError(t('laudos:create.toast.issueFailed')),
   });
 
   const isSaving =
@@ -148,13 +150,13 @@ export function CreateLaudoPage() {
   return (
     <div>
       <PageHeader
-        title="New laudo"
-        subtitle={`Create a diagnostic laudo for appointment ${appointmentId?.substring(0, 8)}.`}
-        backLink={{ label: "Back to appointment", to: `/appointments/${appointmentId}` }}
+        title={t('laudos:create.title')}
+        subtitle={t('laudos:create.subtitle', { appointmentId: appointmentId?.substring(0, 8) })}
+        backLink={{ label: t('laudos:create.backLink'), to: `/appointments/${appointmentId}` }}
       />
 
       {/* File Upload Section */}
-      <Card title="Exam files">
+      <Card title={t('laudos:create.sections.examFiles')}>
         <div
           className={`${styles.dropZone} ${isDragOver ? styles.dropZoneActive : ""}`}
           onDrop={handleDrop}
@@ -179,11 +181,11 @@ export function CreateLaudoPage() {
           />
           <div className={styles.dropZoneText}>
             {uploadMutation.isPending
-              ? "Uploading..."
-              : "Drop files here or click to upload"}
+              ? t('laudos:create.dropZone.uploading')
+              : t('laudos:create.dropZone.text')}
           </div>
           <div className={styles.dropZoneHint}>
-            Images, videos, and PDFs accepted
+            {t('laudos:create.dropZone.hint')}
           </div>
         </div>
 
@@ -214,7 +216,7 @@ export function CreateLaudoPage() {
                   className={styles.removeBtn}
                   onClick={() => deleteMutation.mutate(file.id)}
                   disabled={deleteMutation.isPending}
-                  title="Remove file"
+                  title={t('laudos:create.removeFile')}
                 >
                   &times;
                 </button>
@@ -242,7 +244,7 @@ export function CreateLaudoPage() {
                   className={styles.removeBtn}
                   onClick={() => deleteMutation.mutate(file.id)}
                   disabled={deleteMutation.isPending}
-                  title="Remove file"
+                  title={t('laudos:create.removeFile')}
                 >
                   &times;
                 </button>
@@ -252,33 +254,33 @@ export function CreateLaudoPage() {
         )}
 
         {files && files.length === 0 && !filesLoading && (
-          <p className={styles.noFiles}>No files uploaded yet.</p>
+          <p className={styles.noFiles}>{t('laudos:create.noFilesYet')}</p>
         )}
       </Card>
 
       {/* Text Content Section */}
-      <Card title="Diagnostic content">
+      <Card title={t('laudos:create.sections.diagnosticContent')}>
         <div className={styles.form}>
           {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <FormSection title="Findings and conclusion">
+          <FormSection title={t('laudos:create.sections.findingsAndConclusion')}>
             <Textarea
-              label="Findings"
-              placeholder="Describe the diagnostic findings..."
+              label={t('laudos:create.fields.findings')}
+              placeholder={t('laudos:create.fields.findingsPlaceholder')}
               rows={6}
               {...register("findings")}
             />
 
             <Textarea
-              label="Conclusion"
-              placeholder="Summarize the diagnostic conclusion..."
+              label={t('laudos:create.fields.conclusion')}
+              placeholder={t('laudos:create.fields.conclusionPlaceholder')}
               rows={4}
               {...register("conclusion")}
             />
 
             <Textarea
-              label="Recommendations"
-              placeholder="Provide any recommendations for the clinic..."
+              label={t('laudos:create.fields.recommendations')}
+              placeholder={t('laudos:create.fields.recommendationsPlaceholder')}
               rows={4}
               {...register("recommendations")}
             />
@@ -291,7 +293,7 @@ export function CreateLaudoPage() {
               onClick={() => navigate(`/appointments/${appointmentId}`)}
               disabled={isSaving}
             >
-              Cancel
+              {t('common:actions.cancel')}
             </Button>
             <Button
               type="button"
@@ -300,7 +302,7 @@ export function CreateLaudoPage() {
               isLoading={saveDraftMutation.isPending}
               disabled={isSaving}
             >
-              Save as draft
+              {t('laudos:create.saveDraft')}
             </Button>
             <Button
               type="button"
@@ -308,7 +310,7 @@ export function CreateLaudoPage() {
               isLoading={saveAndIssueMutation.isPending}
               disabled={isSaving}
             >
-              Save and issue
+              {t('laudos:create.saveAndIssue')}
             </Button>
           </div>
         </div>

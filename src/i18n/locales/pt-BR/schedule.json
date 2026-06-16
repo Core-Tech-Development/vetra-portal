@@ -1,0 +1,32 @@
+{
+  "title": "Agenda",
+  "subtitle": "Gerencie seus horários disponíveis para agendamentos.",
+  "addSlot": "Adicionar horário",
+  "fields": {
+    "start": "Início",
+    "end": "Fim"
+  },
+  "error": {
+    "title": "Falha ao carregar horários",
+    "detail": "Ocorreu um erro ao buscar os horários disponíveis. Tente novamente."
+  },
+  "empty": {
+    "title": "Nenhum horário disponível",
+    "description": "Você ainda não adicionou nenhum horário disponível. Use o formulário acima para criar um."
+  },
+  "noSpecialist": {
+    "title": "Especialista não configurado",
+    "description": "Seu perfil de especialista não está vinculado. Entre em contato com um administrador."
+  },
+  "pagination": {
+    "pageOf": "Página {{current}} de {{total}}"
+  },
+  "toast": {
+    "slotCreated": "Horário criado.",
+    "slotCreateFailed": "Falha ao criar horário.",
+    "slotDeleted": "Horário excluído.",
+    "slotDeleteFailed": "Falha ao excluir horário.",
+    "slotBlocked": "Horário bloqueado.",
+    "slotBlockFailed": "Falha ao bloquear horário."
+  }
+}

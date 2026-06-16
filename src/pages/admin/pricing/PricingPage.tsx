@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   listExamTypePricings,
@@ -15,13 +16,11 @@ import type { TableColumn } from "../../../components/ui";
 import { PageHeader, DataTableLayout } from "../../../components/patterns";
 import { Plus, Pencil } from "lucide-react";
 import { useToast } from "../../../components/ui";
+import { formatCurrency } from "../../../i18n/formatting";
 import styles from "./PricingPage.module.css";
 
-function formatCurrency(cents: number): string {
-  return `R$ ${(cents / 100).toFixed(2)}`;
-}
-
 export function PricingPage() {
+  const { t } = useTranslation(['admin', 'common']);
   const queryClient = useQueryClient();
   const { showToast } = useToast();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -42,12 +41,12 @@ export function PricingPage() {
     mutationFn: (data: CreateExamTypePricingRequest) => createExamTypePricing(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["exam-type-pricings"] });
-      showToast("Pricing created successfully", "success");
+      showToast(t('admin:pricing.toast.created'), "success");
       setShowCreateDialog(false);
       resetForm();
     },
     onError: () => {
-      showToast("Failed to create pricing", "error");
+      showToast(t('admin:pricing.toast.createFailed'), "error");
     },
   });
 
@@ -56,12 +55,12 @@ export function PricingPage() {
       updateExamTypePricing(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["exam-type-pricings"] });
-      showToast("Pricing updated successfully", "success");
+      showToast(t('admin:pricing.toast.updated'), "success");
       setEditingPricing(null);
       resetForm();
     },
     onError: () => {
-      showToast("Failed to update pricing", "error");
+      showToast(t('admin:pricing.toast.updateFailed'), "error");
     },
   });
 
@@ -75,7 +74,7 @@ export function PricingPage() {
   function handleCreate() {
     const priceCents = Math.round(parseFloat(priceReais) * 100);
     if (isNaN(priceCents) || priceCents <= 0) {
-      showToast("Invalid price value", "error");
+      showToast(t('admin:pricing.toast.invalidPrice'), "error");
       return;
     }
     createMutation.mutate({
@@ -89,7 +88,7 @@ export function PricingPage() {
     if (!editingPricing) return;
     const priceCents = Math.round(parseFloat(priceReais) * 100);
     if (isNaN(priceCents) || priceCents <= 0) {
-      showToast("Invalid price value", "error");
+      showToast(t('admin:pricing.toast.invalidPrice'), "error");
       return;
     }
     updateMutation.mutate({
@@ -112,31 +111,31 @@ export function PricingPage() {
   const columns: TableColumn<ExamTypePricingResponse>[] = [
     {
       key: "examType",
-      header: "Exam type",
+      header: t('admin:pricing.columns.examType'),
       render: (row) => row.examType.replace(/_/g, " "),
     },
     {
       key: "priceCents",
-      header: "Price",
+      header: t('admin:pricing.columns.price'),
       render: (row) => formatCurrency(row.priceCents),
     },
     {
       key: "platformFeePercent",
-      header: "Platform fee",
+      header: t('admin:pricing.columns.platformFee'),
       render: (row) => `${row.platformFeePercent}%`,
     },
     {
       key: "platformFeeCents",
-      header: "Fee amount",
+      header: t('admin:pricing.columns.feeAmount'),
       render: (row) =>
         formatCurrency(Math.round((row.priceCents * row.platformFeePercent) / 100)),
     },
     {
       key: "active",
-      header: "Status",
+      header: t('admin:pricing.columns.status'),
       render: (row) => (
         <Badge variant={row.active ? "success" : "neutral"}>
-          {row.active ? "Active" : "Inactive"}
+          {row.active ? t('common:status.ACTIVE') : t('common:status.INACTIVE')}
         </Badge>
       ),
     },
@@ -154,11 +153,11 @@ export function PricingPage() {
   return (
     <div>
       <PageHeader
-        title="Exam pricing"
+        title={t('admin:pricing.title')}
         actions={
           <Button onClick={() => { resetForm(); setShowCreateDialog(true); }}>
             <Plus size={16} />
-            Add pricing
+            {t('admin:pricing.addPricing')}
           </Button>
         }
       />
@@ -169,11 +168,11 @@ export function PricingPage() {
         keyExtractor={(row) => row.id}
         isLoading={isLoading}
         isError={isError}
-        errorMessage="Failed to load pricings"
+        errorMessage={t('admin:pricing.error')}
         onRetry={() => refetch()}
         emptyState={{
-          title: "No pricings configured",
-          description: "Add exam type pricings to enable billing when laudos are issued.",
+          title: t('admin:pricing.empty.title'),
+          description: t('admin:pricing.empty.description'),
         }}
         page={0}
         totalPages={0}
@@ -184,43 +183,43 @@ export function PricingPage() {
       <Dialog
         open={showCreateDialog}
         onClose={() => setShowCreateDialog(false)}
-        title="Add exam pricing"
+        title={t('admin:pricing.createDialog.title')}
       >
         <div className={styles.form}>
           <Input
-            label="Exam type"
-            placeholder="e.g. ABDOMINAL_ULTRASOUND"
+            label={t('admin:pricing.createDialog.examTypeLabel')}
+            placeholder={t('admin:pricing.createDialog.examTypePlaceholder')}
             value={examType}
             onChange={(e) => setExamType(e.target.value)}
           />
           <Input
-            label="Price (R$)"
+            label={t('admin:pricing.createDialog.priceLabel')}
             type="number"
             step="0.01"
             min="0"
-            placeholder="150.00"
+            placeholder={t('admin:pricing.createDialog.pricePlaceholder')}
             value={priceReais}
             onChange={(e) => setPriceReais(e.target.value)}
           />
           <Input
-            label="Platform fee (%)"
+            label={t('admin:pricing.createDialog.platformFeeLabel')}
             type="number"
             step="0.01"
             min="0"
             max="100"
-            placeholder="12.00"
+            placeholder={t('admin:pricing.createDialog.platformFeePlaceholder')}
             value={feePercent}
             onChange={(e) => setFeePercent(e.target.value)}
           />
           <div className={styles.formActions}>
             <Button variant="secondary" onClick={() => setShowCreateDialog(false)}>
-              Cancel
+              {t('common:actions.cancel')}
             </Button>
             <Button
               onClick={handleCreate}
               disabled={!examType || !priceReais || createMutation.isPending}
             >
-              {createMutation.isPending ? "Creating..." : "Create"}
+              {createMutation.isPending ? t('admin:pricing.createDialog.creatingButton') : t('admin:pricing.createDialog.createButton')}
             </Button>
           </div>
         </div>
@@ -230,16 +229,16 @@ export function PricingPage() {
       <Dialog
         open={editingPricing !== null}
         onClose={() => setEditingPricing(null)}
-        title="Edit exam pricing"
+        title={t('admin:pricing.editDialog.title')}
       >
         <div className={styles.form}>
           <Input
-            label="Exam type"
+            label={t('admin:pricing.createDialog.examTypeLabel')}
             value={editingPricing?.examType.replace(/_/g, " ") ?? ""}
             disabled
           />
           <Input
-            label="Price (R$)"
+            label={t('admin:pricing.createDialog.priceLabel')}
             type="number"
             step="0.01"
             min="0"
@@ -247,7 +246,7 @@ export function PricingPage() {
             onChange={(e) => setPriceReais(e.target.value)}
           />
           <Input
-            label="Platform fee (%)"
+            label={t('admin:pricing.createDialog.platformFeeLabel')}
             type="number"
             step="0.01"
             min="0"
@@ -261,17 +260,17 @@ export function PricingPage() {
               checked={active}
               onChange={(e) => setActive(e.target.checked)}
             />
-            Active
+            {t('admin:pricing.editDialog.activeLabel')}
           </label>
           <div className={styles.formActions}>
             <Button variant="secondary" onClick={() => setEditingPricing(null)}>
-              Cancel
+              {t('common:actions.cancel')}
             </Button>
             <Button
               onClick={handleUpdate}
               disabled={!priceReais || updateMutation.isPending}
             >
-              {updateMutation.isPending ? "Saving..." : "Save"}
+              {updateMutation.isPending ? t('admin:pricing.editDialog.savingButton') : t('common:actions.save')}
             </Button>
           </div>
         </div>

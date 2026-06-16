@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   LayoutDashboard,
   PawPrint,
@@ -32,51 +33,6 @@ interface NavItem {
   icon: React.ComponentType<{ size?: number }>;
 }
 
-const CLINIC_NAV: NavItem[] = [
-  { label: "Dashboard", path: "/", icon: LayoutDashboard },
-  { label: "Patients", path: "/patients", icon: PawPrint },
-  { label: "Tutors", path: "/tutors", icon: Users },
-  { label: "Exam requests", path: "/exam-requests", icon: ClipboardList },
-  { label: "Appointments", path: "/appointments", icon: Calendar },
-  { label: "Laudos", path: "/laudos", icon: FileText },
-  { label: "Billing", path: "/billing", icon: DollarSign },
-];
-
-const SPECIALIST_NAV: NavItem[] = [
-  { label: "Dashboard", path: "/", icon: LayoutDashboard },
-  { label: "Schedule", path: "/schedule", icon: Clock },
-  { label: "Appointments", path: "/appointments", icon: Calendar },
-  { label: "Laudos", path: "/laudos", icon: FileText },
-  { label: "Profile", path: "/profile", icon: User },
-];
-
-const ADMIN_NAV: NavItem[] = [
-  { label: "Dashboard", path: "/", icon: LayoutDashboard },
-  { label: "Admin", path: "/admin", icon: Shield },
-  { label: "Approvals", path: "/admin/approvals", icon: CheckCircle },
-  { label: "Clinics", path: "/clinics", icon: Building2 },
-  { label: "Specialists", path: "/specialists", icon: Stethoscope },
-  { label: "Appointments", path: "/appointments", icon: Calendar },
-  { label: "Laudos", path: "/laudos", icon: FileText },
-  { label: "Audit log", path: "/admin/audit", icon: ScrollText },
-  { label: "Pricing", path: "/admin/pricing", icon: DollarSign },
-  { label: "Billing", path: "/admin/billing", icon: DollarSign },
-];
-
-function getNavItems(roles: UserRole[]): NavItem[] {
-  if (roles.includes(ROLES.PLATFORM_ADMIN) || roles.includes(ROLES.PLATFORM_OPERATOR)) {
-    return ADMIN_NAV;
-  }
-  if (roles.includes(ROLES.SPECIALIST)) {
-    return SPECIALIST_NAV;
-  }
-  const items = [...CLINIC_NAV];
-  if (roles.includes(ROLES.CLINIC_ADMIN)) {
-    items.splice(1, 0, { label: "Staff", path: "/staff", icon: UserCog });
-  }
-  return items;
-}
-
 interface SidebarProps {
   roles: UserRole[];
   isOpen: boolean;
@@ -99,7 +55,54 @@ export function Sidebar({
   onLogout,
 }: SidebarProps) {
   const location = useLocation();
-  const navItems = getNavItems(roles);
+  const { t } = useTranslation("common");
+
+  const CLINIC_NAV: NavItem[] = [
+    { label: t("nav.dashboard"), path: "/", icon: LayoutDashboard },
+    { label: t("nav.patients"), path: "/patients", icon: PawPrint },
+    { label: t("nav.tutors"), path: "/tutors", icon: Users },
+    { label: t("nav.examRequests"), path: "/exam-requests", icon: ClipboardList },
+    { label: t("nav.appointments"), path: "/appointments", icon: Calendar },
+    { label: t("nav.laudos"), path: "/laudos", icon: FileText },
+    { label: t("nav.billing"), path: "/billing", icon: DollarSign },
+  ];
+
+  const SPECIALIST_NAV: NavItem[] = [
+    { label: t("nav.dashboard"), path: "/", icon: LayoutDashboard },
+    { label: t("nav.schedule"), path: "/schedule", icon: Clock },
+    { label: t("nav.appointments"), path: "/appointments", icon: Calendar },
+    { label: t("nav.laudos"), path: "/laudos", icon: FileText },
+    { label: t("nav.profile"), path: "/profile", icon: User },
+  ];
+
+  const ADMIN_NAV: NavItem[] = [
+    { label: t("nav.dashboard"), path: "/", icon: LayoutDashboard },
+    { label: t("nav.admin"), path: "/admin", icon: Shield },
+    { label: t("nav.approvals"), path: "/admin/approvals", icon: CheckCircle },
+    { label: t("nav.clinics"), path: "/clinics", icon: Building2 },
+    { label: t("nav.specialists"), path: "/specialists", icon: Stethoscope },
+    { label: t("nav.appointments"), path: "/appointments", icon: Calendar },
+    { label: t("nav.laudos"), path: "/laudos", icon: FileText },
+    { label: t("nav.auditLog"), path: "/admin/audit", icon: ScrollText },
+    { label: t("nav.pricing"), path: "/admin/pricing", icon: DollarSign },
+    { label: t("nav.billing"), path: "/admin/billing", icon: DollarSign },
+  ];
+
+  function getNavItems(): NavItem[] {
+    if (roles.includes(ROLES.PLATFORM_ADMIN) || roles.includes(ROLES.PLATFORM_OPERATOR)) {
+      return ADMIN_NAV;
+    }
+    if (roles.includes(ROLES.SPECIALIST)) {
+      return SPECIALIST_NAV;
+    }
+    const items = [...CLINIC_NAV];
+    if (roles.includes(ROLES.CLINIC_ADMIN)) {
+      items.splice(1, 0, { label: t("nav.staff"), path: "/staff", icon: UserCog });
+    }
+    return items;
+  }
+
+  const navItems = getNavItems();
 
   const sidebarClassNames = [
     styles.sidebar,
@@ -127,7 +130,7 @@ export function Sidebar({
           <button
             className={styles.closeButton}
             onClick={onClose}
-            aria-label="Close navigation menu"
+            aria-label={t("sidebar.closeMenu")}
             type="button"
           >
             <X size={20} />
@@ -201,20 +204,20 @@ export function Sidebar({
               className={styles.logoutButton}
               onClick={onLogout}
               type="button"
-              aria-label="Sign out"
+              aria-label={t("actions.signOut")}
             >
               <LogOut size={18} />
-              <span>Sign out</span>
+              <span>{t("actions.signOut")}</span>
             </button>
           )}
 
           {collapsed && (
-            <Tooltip content="Sign out" position="right">
+            <Tooltip content={t("actions.signOut")} position="right">
               <button
                 className={styles.logoutButtonCollapsed}
                 onClick={onLogout}
                 type="button"
-                aria-label="Sign out"
+                aria-label={t("actions.signOut")}
               >
                 <LogOut size={18} />
               </button>
@@ -225,7 +228,7 @@ export function Sidebar({
             className={styles.collapseButton}
             onClick={onToggleCollapse}
             type="button"
-            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-label={collapsed ? t("sidebar.expandSidebar") : t("sidebar.collapseSidebar")}
           >
             {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
           </button>

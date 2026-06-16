@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Mail, Lock } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 import "altcha";
 import "altcha/types/react";
 import { useAuth } from "../auth/useAuth";
@@ -13,8 +15,8 @@ import { Button, Input, Alert } from "../components/ui";
 import styles from "./LoginPage.module.css";
 
 const loginSchema = z.object({
-  username: z.string().min(1, "Username is required"),
-  password: z.string().min(1, "Password is required"),
+  username: z.string().min(1, i18next.t("auth:login.usernameRequired")),
+  password: z.string().min(1, i18next.t("auth:login.passwordRequired")),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -22,6 +24,7 @@ type LoginForm = z.infer<typeof loginSchema>;
 export function LoginPage() {
   const { isAuthenticated, loginWithCredentials } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation("auth");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [captchaSolution, setCaptchaSolution] = useState<string | null>(null);
@@ -80,7 +83,7 @@ export function LoginPage() {
 
   const onSubmit = async (data: LoginForm) => {
     if (!captchaSolution) {
-      setAuthError("Please complete the CAPTCHA verification.");
+      setAuthError(t("login.captchaRequired"));
       return;
     }
 
@@ -94,7 +97,7 @@ export function LoginPage() {
       setAuthError(
         error instanceof Error
           ? error.message
-          : "An unexpected error occurred. Please try again.",
+          : t("common:errors.unexpectedError"),
       );
       // Reset CAPTCHA after failed attempt
       setCaptchaSolution(null);
@@ -114,11 +117,10 @@ export function LoginPage() {
           className={styles.brandingLogo}
         />
         <h1 className={styles.brandingTagline}>
-          Veterinary Diagnostic Imaging Platform
+          {t("branding.tagline")}
         </h1>
         <p className={styles.brandingDescription}>
-          Connecting veterinary clinics to specialist diagnosticians — anytime,
-          anywhere.
+          {t("branding.description")}
         </p>
       </div>
 
@@ -130,8 +132,8 @@ export function LoginPage() {
             <img src="/logo.png" alt="Vetra" className={styles.logoImg} />
           </div>
 
-          <h2 className={styles.heading}>Welcome back</h2>
-          <p className={styles.subtitle}>Sign in to your account</p>
+          <h2 className={styles.heading}>{t("login.heading")}</h2>
+          <p className={styles.subtitle}>{t("login.subtitle")}</p>
 
           <form
             className={styles.form}
@@ -143,8 +145,8 @@ export function LoginPage() {
             )}
 
             <Input
-              label="Username"
-              placeholder="you@example.com"
+              label={t("login.usernameLabel")}
+              placeholder={t("login.usernamePlaceholder")}
               autoComplete="username"
               leftIcon={<Mail size={18} />}
               error={errors.username?.message}
@@ -152,9 +154,9 @@ export function LoginPage() {
             />
 
             <Input
-              label="Password"
+              label={t("login.passwordLabel")}
               type="password"
-              placeholder="Enter your password"
+              placeholder={t("login.passwordPlaceholder")}
               autoComplete="current-password"
               leftIcon={<Lock size={18} />}
               error={errors.password?.message}
@@ -165,9 +167,9 @@ export function LoginPage() {
             <div className={styles.captchaWrapper}>
               {captchaError ? (
                 <div className={styles.captchaError}>
-                  <p>Failed to load CAPTCHA.</p>
+                  <p>{t("login.captchaFailed")}</p>
                   <button type="button" onClick={loadChallenge} className={styles.captchaRetry}>
-                    Retry
+                    {t("login.captchaRetry")}
                   </button>
                 </div>
               ) : captchaChallenge ? (
@@ -177,7 +179,7 @@ export function LoginPage() {
                   configuration={JSON.stringify({ hideFooter: true, hideLogo: true })}
                 />
               ) : (
-                <div className={styles.captchaLoading}>Loading CAPTCHA...</div>
+                <div className={styles.captchaLoading}>{t("login.captchaLoading")}</div>
               )}
             </div>
 
@@ -189,16 +191,16 @@ export function LoginPage() {
               disabled={!captchaSolution}
               className={styles.submitButton}
             >
-              Sign in
+              {t("login.submitButton")}
             </Button>
           </form>
 
           <Link to="/forgot-password" className={styles.forgotLink}>
-            Forgot password?
+            {t("login.forgotPasswordLink")}
           </Link>
 
           <div className={styles.divider} />
-          <p className={styles.footer}>Secured by Keycloak</p>
+          <p className={styles.footer}>{t("footer")}</p>
         </div>
       </div>
     </div>

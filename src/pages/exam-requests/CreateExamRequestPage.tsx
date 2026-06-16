@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 import { createExamRequest } from "../../api/examRequests";
 import { listPatientsByClinic } from "../../api/patients";
 import { useClinicId } from "../../hooks/useClinicId";
@@ -13,22 +15,10 @@ import { PageHeader, FormSection, FormActions } from "../../components/patterns"
 import type { CreateExamRequestRequest } from "../../api/types";
 import styles from "./CreateExamRequestPage.module.css";
 
-const EXAM_TYPES = [
-  { value: "ABDOMINAL_ULTRASOUND", label: "Abdominal ultrasound" },
-  { value: "GESTATIONAL_ULTRASOUND", label: "Gestational ultrasound" },
-  { value: "MUSCULOSKELETAL_ULTRASOUND", label: "Musculoskeletal ultrasound" },
-];
-
-const PRIORITIES = [
-  { value: "ROUTINE", label: "Routine" },
-  { value: "PRIORITY", label: "Priority" },
-  { value: "URGENT", label: "Urgent" },
-];
-
 const createExamRequestSchema = z.object({
-  patientId: z.string().min(1, "Select a patient"),
-  examType: z.string().min(1, "Select an exam type"),
-  priority: z.string().min(1, "Select a priority"),
+  patientId: z.string().min(1, i18next.t('examRequests:create.validation.patientRequired')),
+  examType: z.string().min(1, i18next.t('examRequests:create.validation.examTypeRequired')),
+  priority: z.string().min(1, i18next.t('examRequests:create.validation.priorityRequired')),
   diagnosticHypothesis: z.string().optional(),
   clinicalHistory: z.string().optional(),
   additionalNotes: z.string().optional(),
@@ -37,10 +27,23 @@ const createExamRequestSchema = z.object({
 type CreateExamRequestForm = z.infer<typeof createExamRequestSchema>;
 
 export function CreateExamRequestPage() {
+  const { t } = useTranslation(['examRequests', 'common']);
   const navigate = useNavigate();
   const { showToast } = useToast();
   const clinicId = useClinicId();
   const [apiError, setApiError] = useState<string | null>(null);
+
+  const EXAM_TYPES = [
+    { value: "ABDOMINAL_ULTRASOUND", label: t('common:examTypes.ABDOMINAL_ULTRASOUND') },
+    { value: "GESTATIONAL_ULTRASOUND", label: t('common:examTypes.GESTATIONAL_ULTRASOUND') },
+    { value: "MUSCULOSKELETAL_ULTRASOUND", label: t('common:examTypes.MUSCULOSKELETAL_ULTRASOUND') },
+  ];
+
+  const PRIORITIES = [
+    { value: "ROUTINE", label: t('common:priority.ROUTINE') },
+    { value: "PRIORITY", label: t('common:priority.PRIORITY') },
+    { value: "URGENT", label: t('common:priority.URGENT') },
+  ];
 
   const { data: patientsData, isLoading: patientsLoading } = useQuery({
     queryKey: ["patients", clinicId],
@@ -68,13 +71,11 @@ export function CreateExamRequestPage() {
     mutationFn: (data: CreateExamRequestRequest) =>
       createExamRequest(clinicId!, data),
     onSuccess: () => {
-      showToast("Exam request created successfully.", "success");
+      showToast(t('examRequests:create.toast.success'), "success");
       navigate("/exam-requests");
     },
     onError: () => {
-      setApiError(
-        "Failed to create exam request. Please check the information and try again."
-      );
+      setApiError(t('examRequests:create.toast.error'));
     },
   });
 
@@ -86,9 +87,9 @@ export function CreateExamRequestPage() {
   return (
     <div>
       <PageHeader
-        title="New exam request"
-        subtitle="Request a diagnostic imaging exam for a patient."
-        backLink={{ label: "Back to exam requests", to: "/exam-requests" }}
+        title={t('examRequests:create.title')}
+        subtitle={t('examRequests:create.subtitle')}
+        backLink={{ label: t('examRequests:create.backLink'), to: "/exam-requests" }}
       />
 
       <Card>
@@ -99,16 +100,16 @@ export function CreateExamRequestPage() {
         >
           {apiError && <Alert variant="danger">{apiError}</Alert>}
 
-          <FormSection title="Exam details">
+          <FormSection title={t('examRequests:create.sections.examDetails')}>
             <div className={styles.row}>
               <Select
-                label="Patient"
+                label={t('examRequests:create.fields.patient')}
                 error={errors.patientId?.message}
                 disabled={patientsLoading}
                 {...register("patientId")}
               >
                 <option value="">
-                  {patientsLoading ? "Loading patients..." : "Select a patient"}
+                  {patientsLoading ? t('examRequests:create.fields.patientLoading') : t('examRequests:create.fields.patientPlaceholder')}
                 </option>
                 {patientsData?.content.map((patient) => (
                   <option key={patient.id} value={patient.id}>
@@ -118,11 +119,11 @@ export function CreateExamRequestPage() {
               </Select>
 
               <Select
-                label="Exam type"
+                label={t('examRequests:create.fields.examType')}
                 error={errors.examType?.message}
                 {...register("examType")}
               >
-                <option value="">Select exam type</option>
+                <option value="">{t('examRequests:create.fields.examTypePlaceholder')}</option>
                 {EXAM_TYPES.map((type) => (
                   <option key={type.value} value={type.value}>
                     {type.label}
@@ -132,7 +133,7 @@ export function CreateExamRequestPage() {
             </div>
 
             <Select
-              label="Priority"
+              label={t('examRequests:create.fields.priority')}
               error={errors.priority?.message}
               {...register("priority")}
             >
@@ -144,24 +145,24 @@ export function CreateExamRequestPage() {
             </Select>
           </FormSection>
 
-          <FormSection title="Clinical information">
+          <FormSection title={t('examRequests:create.sections.clinicalInformation')}>
             <Textarea
-              label="Diagnostic hypothesis"
-              placeholder="Describe the diagnostic hypothesis..."
+              label={t('examRequests:create.fields.diagnosticHypothesis')}
+              placeholder={t('examRequests:create.fields.diagnosticHypothesisPlaceholder')}
               rows={3}
               {...register("diagnosticHypothesis")}
             />
 
             <Textarea
-              label="Clinical history"
-              placeholder="Describe the clinical history..."
+              label={t('examRequests:create.fields.clinicalHistory')}
+              placeholder={t('examRequests:create.fields.clinicalHistoryPlaceholder')}
               rows={3}
               {...register("clinicalHistory")}
             />
 
             <Textarea
-              label="Additional notes"
-              placeholder="Any additional notes or observations..."
+              label={t('examRequests:create.fields.additionalNotes')}
+              placeholder={t('examRequests:create.fields.additionalNotesPlaceholder')}
               rows={3}
               {...register("additionalNotes")}
             />
@@ -169,7 +170,7 @@ export function CreateExamRequestPage() {
 
           <FormActions
             onCancel={() => navigate("/exam-requests")}
-            submitLabel="Create exam request"
+            submitLabel={t('examRequests:create.submitButton')}
             isSubmitting={mutation.isPending}
           />
         </form>

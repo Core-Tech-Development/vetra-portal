@@ -1,0 +1,169 @@
+{
+  "list": {
+    "title": "Especialistas",
+    "newSpecialist": "Novo especialista",
+    "columns": {
+      "name": "Nome",
+      "email": "E-mail",
+      "crmv": "CRMV",
+      "specialty": "Especialidade",
+      "status": "Status"
+    },
+    "searchPlaceholder": "Buscar especialistas...",
+    "error": "Falha ao carregar especialistas",
+    "empty": {
+      "title": "Nenhum especialista cadastrado",
+      "description": "Comece cadastrando o primeiro especialista na plataforma."
+    }
+  },
+  "create": {
+    "title": "Novo especialista",
+    "subtitle": "Cadastre um novo especialista em diagnóstico por imagem na plataforma.",
+    "backLink": "Voltar para especialistas",
+    "sections": {
+      "personalInformation": "Informações pessoais",
+      "professionalRegistration": "Registro profissional",
+      "coverageArea": "Área de cobertura",
+      "bio": "Bio"
+    },
+    "fields": {
+      "fullName": "Nome completo",
+      "fullNamePlaceholder": "ex. Dra. Maria Silva",
+      "email": "E-mail",
+      "emailPlaceholder": "especialista@email.com",
+      "phone": "Telefone",
+      "phonePlaceholder": "(11) 99999-9999",
+      "crmv": "CRMV",
+      "crmvPlaceholder": "ex. 12345",
+      "crmvState": "Estado do CRMV",
+      "crmvStatePlaceholder": "Selecione o estado",
+      "specialty": "Especialidade",
+      "specialtyPlaceholder": "Selecione a especialidade",
+      "baseCity": "Cidade base",
+      "baseCityPlaceholder": "ex. São Paulo",
+      "baseState": "Estado base",
+      "baseStatePlaceholder": "Selecione o estado",
+      "maxTravelRadius": "Raio máximo de deslocamento (km)",
+      "maxTravelRadiusPlaceholder": "ex. 50",
+      "hasOwnEquipment": "Possui equipamento próprio",
+      "bio": "Bio",
+      "bioPlaceholder": "Breve descrição profissional..."
+    },
+    "specialties": {
+      "ABDOMINAL_ULTRASOUND": "Ultrassonografia Abdominal",
+      "GESTATIONAL_ULTRASOUND": "Ultrassonografia Gestacional",
+      "MUSCULOSKELETAL_ULTRASOUND": "Ultrassonografia Musculoesquelética"
+    },
+    "submitButton": "Criar especialista",
+    "toast": {
+      "success": "Especialista criado com sucesso.",
+      "error": "Falha ao criar especialista. Verifique as informações e tente novamente."
+    }
+  },
+  "detail": {
+    "backLink": "Voltar para especialistas",
+    "sections": {
+      "specialistInformation": "Informações do especialista",
+      "coverageAreas": "Áreas de cobertura"
+    },
+    "fields": {
+      "email": "E-mail",
+      "phone": "Telefone",
+      "crmv": "CRMV",
+      "specialty": "Especialidade",
+      "baseLocation": "Localização base",
+      "maxTravelRadius": "Raio máximo de deslocamento",
+      "ownEquipment": "Equipamento próprio",
+      "registered": "Cadastrado",
+      "bio": "Bio"
+    },
+    "coverageAreas": {
+      "empty": "Nenhuma área de cobertura cadastrada ainda.",
+      "city": "Cidade",
+      "state": "Estado",
+      "radiusKm": "Raio (km)",
+      "cityPlaceholder": "ex. São Paulo",
+      "selectState": "Selecione",
+      "radiusPlaceholder": "ex. 30",
+      "addArea": "Adicionar área",
+      "remove": "Remover"
+    },
+    "toast": {
+      "approved": "Especialista aprovado com sucesso.",
+      "approveFailed": "Falha ao aprovar especialista.",
+      "areaAdded": "Área de cobertura adicionada.",
+      "areaAddFailed": "Falha ao adicionar área de cobertura.",
+      "areaRemoved": "Área de cobertura removida.",
+      "areaRemoveFailed": "Falha ao remover área de cobertura."
+    },
+    "error": {
+      "title": "Falha ao carregar especialista",
+      "detail": "O especialista não foi encontrado ou ocorreu um erro.",
+      "backButton": "Voltar para especialistas"
+    }
+  },
+  "profile": {
+    "subtitle": "Perfil do especialista",
+    "sections": {
+      "professionalInformation": "Informações profissionais",
+      "personalInformation": "Informações pessoais",
+      "locationMobility": "Localização e mobilidade",
+      "coverageAreas": "Áreas de cobertura"
+    },
+    "fields": {
+      "email": "E-mail",
+      "crmv": "CRMV",
+      "specialty": "Especialidade",
+      "status": "Status",
+      "registered": "Cadastrado",
+      "name": "Nome",
+      "namePlaceholder": "Seu nome completo",
+      "phone": "Telefone",
+      "phonePlaceholder": "(11) 99999-9999",
+      "bio": "Bio",
+      "bioPlaceholder": "Uma breve descrição profissional...",
+      "baseCity": "Cidade base",
+      "baseCityPlaceholder": "ex. São Paulo",
+      "baseState": "Estado base",
+      "maxTravelRadius": "Raio máximo de deslocamento (km)",
+      "maxTravelRadiusPlaceholder": "ex. 50",
+      "ownEquipment": "Equipamento próprio"
+    },
+    "coverageAreas": {
+      "city": "Cidade",
+      "state": "Estado",
+      "radius": "Raio",
+      "status": "Status",
+      "actions": "Ações",
+      "cityPlaceholder": "ex. São Paulo",
+      "selectState": "Selecione",
+      "radiusPlaceholder": "ex. 30",
+      "addButton": "Adicionar",
+      "activate": "Ativar",
+      "deactivate": "Desativar",
+      "remove": "Remover",
+      "empty": {
+        "title": "Nenhuma área de cobertura",
+        "description": "Adicione sua primeira área de cobertura acima para que as clínicas possam encontrá-lo."
+      },
+      "removeDialog": {
+        "title": "Remover área de cobertura",
+        "message": "Tem certeza de que deseja remover <strong>{{city}}, {{state}}</strong> das suas áreas de cobertura?"
+      }
+    },
+    "toast": {
+      "profileUpdated": "Perfil atualizado com sucesso.",
+      "profileUpdateFailed": "Falha ao atualizar perfil.",
+      "areaAdded": "Área de cobertura adicionada.",
+      "areaAddFailed": "Falha ao adicionar área de cobertura.",
+      "areaToggled": "Status da área de cobertura atualizado.",
+      "areaToggleFailed": "Falha ao atualizar área de cobertura.",
+      "areaRemoved": "Área de cobertura removida.",
+      "areaRemoveFailed": "Falha ao remover área de cobertura."
+    },
+    "error": {
+      "title": "Falha ao carregar perfil",
+      "detail": "Seu perfil não pôde ser carregado. Tente novamente."
+    }
+  }
+}

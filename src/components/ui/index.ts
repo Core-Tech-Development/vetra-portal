@@ -21,4 +21,5 @@ export { Alert } from "./Alert";
 export { Avatar } from "./Avatar";
 export { Tooltip } from "./Tooltip";
 export { DropdownMenu } from "./DropdownMenu";
+export { LanguageSwitcher } from "./LanguageSwitcher";
 export * from "./icons";

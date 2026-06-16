@@ -1,16 +1,15 @@
+import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getBillingRecord } from "../../../api/billing";
 import { Button, StatusBadge, Card, Spinner } from "../../../components/ui";
 import { PageHeader, DetailSection, FieldDisplay } from "../../../components/patterns";
 import { ArrowLeft } from "lucide-react";
+import { formatCurrency, formatDateTime } from "../../../i18n/formatting";
 import styles from "./BillingRecordDetailPage.module.css";
 
-function formatCurrency(cents: number): string {
-  return `R$ ${(cents / 100).toFixed(2)}`;
-}
-
 export function BillingRecordDetailPage() {
+  const { t } = useTranslation(['billing', 'common']);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -31,11 +30,11 @@ export function BillingRecordDetailPage() {
   if (isError || !data) {
     return (
       <div>
-        <PageHeader title="Billing record" />
+        <PageHeader title={t('billing:recordDetail.title')} />
         <Card>
-          <p>Failed to load billing record.</p>
+          <p>{t('billing:recordDetail.errorLoading')}</p>
           <Button variant="secondary" onClick={() => navigate(-1)}>
-            Go back
+            {t('common:actions.goBack')}
           </Button>
         </Card>
       </div>
@@ -45,30 +44,30 @@ export function BillingRecordDetailPage() {
   return (
     <div>
       <PageHeader
-        title="Billing record"
+        title={t('billing:recordDetail.title')}
         actions={
           <Button variant="ghost" onClick={() => navigate(-1)}>
             <ArrowLeft size={16} />
-            Back
+            {t('common:actions.back')}
           </Button>
         }
       />
 
       <div className={styles.content}>
         <Card>
-          <DetailSection title="Financial details">
+          <DetailSection title={t('billing:recordDetail.sections.financialDetails')}>
             <div className={styles.fieldsGrid}>
-              <FieldDisplay label="Total" value={formatCurrency(data.totalCents)} />
+              <FieldDisplay label={t('billing:recordDetail.fields.total')} value={formatCurrency(data.totalCents)} />
               <FieldDisplay
-                label="Platform fee"
+                label={t('billing:recordDetail.fields.platformFee')}
                 value={formatCurrency(data.platformFeeCents)}
               />
               <FieldDisplay
-                label="Specialist share"
+                label={t('billing:recordDetail.fields.specialistShare')}
                 value={formatCurrency(data.specialistShareCents)}
               />
               <FieldDisplay
-                label="Status"
+                label={t('billing:recordDetail.fields.status')}
                 value={<StatusBadge status={data.status} />}
               />
             </div>
@@ -76,21 +75,21 @@ export function BillingRecordDetailPage() {
         </Card>
 
         <Card>
-          <DetailSection title="References">
+          <DetailSection title={t('billing:recordDetail.sections.references')}>
             <div className={styles.fieldsGrid}>
-              <FieldDisplay label="Exam type" value={data.examType.replace(/_/g, " ")} />
-              <FieldDisplay label="Laudo ID" value={data.laudoId.substring(0, 8)} />
+              <FieldDisplay label={t('billing:recordDetail.fields.examType')} value={data.examType.replace(/_/g, " ")} />
+              <FieldDisplay label={t('billing:recordDetail.fields.laudoId')} value={data.laudoId.substring(0, 8)} />
               <FieldDisplay
-                label="Appointment ID"
+                label={t('billing:recordDetail.fields.appointmentId')}
                 value={data.appointmentId.substring(0, 8)}
               />
-              <FieldDisplay label="Clinic ID" value={data.clinicId.substring(0, 8)} />
+              <FieldDisplay label={t('billing:recordDetail.fields.clinicId')} value={data.clinicId.substring(0, 8)} />
               <FieldDisplay
-                label="Specialist ID"
+                label={t('billing:recordDetail.fields.specialistId')}
                 value={data.specialistId.substring(0, 8)}
               />
               {data.asaasPaymentId && (
-                <FieldDisplay label="Asaas Payment" value={data.asaasPaymentId} />
+                <FieldDisplay label={t('billing:recordDetail.fields.asaasPayment')} value={data.asaasPaymentId} />
               )}
             </div>
           </DetailSection>
@@ -98,22 +97,22 @@ export function BillingRecordDetailPage() {
 
         {data.errorMessage && (
           <Card>
-            <DetailSection title="Error">
+            <DetailSection title={t('billing:recordDetail.sections.error')}>
               <p className={styles.errorMessage}>{data.errorMessage}</p>
             </DetailSection>
           </Card>
         )}
 
         <Card>
-          <DetailSection title="Timestamps">
+          <DetailSection title={t('billing:recordDetail.sections.timestamps')}>
             <div className={styles.fieldsGrid}>
               <FieldDisplay
-                label="Created"
-                value={new Date(data.createdAt).toLocaleString()}
+                label={t('billing:recordDetail.fields.created')}
+                value={formatDateTime(data.createdAt)}
               />
               <FieldDisplay
-                label="Updated"
-                value={new Date(data.updatedAt).toLocaleString()}
+                label={t('billing:recordDetail.fields.updated')}
+                value={formatDateTime(data.updatedAt)}
               />
             </div>
           </DetailSection>

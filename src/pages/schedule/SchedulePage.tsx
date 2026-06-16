@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { createSlot, listSlots, deleteSlot, blockSlot } from "../../api/availabilitySlots";
 import {
@@ -10,13 +11,11 @@ import {
 } from "../../components/ui";
 import { PageHeader } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
+import { formatDateTime } from "../../i18n/formatting";
 import styles from "./SchedulePage.module.css";
 
-function formatSlotDateTime(value: string): string {
-  return new Date(value).toLocaleString();
-}
-
 export function SchedulePage() {
+  const { t } = useTranslation(['schedule', 'common']);
   const { showToast } = useToast();
   const queryClient = useQueryClient();
   const [page, setPage] = useState(0);
@@ -39,33 +38,33 @@ export function SchedulePage() {
         endAt: new Date(endAt).toISOString(),
       }),
     onSuccess: () => {
-      showToast("Slot created.", "success");
+      showToast(t('schedule:toast.slotCreated'), "success");
       setStartAt("");
       setEndAt("");
       queryClient.invalidateQueries({ queryKey: ["slots", specialistId] });
       refetch();
     },
-    onError: () => showToast("Failed to create slot.", "error"),
+    onError: () => showToast(t('schedule:toast.slotCreateFailed'), "error"),
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => deleteSlot(id),
     onSuccess: () => {
-      showToast("Slot deleted.", "success");
+      showToast(t('schedule:toast.slotDeleted'), "success");
       queryClient.invalidateQueries({ queryKey: ["slots", specialistId] });
       refetch();
     },
-    onError: () => showToast("Failed to delete slot.", "error"),
+    onError: () => showToast(t('schedule:toast.slotDeleteFailed'), "error"),
   });
 
   const blockMutation = useMutation({
     mutationFn: (id: string) => blockSlot(id),
     onSuccess: () => {
-      showToast("Slot blocked.", "success");
+      showToast(t('schedule:toast.slotBlocked'), "success");
       queryClient.invalidateQueries({ queryKey: ["slots", specialistId] });
       refetch();
     },
-    onError: () => showToast("Failed to block slot.", "error"),
+    onError: () => showToast(t('schedule:toast.slotBlockFailed'), "error"),
   });
 
   const canCreate = startAt !== "" && endAt !== "";
@@ -74,13 +73,13 @@ export function SchedulePage() {
     return (
       <div>
         <PageHeader
-          title="Schedule"
-          subtitle="Manage your availability slots for appointments."
+          title={t('schedule:title')}
+          subtitle={t('schedule:subtitle')}
         />
         <Card>
           <EmptyState
-            title="Specialist not configured"
-            description="Your specialist profile is not linked. Please contact an administrator."
+            title={t('schedule:noSpecialist.title')}
+            description={t('schedule:noSpecialist.description')}
           />
         </Card>
       </div>
@@ -90,15 +89,15 @@ export function SchedulePage() {
   return (
     <div>
       <PageHeader
-        title="Schedule"
-        subtitle="Manage your availability slots for appointments."
+        title={t('schedule:title')}
+        subtitle={t('schedule:subtitle')}
       />
 
       {/* Add Slot Form */}
       <div className={styles.addSlotForm}>
         <div className={styles.fieldGroup}>
           <label className={styles.fieldGroupLabel} htmlFor="slot-start">
-            Start
+            {t('schedule:fields.start')}
           </label>
           <input
             id="slot-start"
@@ -110,7 +109,7 @@ export function SchedulePage() {
         </div>
         <div className={styles.fieldGroup}>
           <label className={styles.fieldGroupLabel} htmlFor="slot-end">
-            End
+            {t('schedule:fields.end')}
           </label>
           <input
             id="slot-end"
@@ -125,7 +124,7 @@ export function SchedulePage() {
           isLoading={createMutation.isPending}
           disabled={!canCreate}
         >
-          Add slot
+          {t('schedule:addSlot')}
         </Button>
       </div>
 
@@ -139,20 +138,20 @@ export function SchedulePage() {
 
         {isError && (
           <div className={styles.errorBox}>
-            <div className={styles.errorTitle}>Failed to load slots</div>
+            <div className={styles.errorTitle}>{t('schedule:error.title')}</div>
             <p className={styles.errorDetail}>
-              An error occurred while fetching availability slots. Please try again.
+              {t('schedule:error.detail')}
             </p>
             <Button variant="secondary" onClick={() => refetch()}>
-              Retry
+              {t('common:actions.retry')}
             </Button>
           </div>
         )}
 
         {data && data.content.length === 0 && (
           <EmptyState
-            title="No availability slots"
-            description="You have not added any availability slots yet. Use the form above to create one."
+            title={t('schedule:empty.title')}
+            description={t('schedule:empty.description')}
           />
         )}
 
@@ -162,8 +161,8 @@ export function SchedulePage() {
               <div key={slot.id} className={styles.slotItem}>
                 <div className={styles.slotTime}>
                   <span className={styles.slotLabel}>
-                    {formatSlotDateTime(slot.startAt)} &mdash;{" "}
-                    {formatSlotDateTime(slot.endAt)}
+                    {formatDateTime(slot.startAt)} &mdash;{" "}
+                    {formatDateTime(slot.endAt)}
                   </span>
                   <span className={styles.slotDate}>
                     <StatusBadge status={slot.status} />
@@ -177,7 +176,7 @@ export function SchedulePage() {
                       onClick={() => blockMutation.mutate(slot.id)}
                       isLoading={blockMutation.isPending}
                     >
-                      Block
+                      {t('common:actions.block')}
                     </Button>
                   )}
                   <Button
@@ -186,7 +185,7 @@ export function SchedulePage() {
                     onClick={() => deleteMutation.mutate(slot.id)}
                     isLoading={deleteMutation.isPending}
                   >
-                    Delete
+                    {t('common:actions.delete')}
                   </Button>
                 </div>
               </div>
@@ -200,10 +199,10 @@ export function SchedulePage() {
                   disabled={page === 0}
                   onClick={() => setPage((p) => p - 1)}
                 >
-                  Previous
+                  {t('common:actions.previous')}
                 </Button>
                 <span className={styles.pageInfo}>
-                  Page {page + 1} of {data.totalPages}
+                  {t('schedule:pagination.pageOf', { current: page + 1, total: data.totalPages })}
                 </span>
                 <Button
                   variant="secondary"
@@ -211,7 +210,7 @@ export function SchedulePage() {
                   disabled={page + 1 >= data.totalPages}
                   onClick={() => setPage((p) => p + 1)}
                 >
-                  Next
+                  {t('common:actions.next')}
                 </Button>
               </div>
             )}

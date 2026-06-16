@@ -1,0 +1,32 @@
+{
+  "title": "Schedule",
+  "subtitle": "Manage your availability slots for appointments.",
+  "addSlot": "Add slot",
+  "fields": {
+    "start": "Start",
+    "end": "End"
+  },
+  "error": {
+    "title": "Failed to load slots",
+    "detail": "An error occurred while fetching availability slots. Please try again."
+  },
+  "empty": {
+    "title": "No availability slots",
+    "description": "You have not added any availability slots yet. Use the form above to create one."
+  },
+  "noSpecialist": {
+    "title": "Specialist not configured",
+    "description": "Your specialist profile is not linked. Please contact an administrator."
+  },
+  "pagination": {
+    "pageOf": "Page {{current}} of {{total}}"
+  },
+  "toast": {
+    "slotCreated": "Slot created.",
+    "slotCreateFailed": "Failed to create slot.",
+    "slotDeleted": "Slot deleted.",
+    "slotDeleteFailed": "Failed to delete slot.",
+    "slotBlocked": "Slot blocked.",
+    "slotBlockFailed": "Failed to block slot."
+  }
+}

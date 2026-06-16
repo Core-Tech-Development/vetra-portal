@@ -1,0 +1,108 @@
+{
+  "list": {
+    "title": "Patients",
+    "newPatient": "New patient",
+    "columns": {
+      "name": "Name",
+      "species": "Species",
+      "breed": "Breed",
+      "sex": "Sex"
+    },
+    "searchPlaceholder": "Search patients...",
+    "error": "Failed to load patients",
+    "empty": {
+      "title": "No patients registered",
+      "description": "Start by registering the first patient for this clinic."
+    },
+    "noClinic": {
+      "title": "No clinic selected",
+      "description": "Please select a clinic to view patients."
+    },
+    "deleteDialog": {
+      "title": "Delete patient",
+      "message": "Are you sure you want to delete patient <strong>{{name}}</strong>?",
+      "warning": "This action cannot be undone."
+    }
+  },
+  "create": {
+    "title": "New patient",
+    "subtitle": "Register a new patient for the clinic.",
+    "backLink": "Back to patients",
+    "sections": {
+      "general": "General",
+      "details": "Details"
+    },
+    "validation": {
+      "tutorRequired": "Tutor is required",
+      "nameRequired": "Name is required",
+      "speciesRequired": "Species is required"
+    },
+    "fields": {
+      "tutor": "Tutor",
+      "tutorPlaceholder": "Select a tutor",
+      "patientName": "Patient name",
+      "patientNamePlaceholder": "e.g. Rex",
+      "species": "Species",
+      "speciesPlaceholder": "Select species",
+      "breed": "Breed",
+      "breedPlaceholder": "e.g. Labrador Retriever",
+      "sex": "Sex",
+      "sexPlaceholder": "Select sex",
+      "birthDate": "Birth date",
+      "weightKg": "Weight (kg)",
+      "weightKgPlaceholder": "e.g. 12.5",
+      "microchip": "Microchip",
+      "microchipPlaceholder": "Microchip number",
+      "neutered": "Neutered",
+      "clinicalNotes": "Clinical notes",
+      "clinicalNotesPlaceholder": "Any relevant clinical observations..."
+    },
+    "submitButton": "Create patient",
+    "toast": {
+      "success": "Patient created successfully.",
+      "error": "Failed to create patient. Please check the information and try again."
+    }
+  },
+  "edit": {
+    "title": "Edit patient",
+    "subtitle": "Update patient information.",
+    "backLink": "Back to patients",
+    "submitButton": "Save changes",
+    "toast": {
+      "success": "Patient updated successfully.",
+      "error": "Failed to update patient. Please check the information and try again."
+    }
+  },
+  "detail": {
+    "backLink": "Back to patients",
+    "sections": {
+      "patientInformation": "Patient information",
+      "tutor": "Tutor",
+      "examHistory": "Exam history"
+    },
+    "fields": {
+      "species": "Species",
+      "breed": "Breed",
+      "sex": "Sex",
+      "birthDate": "Birth date",
+      "weightKg": "Weight (kg)",
+      "neutered": "Neutered",
+      "microchip": "Microchip",
+      "registered": "Registered",
+      "clinicalNotes": "Clinical notes",
+      "name": "Name",
+      "phone": "Phone",
+      "email": "Email",
+      "document": "Document"
+    },
+    "examEmpty": {
+      "title": "No exam requests",
+      "description": "This patient has no exam requests yet."
+    },
+    "error": {
+      "title": "Failed to load patient",
+      "detail": "The patient could not be found or an error occurred.",
+      "backButton": "Back to patients"
+    }
+  }
+}

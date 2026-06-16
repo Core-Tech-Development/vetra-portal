@@ -1,0 +1,67 @@
+{
+  "list": {
+    "title": "Clinics",
+    "newClinic": "New clinic",
+    "columns": {
+      "name": "Name",
+      "document": "Document",
+      "city": "City",
+      "status": "Status"
+    },
+    "searchPlaceholder": "Search clinics...",
+    "error": "Failed to load clinics",
+    "empty": {
+      "title": "No clinics registered",
+      "description": "Start by registering the first clinic on the platform."
+    }
+  },
+  "create": {
+    "title": "New clinic",
+    "subtitle": "Register a new veterinary clinic on the platform.",
+    "backLink": "Back to clinics",
+    "sections": {
+      "clinicInformation": "Clinic information",
+      "address": "Address"
+    },
+    "fields": {
+      "clinicName": "Clinic name",
+      "clinicNamePlaceholder": "e.g. PetVida Veterinary Clinic",
+      "cnpj": "CNPJ",
+      "cnpjPlaceholder": "00.000.000/0000-00",
+      "email": "Email",
+      "emailPlaceholder": "contact@clinic.com",
+      "phone": "Phone",
+      "phonePlaceholder": "(11) 99999-9999",
+      "address": "Address",
+      "addressPlaceholder": "Full address",
+      "city": "City",
+      "cityPlaceholder": "e.g. Sao Paulo",
+      "state": "State",
+      "statePlaceholder": "Select state"
+    },
+    "submitButton": "Create clinic",
+    "toast": {
+      "success": "Clinic created successfully.",
+      "error": "Failed to create clinic. Please check the information and try again."
+    }
+  },
+  "detail": {
+    "backLink": "Back to clinics",
+    "sections": {
+      "clinicInformation": "Clinic information"
+    },
+    "fields": {
+      "documentCnpj": "Document (CNPJ)",
+      "email": "Email",
+      "phone": "Phone",
+      "location": "Location",
+      "address": "Address",
+      "registered": "Registered"
+    },
+    "error": {
+      "title": "Failed to load clinic",
+      "detail": "The clinic could not be found or an error occurred.",
+      "backButton": "Back to clinics"
+    }
+  }
+}

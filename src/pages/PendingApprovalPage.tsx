@@ -1,4 +1,5 @@
 import { Clock, XCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth/useAuth";
 import { Button, Alert } from "../components/ui";
 import styles from "./PendingApprovalPage.module.css";
@@ -9,6 +10,7 @@ interface PendingApprovalPageProps {
 
 export function PendingApprovalPage({ status }: PendingApprovalPageProps) {
   const { logout } = useAuth();
+  const { t } = useTranslation("auth");
 
   const isSuspended = status === "SUSPENDED";
 
@@ -23,25 +25,27 @@ export function PendingApprovalPage({ status }: PendingApprovalPageProps) {
       </div>
 
       <h1 className={styles.title}>
-        {isSuspended ? "Account suspended" : "Approval pending"}
+        {isSuspended
+          ? t("pendingApproval.titleSuspended")
+          : t("pendingApproval.titlePending")}
       </h1>
 
       <p className={styles.description}>
         {isSuspended
-          ? "Your account has been suspended. Please contact support for more information."
-          : "Your registration is being reviewed by the Vetra team. You will receive a notification when your account is approved."}
+          ? t("pendingApproval.descriptionSuspended")
+          : t("pendingApproval.descriptionPending")}
       </p>
 
       <div className={styles.alertContainer}>
         <Alert variant="info">
           {isSuspended
-            ? "If you believe this is an error, please reach out to our support team for assistance."
-            : "This process usually takes up to 48 hours. You will be notified by email once your account is approved."}
+            ? t("pendingApproval.alertSuspended")
+            : t("pendingApproval.alertPending")}
         </Alert>
       </div>
 
       <Button variant="secondary" onClick={logout}>
-        Sign out
+        {t("common:actions.signOut")}
       </Button>
     </div>
   );

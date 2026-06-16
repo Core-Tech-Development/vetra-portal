@@ -1,26 +1,29 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { listAppointments } from "../../api/appointments";
 import { Select, StatusBadge } from "../../components/ui";
 import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { AppointmentResponse } from "../../api/types";
+import { formatDate } from "../../i18n/formatting";
 import styles from "./AppointmentListPage.module.css";
 
-const APPOINTMENT_STATUSES = [
-  { value: "", label: "All" },
-  { value: "WAITING_SPECIALIST_ACCEPTANCE", label: "Waiting specialist acceptance" },
-  { value: "ACCEPTED", label: "Accepted" },
-  { value: "IN_TRANSIT", label: "In transit" },
-  { value: "IN_SERVICE", label: "In service" },
-  { value: "WAITING_REPORT", label: "Waiting report" },
-  { value: "REPORT_ISSUED", label: "Report issued" },
-  { value: "COMPLETED", label: "Completed" },
-  { value: "CANCELLED", label: "Cancelled" },
+const APPOINTMENT_STATUS_KEYS = [
+  "",
+  "WAITING_SPECIALIST_ACCEPTANCE",
+  "ACCEPTED",
+  "IN_TRANSIT",
+  "IN_SERVICE",
+  "WAITING_REPORT",
+  "REPORT_ISSUED",
+  "COMPLETED",
+  "CANCELLED",
 ];
 
 export function AppointmentListPage() {
+  const { t } = useTranslation(['appointments', 'common']);
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
@@ -33,7 +36,7 @@ export function AppointmentListPage() {
   const columns: TableColumn<AppointmentResponse>[] = [
     {
       key: "id",
-      header: "ID",
+      header: t('appointments:list.columns.id'),
       render: (row) => (
         <Link to={`/appointments/${row.id}`} className={styles.tableLink}>
           {row.id.substring(0, 8)}
@@ -42,32 +45,32 @@ export function AppointmentListPage() {
     },
     {
       key: "specialist",
-      header: "Specialist",
+      header: t('appointments:list.columns.specialist'),
       render: (row) => row.specialistId.substring(0, 8),
     },
     {
       key: "scheduledDate",
-      header: "Scheduled Date",
+      header: t('appointments:list.columns.scheduledDate'),
       render: (row) =>
         row.scheduledStartAt
-          ? new Date(row.scheduledStartAt).toLocaleDateString()
+          ? formatDate(row.scheduledStartAt)
           : "\u2014",
     },
     {
       key: "status",
-      header: "Status",
+      header: t('appointments:list.columns.status'),
       render: (row) => <StatusBadge status={row.status} />,
     },
     {
       key: "createdAt",
-      header: "Created",
-      render: (row) => new Date(row.createdAt).toLocaleDateString(),
+      header: t('appointments:list.columns.created'),
+      render: (row) => formatDate(row.createdAt),
     },
   ];
 
   return (
     <div>
-      <PageHeader title="Appointments" />
+      <PageHeader title={t('appointments:list.title')} />
 
       <DataTableLayout
         columns={columns}
@@ -75,21 +78,21 @@ export function AppointmentListPage() {
         keyExtractor={(row) => row.id}
         isLoading={isLoading}
         isError={isError}
-        errorMessage="Failed to load appointments"
+        errorMessage={t('appointments:list.error')}
         onRetry={() => refetch()}
         emptyState={{
-          title: "No appointments found",
-          description: "There are no appointments matching the current filter.",
+          title: t('appointments:list.empty.title'),
+          description: t('appointments:list.empty.description'),
         }}
         page={page}
         totalPages={data?.totalPages ?? 0}
         onPageChange={setPage}
         searchValue={search}
         onSearchChange={setSearch}
-        searchPlaceholder="Search appointments..."
+        searchPlaceholder={t('appointments:list.searchPlaceholder')}
         filters={
           <Select
-            label="Status"
+            label={t('common:labels.status')}
             selectSize="sm"
             value={statusFilter}
             onChange={(e) => {
@@ -97,9 +100,9 @@ export function AppointmentListPage() {
               setPage(0);
             }}
           >
-            {APPOINTMENT_STATUSES.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
+            {APPOINTMENT_STATUS_KEYS.map((key) => (
+              <option key={key} value={key}>
+                {key === "" ? t('appointments:list.statusFilter.all') : t(`appointments:list.statusFilter.${key}`, t(`common:status.${key}`, key))}
               </option>
             ))}
           </Select>

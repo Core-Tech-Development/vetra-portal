@@ -1,0 +1,126 @@
+{
+  "list": {
+    "title": "Agendamentos",
+    "columns": {
+      "id": "ID",
+      "specialist": "Especialista",
+      "scheduledDate": "Data agendada",
+      "status": "Status",
+      "created": "Criado"
+    },
+    "searchPlaceholder": "Buscar agendamentos...",
+    "error": "Falha ao carregar agendamentos",
+    "empty": {
+      "title": "Nenhum agendamento encontrado",
+      "description": "Não há agendamentos correspondentes ao filtro atual."
+    },
+    "statusFilter": {
+      "all": "Todos",
+      "WAITING_SPECIALIST_ACCEPTANCE": "Aguardando aceite do especialista",
+      "ACCEPTED": "Aceito",
+      "IN_TRANSIT": "Em trânsito",
+      "IN_SERVICE": "Em atendimento",
+      "WAITING_REPORT": "Aguardando laudo",
+      "REPORT_ISSUED": "Laudo emitido",
+      "COMPLETED": "Concluído",
+      "CANCELLED": "Cancelado"
+    }
+  },
+  "detail": {
+    "titlePrefix": "Agendamento",
+    "backLink": "Voltar para agendamentos",
+    "sections": {
+      "appointmentInformation": "Informações do agendamento",
+      "examFiles": "Arquivos do exame",
+      "laudo": "Laudo",
+      "notes": "Notas"
+    },
+    "fields": {
+      "appointmentId": "ID do agendamento",
+      "examRequestId": "ID da solicitação de exame",
+      "specialistId": "ID do especialista",
+      "availabilitySlotId": "ID do horário disponível",
+      "scheduledStart": "Início agendado",
+      "scheduledEnd": "Fim agendado",
+      "actualStart": "Início real",
+      "actualEnd": "Fim real",
+      "notes": "Notas",
+      "cancelReason": "Motivo do cancelamento",
+      "created": "Criado",
+      "updated": "Atualizado"
+    },
+    "actions": {
+      "accept": "Aceitar",
+      "decline": "Recusar",
+      "startTransit": "Iniciar trânsito",
+      "startService": "Iniciar atendimento",
+      "completeExam": "Concluir exame",
+      "createLaudo": "Criar laudo",
+      "completeAppointment": "Concluir agendamento",
+      "uploadFiles": "Enviar arquivos",
+      "createNote": "Criar nota",
+      "viewFullLaudo": "Ver laudo completo"
+    },
+    "toast": {
+      "accepted": "Agendamento aceito.",
+      "acceptFailed": "Falha ao aceitar agendamento.",
+      "declined": "Agendamento recusado.",
+      "declineFailed": "Falha ao recusar agendamento.",
+      "transitStarted": "Trânsito iniciado.",
+      "transitFailed": "Falha ao iniciar trânsito.",
+      "serviceStarted": "Atendimento iniciado.",
+      "serviceFailed": "Falha ao iniciar atendimento.",
+      "examCompleted": "Exame concluído. Aguardando laudo.",
+      "examCompleteFailed": "Falha ao concluir exame.",
+      "appointmentCompleted": "Agendamento concluído.",
+      "appointmentCompleteFailed": "Falha ao concluir agendamento.",
+      "cancelled": "Agendamento cancelado.",
+      "cancelFailed": "Falha ao cancelar agendamento.",
+      "fileUploaded": "Arquivo enviado com sucesso.",
+      "fileUploadFailed": "Falha ao enviar arquivo.",
+      "noteCreated": "Nota criada.",
+      "noteCreateFailed": "Falha ao criar nota."
+    },
+    "files": {
+      "empty": {
+        "title": "Nenhum arquivo enviado",
+        "description": "Nenhum arquivo de exame foi enviado para este agendamento ainda."
+      }
+    },
+    "laudo": {
+      "fields": {
+        "status": "Status",
+        "issuedAt": "Emitido em",
+        "findings": "Achados",
+        "conclusion": "Conclusão"
+      },
+      "empty": {
+        "title": "Nenhum laudo ainda",
+        "description": "Um laudo ainda não foi criado para este agendamento."
+      }
+    },
+    "notesSection": {
+      "empty": {
+        "title": "Nenhuma nota",
+        "description": "Nenhuma nota de observação foi registrada para este agendamento."
+      }
+    },
+    "createNoteDialog": {
+      "title": "Criar nota",
+      "titleLabel": "Título",
+      "titlePlaceholder": "Título da nota...",
+      "descriptionLabel": "Descrição",
+      "descriptionPlaceholder": "Descreva a observação ou ocorrência..."
+    },
+    "cancelDialog": {
+      "title": "Cancelar agendamento",
+      "message": "Por favor, informe o motivo do cancelamento:",
+      "confirmButton": "Confirmar cancelamento"
+    },
+    "error": {
+      "title": "Falha ao carregar agendamento",
+      "detail": "O agendamento não foi encontrado ou ocorreu um erro.",
+      "backButton": "Voltar para agendamentos"
+    }
+  }
+}

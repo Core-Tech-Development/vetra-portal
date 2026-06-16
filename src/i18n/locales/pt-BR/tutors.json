@@ -1,0 +1,107 @@
+{
+  "list": {
+    "title": "Tutores",
+    "newTutor": "Novo tutor",
+    "columns": {
+      "name": "Nome",
+      "phone": "Telefone",
+      "email": "E-mail",
+      "document": "Documento"
+    },
+    "searchPlaceholder": "Buscar tutores...",
+    "error": "Falha ao carregar tutores",
+    "empty": {
+      "title": "Nenhum tutor cadastrado",
+      "description": "Comece cadastrando o primeiro tutor desta clínica."
+    },
+    "noClinic": {
+      "title": "Nenhuma clínica selecionada",
+      "description": "Selecione uma clínica primeiro."
+    },
+    "deleteDialog": {
+      "title": "Excluir tutor",
+      "message": "Tem certeza de que deseja excluir o tutor <strong>{{name}}</strong>?",
+      "warning": "O tutor não pode ter pacientes vinculados para ser excluído."
+    }
+  },
+  "create": {
+    "title": "Novo tutor",
+    "subtitle": "Cadastre um novo tutor de pets para a clínica.",
+    "backLink": "Voltar para tutores",
+    "sections": {
+      "personalInformation": "Informações pessoais",
+      "address": "Endereço"
+    },
+    "validation": {
+      "nameRequired": "Nome é obrigatório",
+      "validEmailRequired": "E-mail válido é obrigatório"
+    },
+    "fields": {
+      "fullName": "Nome completo",
+      "fullNamePlaceholder": "ex. João da Silva",
+      "phone": "Telefone",
+      "phonePlaceholder": "(11) 99999-9999",
+      "email": "E-mail",
+      "emailPlaceholder": "tutor@email.com",
+      "document": "Documento",
+      "documentPlaceholder": "CPF",
+      "address": "Endereço",
+      "addressPlaceholder": "Rua das Flores, 123",
+      "city": "Cidade",
+      "cityPlaceholder": "São Paulo",
+      "state": "Estado",
+      "statePlaceholder": "SP",
+      "zipCode": "CEP",
+      "zipCodePlaceholder": "01001-000"
+    },
+    "submitButton": "Criar tutor",
+    "toast": {
+      "success": "Tutor criado com sucesso.",
+      "error": "Falha ao criar tutor. Verifique as informações e tente novamente."
+    }
+  },
+  "edit": {
+    "title": "Editar tutor",
+    "subtitle": "Atualize as informações do tutor.",
+    "backLink": "Voltar para tutores",
+    "submitButton": "Salvar alterações",
+    "toast": {
+      "success": "Tutor atualizado com sucesso.",
+      "error": "Falha ao atualizar tutor. Tente novamente."
+    }
+  },
+  "detail": {
+    "backLink": "Voltar para tutores",
+    "sections": {
+      "tutorInformation": "Informações do tutor",
+      "patients": "Pacientes"
+    },
+    "fields": {
+      "name": "Nome",
+      "phone": "Telefone",
+      "email": "E-mail",
+      "document": "Documento",
+      "address": "Endereço",
+      "city": "Cidade",
+      "state": "Estado",
+      "zipCode": "CEP",
+      "registered": "Cadastrado"
+    },
+    "patientColumns": {
+      "name": "Nome",
+      "species": "Espécie",
+      "breed": "Raça",
+      "sex": "Sexo"
+    },
+    "patientsEmpty": {
+      "title": "Nenhum paciente cadastrado",
+      "description": "Este tutor ainda não possui pacientes."
+    },
+    "newPatient": "Novo paciente",
+    "error": {
+      "title": "Falha ao carregar tutor",
+      "detail": "O tutor não foi encontrado ou ocorreu um erro.",
+      "backButton": "Voltar para tutores"
+    }
+  }
+}
