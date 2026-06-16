@@ -67,6 +67,9 @@
   color: var(--color-text-secondary);
   line-height: var(--line-height-normal);
   margin-top: var(--space-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Value row: value + optional trend on same line */
