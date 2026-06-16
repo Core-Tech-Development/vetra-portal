@@ -123,7 +123,8 @@
   },
   "topbar": {
     "toggleMenu": "Alternar menu de navegação",
-    "notifications": "Notificações"
+    "notifications": "Notificações",
+    "myProfile": "Meu Perfil"
   },
   "common": {
     "yes": "Sim",
@@ -188,6 +189,36 @@
     "updated": "Atualizado",
     "date": "Data",
     "location": "Localização"
+  },
+  "profile": {
+    "title": "Meu Perfil",
+    "clinicInfo": "Informações da Clínica",
+    "clinicData": "Dados da Clínica",
+    "myData": "Meus Dados",
+    "document": "CNPJ",
+    "name": "Nome",
+    "namePlaceholder": "Nome completo",
+    "phone": "Telefone",
+    "phonePlaceholder": "(00) 00000-0000",
+    "email": "E-mail",
+    "address": "Endereço",
+    "addressPlaceholder": "Endereço completo",
+    "city": "Cidade",
+    "cityPlaceholder": "Cidade",
+    "state": "Estado",
+    "selectState": "Selecione um estado",
+    "status": "Status",
+    "registeredAt": "Cadastrado em",
+    "username": "Usuário",
+    "clinicName": "Clínica",
+    "errorTitle": "Erro ao carregar perfil",
+    "errorDetail": "Não foi possível carregar os dados do perfil. Tente novamente.",
+    "toast": {
+      "clinicUpdated": "Dados da clínica atualizados.",
+      "clinicUpdateFailed": "Falha ao atualizar dados da clínica.",
+      "staffUpdated": "Seus dados foram atualizados.",
+      "staffUpdateFailed": "Falha ao atualizar seus dados."
+    }
   },
   "errors": {
     "unexpectedError": "Ocorreu um erro inesperado. Por favor, tente novamente.",

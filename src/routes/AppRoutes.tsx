@@ -39,7 +39,7 @@ import { LaudoDetailPage } from "../pages/laudos/LaudoDetailPage";
 import { AdminDashboardPage } from "../pages/admin/AdminDashboardPage";
 import { AdminApprovalsPage } from "../pages/admin/AdminApprovalsPage";
 import { AuditLogPage } from "../pages/admin/AuditLogPage";
-import { SpecialistProfilePage } from "../pages/profile/SpecialistProfilePage";
+import { ProfilePage } from "../pages/profile/ProfilePage";
 import { PricingPage } from "../pages/admin/pricing/PricingPage";
 import { BillingDashboardPage } from "../pages/admin/billing/BillingDashboardPage";
 import { BillingRecordDetailPage } from "../pages/admin/billing/BillingRecordDetailPage";
@@ -367,15 +367,8 @@ export function AppRoutes() {
             </ProtectedRoute>
           }
         />
-        {/* Specialist Profile */}
-        <Route
-          path="profile"
-          element={
-            <ProtectedRoute requiredRoles={[ROLES.SPECIALIST]}>
-              <SpecialistProfilePage />
-            </ProtectedRoute>
-          }
-        />
+        {/* Profile */}
+        <Route path="profile" element={<ProfilePage />} />
 
         {/* Billing (Clinic) */}
         <Route

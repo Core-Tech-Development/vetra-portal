@@ -37,6 +37,20 @@ export interface ErrorResponse {
   timestamp: string;
 }
 
+// === Clinic Profile ===
+export interface UpdateClinicProfileRequest {
+  name: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  state?: string;
+}
+
+export interface UpdateMyStaffProfileRequest {
+  name: string;
+  phone?: string;
+}
+
 // === Specialist ===
 export interface CreateSpecialistRequest {
   name: string;

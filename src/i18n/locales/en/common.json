@@ -123,7 +123,8 @@
   },
   "topbar": {
     "toggleMenu": "Toggle navigation menu",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "myProfile": "My Profile"
   },
   "common": {
     "yes": "Yes",
@@ -188,6 +189,36 @@
     "updated": "Updated",
     "date": "Date",
     "location": "Location"
+  },
+  "profile": {
+    "title": "My Profile",
+    "clinicInfo": "Clinic Information",
+    "clinicData": "Clinic Data",
+    "myData": "My Data",
+    "document": "CNPJ",
+    "name": "Name",
+    "namePlaceholder": "Full name",
+    "phone": "Phone",
+    "phonePlaceholder": "(00) 00000-0000",
+    "email": "Email",
+    "address": "Address",
+    "addressPlaceholder": "Full address",
+    "city": "City",
+    "cityPlaceholder": "City",
+    "state": "State",
+    "selectState": "Select a state",
+    "status": "Status",
+    "registeredAt": "Registered at",
+    "username": "Username",
+    "clinicName": "Clinic",
+    "errorTitle": "Failed to load profile",
+    "errorDetail": "Could not load profile data. Please try again.",
+    "toast": {
+      "clinicUpdated": "Clinic data updated.",
+      "clinicUpdateFailed": "Failed to update clinic data.",
+      "staffUpdated": "Your data has been updated.",
+      "staffUpdateFailed": "Failed to update your data."
+    }
   },
   "errors": {
     "unexpectedError": "An unexpected error occurred. Please try again.",

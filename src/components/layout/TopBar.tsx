@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { Menu, Bell, LogOut, User } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
@@ -25,6 +26,7 @@ export function TopBar({
   onLogout,
 }: TopBarProps) {
   const { t } = useTranslation("common");
+  const navigate = useNavigate();
   const [panelOpen, setPanelOpen] = useState(false);
   const bellRef = useRef<HTMLDivElement>(null);
 
@@ -72,9 +74,9 @@ export function TopBar({
           trigger={<Avatar name={userName} size="sm" />}
           items={[
             {
-              label: userName,
+              label: t("topbar.myProfile"),
               icon: <User size={16} />,
-              onClick: () => {},
+              onClick: () => navigate("/profile"),
             },
             {
               label: t("actions.signOut"),
