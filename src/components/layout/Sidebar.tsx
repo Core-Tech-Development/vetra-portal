@@ -12,7 +12,6 @@ import {
   Stethoscope,
   Building2,
   Shield,
-  CheckCircle,
   ScrollText,
   User,
   LogOut,
@@ -78,7 +77,6 @@ export function Sidebar({
   const ADMIN_NAV: NavItem[] = [
     { label: t("nav.dashboard"), path: "/", icon: LayoutDashboard },
     { label: t("nav.admin"), path: "/admin", icon: Shield },
-    { label: t("nav.approvals"), path: "/admin/approvals", icon: CheckCircle },
     { label: t("nav.clinics"), path: "/clinics", icon: Building2 },
     { label: t("nav.specialists"), path: "/specialists", icon: Stethoscope },
     { label: t("nav.appointments"), path: "/appointments", icon: Calendar },

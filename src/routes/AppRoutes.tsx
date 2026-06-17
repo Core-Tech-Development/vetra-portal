@@ -37,7 +37,6 @@ import { LaudoListPage } from "../pages/laudos/LaudoListPage";
 import { CreateLaudoPage } from "../pages/laudos/CreateLaudoPage";
 import { LaudoDetailPage } from "../pages/laudos/LaudoDetailPage";
 import { AdminDashboardPage } from "../pages/admin/AdminDashboardPage";
-import { AdminApprovalsPage } from "../pages/admin/AdminApprovalsPage";
 import { AuditLogPage } from "../pages/admin/AuditLogPage";
 import { ProfilePage } from "../pages/profile/ProfilePage";
 import { PricingPage } from "../pages/admin/pricing/PricingPage";
@@ -344,16 +343,6 @@ export function AppRoutes() {
               requiredRoles={[ROLES.PLATFORM_ADMIN, ROLES.PLATFORM_OPERATOR]}
             >
               <AdminDashboardPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="admin/approvals"
-          element={
-            <ProtectedRoute
-              requiredRoles={[ROLES.PLATFORM_ADMIN, ROLES.PLATFORM_OPERATOR]}
-            >
-              <AdminApprovalsPage />
             </ProtectedRoute>
           }
         />

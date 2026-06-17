@@ -218,6 +218,20 @@
       "clinicUpdateFailed": "Failed to update clinic data.",
       "staffUpdated": "Your data has been updated.",
       "staffUpdateFailed": "Failed to update your data."
+    },
+    "changePassword": {
+      "title": "Change password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "currentPasswordPlaceholder": "Enter current password",
+      "newPasswordPlaceholder": "Enter new password",
+      "confirmPasswordPlaceholder": "Confirm new password",
+      "minLength": "Password must be at least 8 characters",
+      "passwordMismatch": "Passwords do not match",
+      "success": "Password changed successfully",
+      "error": "Failed to change password",
+      "invalidCurrentPassword": "Current password is incorrect"
     }
   },
   "errors": {

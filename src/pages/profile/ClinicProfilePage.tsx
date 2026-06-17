@@ -13,6 +13,7 @@ import {
   StatusBadge,
 } from "../../components/ui";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
+import { ChangePasswordForm } from "../../components/profile/ChangePasswordForm";
 import { useToast } from "../../components/ui/Toast";
 import { useAuth } from "../../auth/useAuth";
 import { formatDate } from "../../i18n/formatting";
@@ -298,6 +299,10 @@ export function ClinicProfilePage() {
             </div>
           </form>
         </Card>
+      </div>
+
+      <div className={styles.section}>
+        <ChangePasswordForm />
       </div>
     </div>
   );

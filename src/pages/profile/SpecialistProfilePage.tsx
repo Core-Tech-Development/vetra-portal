@@ -23,6 +23,7 @@ import {
   EmptyState,
 } from "../../components/ui";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
+import { ChangePasswordForm } from "../../components/profile/ChangePasswordForm";
 import { useToast } from "../../components/ui/Toast";
 import { formatDate } from "../../i18n/formatting";
 import styles from "./SpecialistProfilePage.module.css";
@@ -448,6 +449,10 @@ export function SpecialistProfilePage() {
             </table>
           )}
         </Card>
+      </div>
+
+      <div className={styles.section}>
+        <ChangePasswordForm />
       </div>
 
       {removeAreaId && areaToRemove && (

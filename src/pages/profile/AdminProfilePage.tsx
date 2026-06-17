@@ -1,6 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../auth/useAuth";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
+import { ChangePasswordForm } from "../../components/profile/ChangePasswordForm";
+import styles from "./AdminProfilePage.module.css";
 
 export function AdminProfilePage() {
   const { t } = useTranslation("common");
@@ -24,6 +26,10 @@ export function AdminProfilePage() {
           value={user?.preferredUsername ?? "-"}
         />
       </DetailSection>
+
+      <div className={styles.section}>
+        <ChangePasswordForm />
+      </div>
     </div>
   );
 }

@@ -218,6 +218,20 @@
       "clinicUpdateFailed": "Falha ao atualizar dados da clínica.",
       "staffUpdated": "Seus dados foram atualizados.",
       "staffUpdateFailed": "Falha ao atualizar seus dados."
+    },
+    "changePassword": {
+      "title": "Alterar senha",
+      "currentPassword": "Senha atual",
+      "newPassword": "Nova senha",
+      "confirmPassword": "Confirmar nova senha",
+      "currentPasswordPlaceholder": "Digite a senha atual",
+      "newPasswordPlaceholder": "Digite a nova senha",
+      "confirmPasswordPlaceholder": "Confirme a nova senha",
+      "minLength": "A senha deve ter pelo menos 8 caracteres",
+      "passwordMismatch": "As senhas não coincidem",
+      "success": "Senha alterada com sucesso",
+      "error": "Falha ao alterar a senha",
+      "invalidCurrentPassword": "A senha atual esta incorreta"
     }
   },
   "errors": {
