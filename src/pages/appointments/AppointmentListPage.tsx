@@ -8,6 +8,7 @@ import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { AppointmentResponse } from "../../api/types";
 import { formatDate } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./AppointmentListPage.module.css";
 
 const APPOINTMENT_STATUS_KEYS = [
@@ -31,6 +32,7 @@ export function AppointmentListPage() {
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["appointments", page, statusFilter],
     queryFn: () => listAppointments(page, 20, statusFilter || undefined),
+    staleTime: STALE_TIMES.list,
   });
 
   const columns: TableColumn<AppointmentResponse>[] = [

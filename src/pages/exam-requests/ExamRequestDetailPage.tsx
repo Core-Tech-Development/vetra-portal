@@ -25,6 +25,7 @@ import { PageHeader, DetailSection, FieldDisplay } from "../../components/patter
 import { useToast } from "../../components/ui/Toast";
 import { useAuth } from "../../auth/useAuth";
 import { formatDate, formatDateTime } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./ExamRequestDetailPage.module.css";
 
 const PRIORITY_VARIANT: Record<string, BadgeVariant> = {
@@ -64,18 +65,21 @@ export function ExamRequestDetailPage() {
     queryKey: ["exam-request", id],
     queryFn: () => getExamRequest(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.profile,
   });
 
   const { data: patient } = useQuery({
     queryKey: ["patient", examRequest?.patientId],
     queryFn: () => getPatient(examRequest!.patientId),
     enabled: !!examRequest?.patientId,
+    staleTime: STALE_TIMES.profile,
   });
 
   const { data: clinic } = useQuery({
     queryKey: ["clinic", examRequest?.clinicId],
     queryFn: () => getClinic(examRequest!.clinicId),
     enabled: !!examRequest?.clinicId,
+    staleTime: STALE_TIMES.profile,
   });
 
   const specialtyParam = filterBySpecialty ? examRequest?.examType : undefined;
@@ -95,6 +99,7 @@ export function ExamRequestDetailPage() {
     queryFn: () =>
       searchSpecialists(clinic!.city, clinic!.state, specialtyParam),
     enabled: showSpecialists && !!clinic && !!examRequest,
+    staleTime: STALE_TIMES.list,
   });
 
   // Date range for available slots: next 14 days
@@ -123,6 +128,7 @@ export function ExamRequestDetailPage() {
         slotDateRange.to
       ),
     enabled: !!schedulingSpecialist,
+    staleTime: STALE_TIMES.list,
   });
 
   const cancelMutation = useMutation({

@@ -8,6 +8,7 @@ import { Button, StatusBadge } from "../../components/ui";
 import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { ClinicResponse } from "../../api/types";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./ClinicListPage.module.css";
 
 export function ClinicListPage() {
@@ -18,6 +19,7 @@ export function ClinicListPage() {
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["clinics", page],
     queryFn: () => listClinics(page, 20),
+    staleTime: STALE_TIMES.list,
   });
 
   const columns: TableColumn<ClinicResponse>[] = [

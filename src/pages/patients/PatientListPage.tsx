@@ -9,6 +9,7 @@ import { Button, Dialog } from "../../components/ui";
 import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { PatientResponse } from "../../api/types";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./PatientListPage.module.css";
 
 export function PatientListPage() {
@@ -24,6 +25,7 @@ export function PatientListPage() {
     queryKey: ["patients", clinicId, page],
     queryFn: () => listPatientsByClinic(clinicId!, page, 20),
     enabled: !!clinicId,
+    staleTime: STALE_TIMES.list,
   });
 
   const deleteMutation = useMutation({

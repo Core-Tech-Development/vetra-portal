@@ -13,6 +13,7 @@ import { Card, Select, Textarea, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
 import { PageHeader, FormSection, FormActions } from "../../components/patterns";
 import type { CreateExamRequestRequest } from "../../api/types";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./CreateExamRequestPage.module.css";
 
 const createExamRequestSchema = z.object({
@@ -49,6 +50,7 @@ export function CreateExamRequestPage() {
     queryKey: ["patients", clinicId],
     queryFn: () => listPatientsByClinic(clinicId!, 0, 100),
     enabled: !!clinicId,
+    staleTime: STALE_TIMES.list,
   });
 
   const {

@@ -9,6 +9,7 @@ import { PageHeader, DetailSection, FieldDisplay } from "../../components/patter
 import { useToast } from "../../components/ui/Toast";
 import { useAuth } from "../../auth/useAuth";
 import { formatDateTime } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./LaudoDetailPage.module.css";
 
 export function LaudoDetailPage() {
@@ -30,6 +31,7 @@ export function LaudoDetailPage() {
     queryKey: ["laudo", id],
     queryFn: () => getLaudo(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.profile,
   });
 
   const issueMutation = useMutation({

@@ -25,6 +25,7 @@ import { useToast } from "../../components/ui/Toast";
 import { formatDateTime } from "../../i18n/formatting";
 import { WeeklyCalendar } from "../../components/schedule/WeeklyCalendar";
 import { CreateSlotDialog } from "../../components/schedule/CreateSlotDialog";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./SchedulePage.module.css";
 
 function getMonday(date: Date): Date {
@@ -78,6 +79,7 @@ export function SchedulePage() {
     queryKey: ["slots-calendar", specialistId, weekFrom, weekTo],
     queryFn: () => listSlotsByDateRange(specialistId, weekFrom, weekTo),
     enabled: !!specialistId && activeTab === "week",
+    staleTime: STALE_TIMES.list,
   });
 
   // List query
@@ -90,6 +92,7 @@ export function SchedulePage() {
     queryKey: ["slots", specialistId, listPage],
     queryFn: () => listSlots(specialistId, listPage, 20),
     enabled: !!specialistId && activeTab === "list",
+    staleTime: STALE_TIMES.list,
   });
 
   const deleteMutation = useMutation({

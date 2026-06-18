@@ -17,6 +17,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import type { TableColumn } from "../../components/ui";
 import type { PatientResponse } from "../../api/types";
 import { formatDate } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./TutorDetailPage.module.css";
 
 export function TutorDetailPage() {
@@ -47,12 +48,14 @@ export function TutorDetailPage() {
     queryKey: ["tutor", id],
     queryFn: () => getTutor(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.profile,
   });
 
   const { data: patientsData } = useQuery({
     queryKey: ["tutor-patients", id],
     queryFn: () => listPatientsByTutor(id!, 0, 100),
     enabled: !!id,
+    staleTime: STALE_TIMES.list,
   });
 
   const patientColumns: TableColumn<PatientResponse>[] = [

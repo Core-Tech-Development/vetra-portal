@@ -8,6 +8,7 @@ import { Button, StatusBadge } from "../../components/ui";
 import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { SpecialistResponse } from "../../api/types";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./SpecialistListPage.module.css";
 
 export function SpecialistListPage() {
@@ -18,6 +19,7 @@ export function SpecialistListPage() {
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["specialists", page],
     queryFn: () => listSpecialists(page, 20),
+    staleTime: STALE_TIMES.list,
   });
 
   const columns: TableColumn<SpecialistResponse>[] = [

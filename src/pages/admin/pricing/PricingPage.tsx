@@ -17,6 +17,7 @@ import { PageHeader, DataTableLayout } from "../../../components/patterns";
 import { Plus, Pencil } from "lucide-react";
 import { useToast } from "../../../components/ui";
 import { formatCurrency } from "../../../i18n/formatting";
+import { STALE_TIMES } from "../../../config/queryConfig";
 import styles from "./PricingPage.module.css";
 
 export function PricingPage() {
@@ -35,6 +36,7 @@ export function PricingPage() {
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["exam-type-pricings"],
     queryFn: listExamTypePricings,
+    staleTime: STALE_TIMES.static,
   });
 
   const createMutation = useMutation({

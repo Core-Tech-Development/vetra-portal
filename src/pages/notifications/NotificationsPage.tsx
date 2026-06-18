@@ -5,6 +5,7 @@ import { listNotifications, markAllAsRead } from "../../api/notifications";
 import { Button, Spinner, EmptyState, Pagination, Tabs, TabList, Tab, Bell } from "../../components/ui";
 import { PageHeader } from "../../components/patterns";
 import { NotificationItem } from "../../components/notifications/NotificationItem";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./NotificationsPage.module.css";
 
 type FilterTab = "all" | "unread";
@@ -20,6 +21,7 @@ export function NotificationsPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["notifications", "page", page, filter],
     queryFn: () => listNotifications(page, 20, unreadOnly),
+    staleTime: STALE_TIMES.realtime,
   });
 
   const markAllMutation = useMutation({

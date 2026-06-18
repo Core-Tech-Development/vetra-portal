@@ -12,6 +12,7 @@ import { useClinicId } from "../../hooks/useClinicId";
 import { Card, Input, Select, Textarea, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
 import { PageHeader, FormSection, FormActions } from "../../components/patterns";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./CreatePatientPage.module.css";
 
 const createPatientSchema = z.object({
@@ -55,6 +56,7 @@ export function CreatePatientPage() {
     queryKey: ["tutors", clinicId],
     queryFn: () => listTutorsByClinic(clinicId!, 0, 100),
     enabled: !!clinicId,
+    staleTime: STALE_TIMES.list,
   });
 
   const {

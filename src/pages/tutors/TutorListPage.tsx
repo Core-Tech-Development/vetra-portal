@@ -8,6 +8,7 @@ import { Button, Dialog } from "../../components/ui";
 import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { TutorResponse } from "../../api/types";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./TutorListPage.module.css";
 
 function getClinicId(): string {
@@ -27,6 +28,7 @@ export function TutorListPage() {
     queryKey: ["tutors", clinicId, page],
     queryFn: () => listTutorsByClinic(clinicId, page, 20),
     enabled: !!clinicId,
+    staleTime: STALE_TIMES.list,
   });
 
   const deleteMutation = useMutation({

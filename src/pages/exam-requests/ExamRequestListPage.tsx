@@ -16,6 +16,7 @@ import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { ExamRequestResponse } from "../../api/types";
 import { formatDate } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./ExamRequestListPage.module.css";
 
 const PRIORITY_VARIANT: Record<string, "neutral" | "warning" | "danger"> = {
@@ -34,6 +35,7 @@ export function ExamRequestListPage() {
     queryKey: ["exam-requests", clinicId, page],
     queryFn: () => listExamRequestsByClinic(clinicId!, page, 20),
     enabled: !!clinicId,
+    staleTime: STALE_TIMES.list,
   });
 
   const columns: TableColumn<ExamRequestResponse>[] = [

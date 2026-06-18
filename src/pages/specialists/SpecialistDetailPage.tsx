@@ -16,6 +16,7 @@ import { ArrowLeft, Trash2 } from "lucide-react";
 import { useToast } from "../../components/ui/Toast";
 import { useAuth } from "../../auth/useAuth";
 import { formatDate } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./SpecialistDetailPage.module.css";
 
 const BRAZILIAN_STATES = [
@@ -41,12 +42,14 @@ export function SpecialistDetailPage() {
     queryKey: ["specialist", id],
     queryFn: () => getSpecialist(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.profile,
   });
 
   const { data: coverageAreas, isLoading: areasLoading } = useQuery({
     queryKey: ["specialist", id, "coverage-areas"],
     queryFn: () => listCoverageAreas(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.static,
   });
 
   const approveMutation = useMutation({

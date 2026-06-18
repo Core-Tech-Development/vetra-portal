@@ -17,6 +17,7 @@ import { ChangePasswordForm } from "../../components/profile/ChangePasswordForm"
 import { useToast } from "../../components/ui/Toast";
 import { useAuth } from "../../auth/useAuth";
 import { formatDate } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./ClinicProfilePage.module.css";
 
 const BRAZILIAN_STATES = [
@@ -78,6 +79,7 @@ export function ClinicProfilePage() {
   } = useQuery({
     queryKey: ["my-clinic-profile"],
     queryFn: getMyClinicProfile,
+    staleTime: STALE_TIMES.profile,
   });
 
   const {
@@ -88,6 +90,7 @@ export function ClinicProfilePage() {
   } = useQuery({
     queryKey: ["my-staff-profile"],
     queryFn: getMyStaffProfile,
+    staleTime: STALE_TIMES.profile,
   });
 
   const clinicForm = useForm<ClinicDataForm>();

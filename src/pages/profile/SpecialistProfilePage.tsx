@@ -26,6 +26,7 @@ import { PageHeader, DetailSection, FieldDisplay } from "../../components/patter
 import { ChangePasswordForm } from "../../components/profile/ChangePasswordForm";
 import { useToast } from "../../components/ui/Toast";
 import { formatDate } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./SpecialistProfilePage.module.css";
 
 const BRAZILIAN_STATES = [
@@ -89,11 +90,13 @@ export function SpecialistProfilePage() {
   } = useQuery({
     queryKey: ["my-profile"],
     queryFn: getMyProfile,
+    staleTime: STALE_TIMES.profile,
   });
 
   const { data: coverageAreas, isLoading: areasLoading } = useQuery({
     queryKey: ["my-coverage-areas"],
     queryFn: getMyCoverageAreas,
+    staleTime: STALE_TIMES.static,
   });
 
   const personalForm = useForm<PersonalInfoForm>();

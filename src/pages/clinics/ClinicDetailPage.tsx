@@ -10,6 +10,7 @@ import { ArrowLeft, Trash2 } from "lucide-react";
 import { useToast } from "../../components/ui/Toast";
 import { useAuth } from "../../auth/useAuth";
 import { formatDate } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./ClinicDetailPage.module.css";
 
 export function ClinicDetailPage() {
@@ -26,6 +27,7 @@ export function ClinicDetailPage() {
     queryKey: ["clinic", id],
     queryFn: () => getClinic(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.profile,
   });
 
   const deleteMutation = useMutation({

@@ -18,6 +18,7 @@ import { PageHeader, DetailSection, FieldDisplay } from "../../components/patter
 import { Pencil, Trash2 } from "lucide-react";
 import type { BadgeVariant } from "../../components/ui";
 import { formatDate } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./PatientDetailPage.module.css";
 
 const PRIORITY_VARIANT: Record<string, BadgeVariant> = {
@@ -54,18 +55,21 @@ export function PatientDetailPage() {
     queryKey: ["patient", id],
     queryFn: () => getPatient(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.profile,
   });
 
   const { data: tutor } = useQuery({
     queryKey: ["tutor", patient?.tutorId],
     queryFn: () => getTutor(patient!.tutorId),
     enabled: !!patient?.tutorId,
+    staleTime: STALE_TIMES.profile,
   });
 
   const { data: examRequests } = useQuery({
     queryKey: ["patient-exams", id],
     queryFn: () => listExamRequestsByPatient(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.list,
   });
 
   if (isLoading) {

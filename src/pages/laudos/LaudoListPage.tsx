@@ -8,6 +8,7 @@ import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { LaudoResponse } from "../../api/types";
 import { formatDate } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./LaudoListPage.module.css";
 
 export function LaudoListPage() {
@@ -20,6 +21,7 @@ export function LaudoListPage() {
     queryKey: ["laudos", specialistId, page],
     queryFn: () => listLaudosBySpecialist(specialistId, page, 20),
     enabled: !!specialistId,
+    staleTime: STALE_TIMES.list,
   });
 
   const columns: TableColumn<LaudoResponse>[] = [

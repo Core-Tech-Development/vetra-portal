@@ -13,6 +13,7 @@ import {
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { Pencil, Trash2 } from "lucide-react";
 import { formatDate } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./StaffDetailPage.module.css";
 
 function getRoleBadgeVariant(role: string): "neutral" | "info" {
@@ -54,6 +55,7 @@ export function StaffDetailPage() {
     queryKey: ["clinic-staff-detail", id],
     queryFn: () => getClinicStaff(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.profile,
   });
 
   if (isLoading) {

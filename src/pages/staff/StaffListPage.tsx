@@ -13,6 +13,7 @@ import {
 import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { ClinicStaffResponse } from "../../api/types";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./StaffListPage.module.css";
 
 function getClinicId(): string {
@@ -43,6 +44,7 @@ export function StaffListPage() {
     queryKey: ["clinic-staff", clinicId, page],
     queryFn: () => listClinicStaff(clinicId, page, 20),
     enabled: !!clinicId,
+    staleTime: STALE_TIMES.list,
   });
 
   const deactivateMutation = useMutation({

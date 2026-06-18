@@ -22,6 +22,7 @@ import { useToast } from "../../components/ui/Toast";
 import { useAuth } from "../../auth/useAuth";
 import { useState, useRef } from "react";
 import { formatDate, formatDateTime } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./AppointmentDetailPage.module.css";
 
 function formatFileSize(bytes: number): string {
@@ -61,24 +62,28 @@ export function AppointmentDetailPage() {
     queryKey: ["appointment", id],
     queryFn: () => getAppointment(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.profile,
   });
 
   const { data: files } = useQuery({
     queryKey: ["appointment-files", id],
     queryFn: () => listFiles(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.list,
   });
 
   const { data: laudo } = useQuery({
     queryKey: ["appointment-laudo", id],
     queryFn: () => getLaudoByAppointment(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.profile,
   });
 
   const { data: notes } = useQuery({
     queryKey: ["appointment-notes", id],
     queryFn: () => listNotes(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.list,
   });
 
   const createNoteMutation = useMutation({

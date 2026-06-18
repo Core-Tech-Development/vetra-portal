@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { listAppointments } from "../api/appointments";
 import { getDashboard } from "../api/admin";
+import { STALE_TIMES } from "../config/queryConfig";
 import styles from "./DashboardPage.module.css";
 
 function ClinicDashboard() {
@@ -25,6 +26,7 @@ function ClinicDashboard() {
   const { data: appointmentsData, isLoading } = useQuery({
     queryKey: ["appointments", "upcoming"],
     queryFn: () => listAppointments(0, 5),
+    staleTime: STALE_TIMES.dashboard,
   });
 
   const upcomingCount = appointmentsData?.totalElements ?? 0;
@@ -78,6 +80,7 @@ function SpecialistDashboard() {
   const { data: appointmentsData, isLoading } = useQuery({
     queryKey: ["appointments", "specialist", "today"],
     queryFn: () => listAppointments(0, 10, "SCHEDULED"),
+    staleTime: STALE_TIMES.dashboard,
   });
 
   const todayCount = appointmentsData?.totalElements ?? 0;
@@ -125,6 +128,7 @@ function AdminDashboard() {
   const { data: dashboardData, isLoading } = useQuery({
     queryKey: ["admin", "dashboard"],
     queryFn: getDashboard,
+    staleTime: STALE_TIMES.dashboard,
   });
 
   return (

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { listNotifications, markAllAsRead } from "../../api/notifications";
 import { Spinner, EmptyState, Bell } from "../ui";
 import { NotificationItem } from "./NotificationItem";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./NotificationPanel.module.css";
 
 interface NotificationPanelProps {
@@ -19,6 +20,7 @@ export function NotificationPanel({ onClose }: NotificationPanelProps) {
   const { data, isLoading } = useQuery({
     queryKey: ["notifications", "recent"],
     queryFn: () => listNotifications(0, 10),
+    staleTime: STALE_TIMES.realtime,
   });
 
   const markAllMutation = useMutation({

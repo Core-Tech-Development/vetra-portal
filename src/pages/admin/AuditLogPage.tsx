@@ -6,6 +6,7 @@ import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import type { AuditLogResponse } from "../../api/types";
 import { formatDateTime } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 
 export function AuditLogPage() {
   const { t } = useTranslation('admin');
@@ -15,6 +16,7 @@ export function AuditLogPage() {
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["audit-logs", page],
     queryFn: () => listAuditLogs(page, 20),
+    staleTime: STALE_TIMES.list,
   });
 
   const columns: TableColumn<AuditLogResponse>[] = [

@@ -16,6 +16,7 @@ import {
   Calendar,
   Activity,
 } from "lucide-react";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./AdminDashboardPage.module.css";
 
 export function AdminDashboardPage() {
@@ -32,6 +33,7 @@ export function AdminDashboardPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["admin-dashboard"],
     queryFn: getDashboard,
+    staleTime: STALE_TIMES.dashboard,
   });
 
   const {
@@ -42,6 +44,7 @@ export function AdminDashboardPage() {
   } = useQuery({
     queryKey: ["clinics", 0],
     queryFn: () => listClinics(0, 100),
+    staleTime: STALE_TIMES.list,
   });
 
   const {
@@ -52,6 +55,7 @@ export function AdminDashboardPage() {
   } = useQuery({
     queryKey: ["specialists", 0],
     queryFn: () => listSpecialists(0, 100),
+    staleTime: STALE_TIMES.list,
   });
 
   const pendingClinics =

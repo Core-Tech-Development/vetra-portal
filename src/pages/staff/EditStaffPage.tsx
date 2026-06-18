@@ -10,6 +10,7 @@ import { getClinicStaff, updateClinicStaff } from "../../api/clinicStaff";
 import { Card, Input, Select, Spinner, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
 import { PageHeader, FormSection, FormActions } from "../../components/patterns";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./CreateStaffPage.module.css";
 
 const editStaffSchema = z.object({
@@ -31,6 +32,7 @@ export function EditStaffPage() {
     queryKey: ["clinic-staff-detail", id],
     queryFn: () => getClinicStaff(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.profile,
   });
 
   const {

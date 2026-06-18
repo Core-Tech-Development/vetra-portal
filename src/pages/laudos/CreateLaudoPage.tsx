@@ -10,6 +10,7 @@ import { uploadFile, listFiles, deleteFile } from "../../api/examFiles";
 import { Button, Card, Textarea, Spinner, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
 import { PageHeader, FormSection } from "../../components/patterns";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./CreateLaudoPage.module.css";
 
 const schema = z.object({
@@ -52,6 +53,7 @@ export function CreateLaudoPage() {
     queryKey: ["appointment-files", appointmentId],
     queryFn: () => listFiles(appointmentId!),
     enabled: !!appointmentId,
+    staleTime: STALE_TIMES.list,
   });
 
   const uploadMutation = useMutation({

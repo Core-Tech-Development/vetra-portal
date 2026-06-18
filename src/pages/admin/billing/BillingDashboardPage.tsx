@@ -8,6 +8,7 @@ import type { TableColumn } from "../../../components/ui";
 import { PageHeader, StatCard, DataTableLayout } from "../../../components/patterns";
 import { DollarSign, TrendingUp, Clock, AlertTriangle, Receipt } from "lucide-react";
 import { formatCurrency, formatDate } from "../../../i18n/formatting";
+import { STALE_TIMES } from "../../../config/queryConfig";
 import styles from "./BillingDashboardPage.module.css";
 
 export function BillingDashboardPage() {
@@ -18,11 +19,13 @@ export function BillingDashboardPage() {
   const { data: dashboard, isLoading: dashLoading } = useQuery({
     queryKey: ["billing-dashboard"],
     queryFn: getBillingDashboard,
+    staleTime: STALE_TIMES.dashboard,
   });
 
   const { data: records, isLoading: recordsLoading, isError, refetch } = useQuery({
     queryKey: ["billing-records", page],
     queryFn: () => listBillingRecords(page, 20),
+    staleTime: STALE_TIMES.list,
   });
 
   const columns: TableColumn<BillingRecordResponse>[] = [

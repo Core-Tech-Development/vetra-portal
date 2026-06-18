@@ -10,6 +10,7 @@ import { getPatient, updatePatient } from "../../api/patients";
 import { Card, Input, Select, Spinner, Textarea, Alert } from "../../components/ui";
 import { useToast } from "../../components/ui/Toast";
 import { PageHeader, FormSection, FormActions } from "../../components/patterns";
+import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./CreatePatientPage.module.css";
 
 const editPatientSchema = z.object({
@@ -52,6 +53,7 @@ export function EditPatientPage() {
     queryKey: ["patient", id],
     queryFn: () => getPatient(id!),
     enabled: !!id,
+    staleTime: STALE_TIMES.profile,
   });
 
   const {

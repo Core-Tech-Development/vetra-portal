@@ -8,6 +8,7 @@ import type { TableColumn } from "../../components/ui";
 import { PageHeader, DataTableLayout } from "../../components/patterns";
 import { useClinicId } from "../../hooks/useClinicId";
 import { formatCurrency, formatDate } from "../../i18n/formatting";
+import { STALE_TIMES } from "../../config/queryConfig";
 
 export function ClinicBillingPage() {
   const { t } = useTranslation('billing');
@@ -19,6 +20,7 @@ export function ClinicBillingPage() {
     queryKey: ["clinic-billing", clinicId, page],
     queryFn: () => listClinicBillingRecords(clinicId!, page, 20),
     enabled: !!clinicId,
+    staleTime: STALE_TIMES.list,
   });
 
   const columns: TableColumn<BillingRecordResponse>[] = [
