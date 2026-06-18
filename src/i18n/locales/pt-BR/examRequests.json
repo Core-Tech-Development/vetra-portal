@@ -114,5 +114,12 @@
       "detail": "A solicitação de exame não foi encontrada ou ocorreu um erro.",
       "backButton": "Voltar para solicitações de exame"
     }
+  },
+  "deleteDialog": {
+    "title": "Excluir solicitação de exame",
+    "message": "Tem certeza que deseja excluir a solicitação de exame <strong>{{id}}</strong>?",
+    "warning": "Esta ação não pode ser desfeita. Agendamentos associados também podem ser afetados.",
+    "success": "Solicitação de exame excluída com sucesso",
+    "error": "Falha ao excluir solicitação de exame"
   }
 }

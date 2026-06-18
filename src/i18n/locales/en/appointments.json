@@ -122,5 +122,12 @@
       "detail": "The appointment could not be found or an error occurred.",
       "backButton": "Back to appointments"
     }
+  },
+  "deleteDialog": {
+    "title": "Delete appointment",
+    "message": "Are you sure you want to delete appointment <strong>{{id}}</strong>?",
+    "warning": "This action cannot be undone. Associated files and laudos may also be affected.",
+    "success": "Appointment deleted successfully",
+    "error": "Failed to delete appointment"
   }
 }

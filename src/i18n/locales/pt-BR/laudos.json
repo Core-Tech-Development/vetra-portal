@@ -82,5 +82,12 @@
       "detail": "O laudo não foi encontrado ou ocorreu um erro.",
       "backButton": "Voltar para laudos"
     }
+  },
+  "deleteDialog": {
+    "title": "Excluir laudo",
+    "message": "Tem certeza que deseja excluir o laudo <strong>{{id}}</strong>?",
+    "warning": "Esta ação não pode ser desfeita. O laudo e seus dados associados serão permanentemente removidos.",
+    "success": "Laudo excluído com sucesso",
+    "error": "Falha ao excluir laudo"
   }
 }

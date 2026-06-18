@@ -57,6 +57,10 @@ export async function cancelExamRequest(
   return response.data;
 }
 
+export async function deleteExamRequest(id: string): Promise<void> {
+  await apiClient.delete(`/exam-requests/${id}`);
+}
+
 export async function listExamRequestsByPatient(
   patientId: string
 ): Promise<ExamRequestResponse[]> {

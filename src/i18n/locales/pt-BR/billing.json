@@ -58,5 +58,12 @@
       "updated": "Atualizado"
     },
     "errorLoading": "Falha ao carregar registro de faturamento."
+  },
+  "deleteDialog": {
+    "title": "Excluir registro de faturamento",
+    "message": "Tem certeza que deseja excluir o registro de faturamento <strong>{{id}}</strong>?",
+    "warning": "Esta ação não pode ser desfeita. O registro de faturamento será permanentemente removido.",
+    "success": "Registro de faturamento excluído com sucesso",
+    "error": "Falha ao excluir registro de faturamento"
   }
 }

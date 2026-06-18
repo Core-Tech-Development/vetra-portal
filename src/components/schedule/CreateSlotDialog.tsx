@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useMutation } from "@tanstack/react-query";
 import { createSlot, createBulkSlots } from "../../api/availabilitySlots";
-import { Dialog, Button, Tabs, TabList, Tab, TabPanel } from "../ui";
+import { Dialog, Button, Input, Tabs, TabList, Tab, TabPanel } from "../ui";
 import { useToast } from "../ui/Toast";
 import styles from "./CreateSlotDialog.module.css";
 
@@ -76,10 +76,12 @@ export function CreateSlotDialog({
   const { t } = useTranslation(["schedule", "common"]);
   const { showToast } = useToast();
 
+  const today = new Date().toISOString().split("T")[0];
+
   const [activeTab, setActiveTab] = useState<string>("single");
 
   // Single slot fields
-  const [singleDate, setSingleDate] = useState(initialDate || "");
+  const [singleDate, setSingleDate] = useState(initialDate || today);
   const [singleStartTime, setSingleStartTime] = useState(
     initialHour !== undefined ? formatHour(initialHour) : ""
   );
@@ -89,7 +91,7 @@ export function CreateSlotDialog({
   const [singleLabel, setSingleLabel] = useState("");
 
   // Recurring slot fields
-  const [recurStartDate, setRecurStartDate] = useState("");
+  const [recurStartDate, setRecurStartDate] = useState(today);
   const [recurEndDate, setRecurEndDate] = useState("");
   const [recurDays, setRecurDays] = useState<string[]>([]);
   const [recurStartTime, setRecurStartTime] = useState("");
@@ -147,11 +149,11 @@ export function CreateSlotDialog({
   });
 
   function resetAndClose() {
-    setSingleDate("");
+    setSingleDate(today);
     setSingleStartTime("");
     setSingleEndTime("");
     setSingleLabel("");
-    setRecurStartDate("");
+    setRecurStartDate(today);
     setRecurEndDate("");
     setRecurDays([]);
     setRecurStartTime("");
@@ -192,58 +194,35 @@ export function CreateSlotDialog({
 
         <TabPanel value="single" activeValue={activeTab}>
           <div className={styles.form}>
-            <div className={styles.field}>
-              <label className={styles.fieldLabel} htmlFor="single-date">
-                {t("schedule:createSlot.date")}
-              </label>
-              <input
-                id="single-date"
-                type="date"
-                className={styles.fieldInput}
-                value={singleDate}
-                onChange={(e) => setSingleDate(e.target.value)}
-              />
-            </div>
+            <Input
+              label={t("schedule:createSlot.date")}
+              type="date"
+              value={singleDate}
+              min={today}
+              onChange={(e) => setSingleDate(e.target.value)}
+            />
 
             <div className={styles.fieldRow}>
-              <div className={styles.field}>
-                <label className={styles.fieldLabel} htmlFor="single-start">
-                  {t("schedule:createSlot.startTime")}
-                </label>
-                <input
-                  id="single-start"
-                  type="time"
-                  className={styles.fieldInput}
-                  value={singleStartTime}
-                  onChange={(e) => setSingleStartTime(e.target.value)}
-                />
-              </div>
-              <div className={styles.field}>
-                <label className={styles.fieldLabel} htmlFor="single-end">
-                  {t("schedule:createSlot.endTime")}
-                </label>
-                <input
-                  id="single-end"
-                  type="time"
-                  className={styles.fieldInput}
-                  value={singleEndTime}
-                  onChange={(e) => setSingleEndTime(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className={styles.field}>
-              <label className={styles.fieldLabel} htmlFor="single-label">
-                {t("schedule:createSlot.label")}
-              </label>
-              <input
-                id="single-label"
-                type="text"
-                className={styles.fieldInput}
-                value={singleLabel}
-                onChange={(e) => setSingleLabel(e.target.value)}
+              <Input
+                label={t("schedule:createSlot.startTime")}
+                type="time"
+                value={singleStartTime}
+                onChange={(e) => setSingleStartTime(e.target.value)}
+              />
+              <Input
+                label={t("schedule:createSlot.endTime")}
+                type="time"
+                value={singleEndTime}
+                onChange={(e) => setSingleEndTime(e.target.value)}
               />
             </div>
+
+            <Input
+              label={t("schedule:createSlot.label")}
+              type="text"
+              value={singleLabel}
+              onChange={(e) => setSingleLabel(e.target.value)}
+            />
 
             <div className={styles.actions}>
               <Button variant="secondary" onClick={resetAndClose}>
@@ -263,36 +242,26 @@ export function CreateSlotDialog({
         <TabPanel value="recurring" activeValue={activeTab}>
           <div className={styles.form}>
             <div className={styles.fieldRow}>
-              <div className={styles.field}>
-                <label className={styles.fieldLabel} htmlFor="recur-start-date">
-                  {t("schedule:createSlot.startDate")}
-                </label>
-                <input
-                  id="recur-start-date"
-                  type="date"
-                  className={styles.fieldInput}
-                  value={recurStartDate}
-                  onChange={(e) => setRecurStartDate(e.target.value)}
-                />
-              </div>
-              <div className={styles.field}>
-                <label className={styles.fieldLabel} htmlFor="recur-end-date">
-                  {t("schedule:createSlot.endDate")}
-                </label>
-                <input
-                  id="recur-end-date"
-                  type="date"
-                  className={styles.fieldInput}
-                  value={recurEndDate}
-                  onChange={(e) => setRecurEndDate(e.target.value)}
-                />
-              </div>
+              <Input
+                label={t("schedule:createSlot.startDate")}
+                type="date"
+                value={recurStartDate}
+                min={today}
+                onChange={(e) => setRecurStartDate(e.target.value)}
+              />
+              <Input
+                label={t("schedule:createSlot.endDate")}
+                type="date"
+                value={recurEndDate}
+                min={recurStartDate || today}
+                onChange={(e) => setRecurEndDate(e.target.value)}
+              />
             </div>
 
-            <div className={styles.field}>
-              <label className={styles.fieldLabel}>
+            <div className={styles.daysSection}>
+              <span className={styles.daysLabel}>
                 {t("schedule:createSlot.daysOfWeek")}
-              </label>
+              </span>
               <div className={styles.daysGrid}>
                 {DAY_OPTIONS.map((day) => (
                   <label key={day.value} className={styles.dayCheckbox}>
@@ -308,57 +277,33 @@ export function CreateSlotDialog({
             </div>
 
             <div className={styles.fieldRow}>
-              <div className={styles.field}>
-                <label className={styles.fieldLabel} htmlFor="recur-start-time">
-                  {t("schedule:createSlot.startTime")}
-                </label>
-                <input
-                  id="recur-start-time"
-                  type="time"
-                  className={styles.fieldInput}
-                  value={recurStartTime}
-                  onChange={(e) => setRecurStartTime(e.target.value)}
-                />
-              </div>
-              <div className={styles.field}>
-                <label className={styles.fieldLabel} htmlFor="recur-end-time">
-                  {t("schedule:createSlot.endTime")}
-                </label>
-                <input
-                  id="recur-end-time"
-                  type="time"
-                  className={styles.fieldInput}
-                  value={recurEndTime}
-                  onChange={(e) => setRecurEndTime(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className={styles.field}>
-              <label className={styles.fieldLabel} htmlFor="recur-timezone">
-                {t("schedule:createSlot.timezone")}
-              </label>
-              <input
-                id="recur-timezone"
-                type="text"
-                className={styles.fieldInput}
-                value={recurTimezone}
-                readOnly
+              <Input
+                label={t("schedule:createSlot.startTime")}
+                type="time"
+                value={recurStartTime}
+                onChange={(e) => setRecurStartTime(e.target.value)}
+              />
+              <Input
+                label={t("schedule:createSlot.endTime")}
+                type="time"
+                value={recurEndTime}
+                onChange={(e) => setRecurEndTime(e.target.value)}
               />
             </div>
 
-            <div className={styles.field}>
-              <label className={styles.fieldLabel} htmlFor="recur-label">
-                {t("schedule:createSlot.label")}
-              </label>
-              <input
-                id="recur-label"
-                type="text"
-                className={styles.fieldInput}
-                value={recurLabel}
-                onChange={(e) => setRecurLabel(e.target.value)}
-              />
-            </div>
+            <Input
+              label={t("schedule:createSlot.timezone")}
+              type="text"
+              value={recurTimezone}
+              readOnly
+            />
+
+            <Input
+              label={t("schedule:createSlot.label")}
+              type="text"
+              value={recurLabel}
+              onChange={(e) => setRecurLabel(e.target.value)}
+            />
 
             <div className={styles.preview}>
               {previewCount > 0

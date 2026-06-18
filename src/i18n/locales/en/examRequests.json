@@ -114,5 +114,12 @@
       "detail": "The exam request could not be found or an error occurred.",
       "backButton": "Back to exam requests"
     }
+  },
+  "deleteDialog": {
+    "title": "Delete exam request",
+    "message": "Are you sure you want to delete exam request <strong>{{id}}</strong>?",
+    "warning": "This action cannot be undone. Any associated appointments may also be affected.",
+    "success": "Exam request deleted successfully",
+    "error": "Failed to delete exam request"
   }
 }

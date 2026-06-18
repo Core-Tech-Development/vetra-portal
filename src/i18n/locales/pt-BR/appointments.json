@@ -122,5 +122,12 @@
       "detail": "O agendamento não foi encontrado ou ocorreu um erro.",
       "backButton": "Voltar para agendamentos"
     }
+  },
+  "deleteDialog": {
+    "title": "Excluir agendamento",
+    "message": "Tem certeza que deseja excluir o agendamento <strong>{{id}}</strong>?",
+    "warning": "Esta ação não pode ser desfeita. Arquivos e laudos associados também podem ser afetados.",
+    "success": "Agendamento excluído com sucesso",
+    "error": "Falha ao excluir agendamento"
   }
 }

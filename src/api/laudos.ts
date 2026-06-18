@@ -52,6 +52,10 @@ export async function listLaudosBySpecialist(
   return response.data;
 }
 
+export async function deleteLaudo(id: string): Promise<void> {
+  await apiClient.delete(`/laudos/${id}`);
+}
+
 export async function getLaudoByAppointment(
   appointmentId: string
 ): Promise<LaudoResponse> {

@@ -58,5 +58,12 @@
       "updated": "Updated"
     },
     "errorLoading": "Failed to load billing record."
+  },
+  "deleteDialog": {
+    "title": "Delete billing record",
+    "message": "Are you sure you want to delete billing record <strong>{{id}}</strong>?",
+    "warning": "This action cannot be undone. The billing record will be permanently removed.",
+    "success": "Billing record deleted successfully",
+    "error": "Failed to delete billing record"
   }
 }

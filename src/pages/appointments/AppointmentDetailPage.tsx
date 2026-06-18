@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import {
@@ -10,13 +10,16 @@ import {
   completeExam,
   completeAppointment,
   cancelAppointment,
+  deleteAppointment,
 } from "../../api/appointments";
 import { listFiles, uploadFile } from "../../api/examFiles";
 import { getLaudoByAppointment } from "../../api/laudos";
 import { listNotes, createNote } from "../../api/appointmentNotes";
+import { Trash2 } from "lucide-react";
 import { Button, Card, StatusBadge, Spinner, Dialog, EmptyState } from "../../components/ui";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
+import { useAuth } from "../../auth/useAuth";
 import { useState, useRef } from "react";
 import { formatDate, formatDateTime } from "../../i18n/formatting";
 import styles from "./AppointmentDetailPage.module.css";
@@ -30,8 +33,12 @@ function formatFileSize(bytes: number): string {
 export function AppointmentDetailPage() {
   const { t } = useTranslation(['appointments', 'common']);
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { showToast } = useToast();
   const queryClient = useQueryClient();
+  const { roles } = useAuth();
+  const isAdmin = roles.includes("PLATFORM_ADMIN");
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const [showCreateNoteDialog, setShowCreateNoteDialog] = useState(false);
@@ -172,6 +179,19 @@ export function AppointmentDetailPage() {
     onError: () => showToast(t('appointments:detail.toast.fileUploadFailed'), "error"),
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteAppointment(id!),
+    onSuccess: () => {
+      showToast(t('appointments:deleteDialog.success'), 'success');
+      queryClient.invalidateQueries({ queryKey: ["appointments"] });
+      navigate("/appointments");
+    },
+    onError: () => {
+      showToast(t('appointments:deleteDialog.error'), 'error');
+      setShowDeleteDialog(false);
+    },
+  });
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = e.target.files;
     if (!selectedFiles || selectedFiles.length === 0) return;
@@ -217,7 +237,18 @@ export function AppointmentDetailPage() {
         subtitle={appointment.status}
         backLink={{ label: t('appointments:detail.backLink'), to: "/appointments" }}
         actions={
-          <StatusBadge status={appointment.status} />
+          <div className={styles.headerActions}>
+            <StatusBadge status={appointment.status} />
+            {isAdmin && (
+              <Button
+                variant="danger"
+                leftIcon={<Trash2 size={16} />}
+                onClick={() => setShowDeleteDialog(true)}
+              >
+                {t('common:actions.delete')}
+              </Button>
+            )}
+          </div>
         }
       />
 
@@ -588,6 +619,34 @@ export function AppointmentDetailPage() {
           />
         </div>
       </Dialog>
+
+      {showDeleteDialog && (
+        <Dialog
+          open={showDeleteDialog}
+          onClose={() => setShowDeleteDialog(false)}
+          title={t('appointments:deleteDialog.title')}
+        >
+          <p dangerouslySetInnerHTML={{ __html: t('appointments:deleteDialog.message', { id: appointment.id.substring(0, 8) }) }} />
+          <p className={styles.dialogWarning}>
+            {t('appointments:deleteDialog.warning')}
+          </p>
+          <div className={styles.dialogActions}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDeleteDialog(false)}
+            >
+              {t('common:actions.cancel')}
+            </Button>
+            <Button
+              variant="danger"
+              isLoading={deleteMutation.isPending}
+              onClick={() => deleteMutation.mutate()}
+            >
+              {t('common:actions.delete')}
+            </Button>
+          </div>
+        </Dialog>
+      )}
     </div>
   );
 }

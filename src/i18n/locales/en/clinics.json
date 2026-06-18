@@ -63,5 +63,12 @@
       "detail": "The clinic could not be found or an error occurred.",
       "backButton": "Back to clinics"
     }
+  },
+  "deleteDialog": {
+    "title": "Delete clinic",
+    "message": "Are you sure you want to delete clinic <strong>{{name}}</strong>?",
+    "warning": "This action cannot be undone. The clinic must have no staff members to be deleted.",
+    "success": "Clinic deleted successfully",
+    "error": "Failed to delete clinic"
   }
 }

@@ -63,5 +63,12 @@
       "detail": "A clínica não foi encontrada ou ocorreu um erro.",
       "backButton": "Voltar para clínicas"
     }
+  },
+  "deleteDialog": {
+    "title": "Excluir clínica",
+    "message": "Tem certeza que deseja excluir a clínica <strong>{{name}}</strong>?",
+    "warning": "Esta ação não pode ser desfeita. A clínica não pode ter funcionários vinculados.",
+    "success": "Clínica excluída com sucesso",
+    "error": "Falha ao excluir clínica"
   }
 }

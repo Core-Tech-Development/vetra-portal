@@ -15,31 +15,17 @@
   min-width: 140px;
 }
 
-.field {
+/* Day-of-week section */
+.daysSection {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
 }
 
-.fieldLabel {
+.daysLabel {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-secondary);
-}
-
-.fieldInput {
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
-  background-color: var(--color-surface);
-}
-
-.fieldInput:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(31, 111, 91, 0.15);
 }
 
 /* Day-of-week checkboxes */

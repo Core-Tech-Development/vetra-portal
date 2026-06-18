@@ -27,6 +27,18 @@ export async function suspendClinic(id: string): Promise<ClinicResponse> {
   return response.data;
 }
 
+export async function deleteClinic(id: string): Promise<void> {
+  await apiClient.delete(`/admin/clinics/${id}`);
+}
+
+export async function deleteSpecialist(id: string): Promise<void> {
+  await apiClient.delete(`/admin/specialists/${id}`);
+}
+
+export async function deleteBillingRecord(id: string): Promise<void> {
+  await apiClient.delete(`/admin/billing/${id}`);
+}
+
 export async function listAuditLogs(
   page = 0,
   size = 20,

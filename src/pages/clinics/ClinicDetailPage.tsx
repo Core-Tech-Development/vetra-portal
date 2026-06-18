@@ -1,21 +1,45 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams, Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getClinic } from "../../api/clinics";
-import { Button, StatusBadge, Spinner } from "../../components/ui";
+import { deleteClinic } from "../../api/admin";
+import { Button, StatusBadge, Spinner, Dialog } from "../../components/ui";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Trash2 } from "lucide-react";
+import { useToast } from "../../components/ui/Toast";
+import { useAuth } from "../../auth/useAuth";
 import { formatDate } from "../../i18n/formatting";
 import styles from "./ClinicDetailPage.module.css";
 
 export function ClinicDetailPage() {
   const { t } = useTranslation(['clinics', 'common']);
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { showToast } = useToast();
+  const { roles } = useAuth();
+  const isAdmin = roles.includes("PLATFORM_ADMIN");
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const { data: clinic, isLoading, isError, refetch } = useQuery({
     queryKey: ["clinic", id],
     queryFn: () => getClinic(id!),
     enabled: !!id,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteClinic(id!),
+    onSuccess: () => {
+      showToast(t('clinics:deleteDialog.success'), 'success');
+      queryClient.invalidateQueries({ queryKey: ["clinics"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
+      navigate("/clinics");
+    },
+    onError: () => {
+      showToast(t('clinics:deleteDialog.error'), 'error');
+      setShowDeleteDialog(false);
+    },
   });
 
   if (isLoading) {
@@ -59,6 +83,15 @@ export function ClinicDetailPage() {
                 {t('clinics:detail.backLink')}
               </Button>
             </Link>
+            {isAdmin && (
+              <Button
+                variant="danger"
+                leftIcon={<Trash2 size={16} />}
+                onClick={() => setShowDeleteDialog(true)}
+              >
+                {t('common:actions.delete')}
+              </Button>
+            )}
           </div>
         }
       />
@@ -74,6 +107,34 @@ export function ClinicDetailPage() {
           value={formatDate(clinic.createdAt)}
         />
       </DetailSection>
+
+      {showDeleteDialog && (
+        <Dialog
+          open={showDeleteDialog}
+          onClose={() => setShowDeleteDialog(false)}
+          title={t('clinics:deleteDialog.title')}
+        >
+          <p dangerouslySetInnerHTML={{ __html: t('clinics:deleteDialog.message', { name: clinic.name }) }} />
+          <p className={styles.dialogWarning}>
+            {t('clinics:deleteDialog.warning')}
+          </p>
+          <div className={styles.dialogActions}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDeleteDialog(false)}
+            >
+              {t('common:actions.cancel')}
+            </Button>
+            <Button
+              variant="danger"
+              isLoading={deleteMutation.isPending}
+              onClick={() => deleteMutation.mutate()}
+            >
+              {t('common:actions.delete')}
+            </Button>
+          </div>
+        </Dialog>
+      )}
     </div>
   );
 }

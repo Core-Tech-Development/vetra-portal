@@ -113,6 +113,10 @@ export async function declineAppointment(
   return response.data;
 }
 
+export async function deleteAppointment(id: string): Promise<void> {
+  await apiClient.delete(`/appointments/${id}`);
+}
+
 export async function cancelAppointment(
   id: string,
   reason: string

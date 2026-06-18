@@ -82,5 +82,12 @@
       "detail": "The laudo could not be found or an error occurred.",
       "backButton": "Back to laudos"
     }
+  },
+  "deleteDialog": {
+    "title": "Delete laudo",
+    "message": "Are you sure you want to delete laudo <strong>{{id}}</strong>?",
+    "warning": "This action cannot be undone. The laudo and its associated data will be permanently removed.",
+    "success": "Laudo deleted successfully",
+    "error": "Failed to delete laudo"
   }
 }

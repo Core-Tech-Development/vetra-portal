@@ -165,5 +165,12 @@
       "title": "Falha ao carregar perfil",
       "detail": "Seu perfil não pôde ser carregado. Tente novamente."
     }
+  },
+  "deleteDialog": {
+    "title": "Excluir especialista",
+    "message": "Tem certeza que deseja excluir o especialista <strong>{{name}}</strong>?",
+    "warning": "Esta ação não pode ser desfeita. O especialista não pode ter agendamentos ativos.",
+    "success": "Especialista excluído com sucesso",
+    "error": "Falha ao excluir especialista"
   }
 }

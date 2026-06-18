@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Calendar } from "lucide-react";
-import { getExamRequest, cancelExamRequest } from "../../api/examRequests";
+import { Calendar, Trash2 } from "lucide-react";
+import { getExamRequest, cancelExamRequest, deleteExamRequest } from "../../api/examRequests";
 import { getClinic } from "../../api/clinics";
 import { getPatient } from "../../api/patients";
 import { searchSpecialists } from "../../api/specialists";
@@ -23,6 +23,7 @@ import type { BadgeVariant, TableColumn } from "../../components/ui";
 import type { SpecialistResponse, SlotResponse } from "../../api/types";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
+import { useAuth } from "../../auth/useAuth";
 import { formatDate, formatDateTime } from "../../i18n/formatting";
 import styles from "./ExamRequestDetailPage.module.css";
 
@@ -42,8 +43,12 @@ function formatDateISO(date: Date): string {
 export function ExamRequestDetailPage() {
   const { t } = useTranslation(['examRequests', 'common', 'schedule']);
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { showToast } = useToast();
   const queryClient = useQueryClient();
+  const { roles } = useAuth();
+  const isAdmin = roles.includes("PLATFORM_ADMIN");
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showSpecialists, setShowSpecialists] = useState(false);
   const [filterBySpecialty, setFilterBySpecialty] = useState(true);
   const [schedulingSpecialist, setSchedulingSpecialist] =
@@ -155,6 +160,19 @@ export function ExamRequestDetailPage() {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteExamRequest(id!),
+    onSuccess: () => {
+      showToast(t('examRequests:deleteDialog.success'), 'success');
+      queryClient.invalidateQueries({ queryKey: ["exam-requests"] });
+      navigate("/exam-requests");
+    },
+    onError: () => {
+      showToast(t('examRequests:deleteDialog.error'), 'error');
+      setShowDeleteDialog(false);
+    },
+  });
+
   const specialistColumns: TableColumn<SpecialistResponse>[] = [
     {
       key: "name",
@@ -241,8 +259,8 @@ export function ExamRequestDetailPage() {
         title={`${t('examRequests:detail.titlePrefix')} — ${t(`common:examTypes.${examRequest.examType}`, examRequest.examType.replace(/_/g, " "))}`}
         backLink={{ label: t('examRequests:detail.backLink'), to: "/exam-requests" }}
         actions={
-          examRequest.status === "CREATED" ? (
-            <div className={styles.headerActions}>
+          <div className={styles.headerActions}>
+            {examRequest.status === "CREATED" && (
               <Button
                 variant="danger"
                 onClick={() => cancelMutation.mutate()}
@@ -250,8 +268,17 @@ export function ExamRequestDetailPage() {
               >
                 {t('examRequests:detail.cancelRequest')}
               </Button>
-            </div>
-          ) : undefined
+            )}
+            {isAdmin && (
+              <Button
+                variant="danger"
+                leftIcon={<Trash2 size={16} />}
+                onClick={() => setShowDeleteDialog(true)}
+              >
+                {t('common:actions.delete')}
+              </Button>
+            )}
+          </div>
         }
       />
 
@@ -488,6 +515,34 @@ export function ExamRequestDetailPage() {
               }}
             >
               {t('examRequests:detail.scheduleDialog.confirmButton')}
+            </Button>
+          </div>
+        </Dialog>
+      )}
+
+      {showDeleteDialog && (
+        <Dialog
+          open={showDeleteDialog}
+          onClose={() => setShowDeleteDialog(false)}
+          title={t('examRequests:deleteDialog.title')}
+        >
+          <p dangerouslySetInnerHTML={{ __html: t('examRequests:deleteDialog.message', { id: examRequest.id.substring(0, 8) }) }} />
+          <p className={styles.dialogWarning}>
+            {t('examRequests:deleteDialog.warning')}
+          </p>
+          <div className={styles.dialogActions}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDeleteDialog(false)}
+            >
+              {t('common:actions.cancel')}
+            </Button>
+            <Button
+              variant="danger"
+              isLoading={deleteMutation.isPending}
+              onClick={() => deleteMutation.mutate()}
+            >
+              {t('common:actions.delete')}
             </Button>
           </div>
         </Dialog>

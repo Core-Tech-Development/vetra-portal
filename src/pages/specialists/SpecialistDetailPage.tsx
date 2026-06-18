@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getSpecialist,
@@ -9,10 +9,12 @@ import {
   addCoverageArea,
   removeCoverageArea,
 } from "../../api/specialists";
-import { Button, Card, StatusBadge, Spinner } from "../../components/ui";
+import { deleteSpecialist } from "../../api/admin";
+import { Button, Card, StatusBadge, Spinner, Dialog } from "../../components/ui";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Trash2 } from "lucide-react";
 import { useToast } from "../../components/ui/Toast";
+import { useAuth } from "../../auth/useAuth";
 import { formatDate } from "../../i18n/formatting";
 import styles from "./SpecialistDetailPage.module.css";
 
@@ -24,12 +26,16 @@ const BRAZILIAN_STATES = [
 export function SpecialistDetailPage() {
   const { t } = useTranslation(['specialists', 'common']);
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { showToast } = useToast();
+  const { roles } = useAuth();
+  const isAdmin = roles.includes("PLATFORM_ADMIN");
 
   const [areaCity, setAreaCity] = useState("");
   const [areaState, setAreaState] = useState("");
   const [areaRadius, setAreaRadius] = useState("");
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const { data: specialist, isLoading, isError, refetch } = useQuery({
     queryKey: ["specialist", id],
@@ -88,6 +94,20 @@ export function SpecialistDetailPage() {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: () => deleteSpecialist(id!),
+    onSuccess: () => {
+      showToast(t('specialists:deleteDialog.success'), 'success');
+      queryClient.invalidateQueries({ queryKey: ["specialists"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
+      navigate("/specialists");
+    },
+    onError: () => {
+      showToast(t('specialists:deleteDialog.error'), 'error');
+      setShowDeleteDialog(false);
+    },
+  });
+
   if (isLoading) {
     return (
       <div className={styles.loadingContainer}>
@@ -141,6 +161,15 @@ export function SpecialistDetailPage() {
                 {t('specialists:detail.backLink')}
               </Button>
             </Link>
+            {isAdmin && (
+              <Button
+                variant="danger"
+                leftIcon={<Trash2 size={16} />}
+                onClick={() => setShowDeleteDialog(true)}
+              >
+                {t('common:actions.delete')}
+              </Button>
+            )}
           </div>
         }
       />
@@ -273,6 +302,34 @@ export function SpecialistDetailPage() {
           </div>
         </Card>
       </div>
+
+      {showDeleteDialog && (
+        <Dialog
+          open={showDeleteDialog}
+          onClose={() => setShowDeleteDialog(false)}
+          title={t('specialists:deleteDialog.title')}
+        >
+          <p dangerouslySetInnerHTML={{ __html: t('specialists:deleteDialog.message', { name: specialist.name }) }} />
+          <p className={styles.dialogWarning}>
+            {t('specialists:deleteDialog.warning')}
+          </p>
+          <div className={styles.dialogActions}>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDeleteDialog(false)}
+            >
+              {t('common:actions.cancel')}
+            </Button>
+            <Button
+              variant="danger"
+              isLoading={deleteMutation.isPending}
+              onClick={() => deleteMutation.mutate()}
+            >
+              {t('common:actions.delete')}
+            </Button>
+          </div>
+        </Dialog>
+      )}
     </div>
   );
 }

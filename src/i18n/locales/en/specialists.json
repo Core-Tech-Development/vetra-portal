@@ -165,5 +165,12 @@
       "title": "Failed to load profile",
       "detail": "Your profile could not be loaded. Please try again."
     }
+  },
+  "deleteDialog": {
+    "title": "Delete specialist",
+    "message": "Are you sure you want to delete specialist <strong>{{name}}</strong>?",
+    "warning": "This action cannot be undone. The specialist must have no active appointments to be deleted.",
+    "success": "Specialist deleted successfully",
+    "error": "Failed to delete specialist"
   }
 }
