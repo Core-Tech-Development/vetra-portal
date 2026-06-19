@@ -14,7 +14,7 @@ import {
   Building2,
   Users,
 } from "lucide-react";
-import { listAppointments } from "../api/appointments";
+import { listAppointments, listAppointmentsBySpecialist } from "../api/appointments";
 import { getDashboard } from "../api/admin";
 import { STALE_TIMES } from "../config/queryConfig";
 import styles from "./DashboardPage.module.css";
@@ -77,35 +77,56 @@ function SpecialistDashboard() {
   const navigate = useNavigate();
   const { t } = useTranslation("dashboard");
 
-  const { data: appointmentsData, isLoading } = useQuery({
-    queryKey: ["appointments", "specialist", "today"],
-    queryFn: () => listAppointments(0, 10, "SCHEDULED"),
+  const specialistId = localStorage.getItem("vetra_specialist_id") || "";
+
+  const { data: acceptedData, isLoading: acceptedLoading } = useQuery({
+    queryKey: ["appointments", "specialist", specialistId, "accepted"],
+    queryFn: () => listAppointmentsBySpecialist(specialistId, 0, 1, "ACCEPTED"),
+    enabled: !!specialistId,
     staleTime: STALE_TIMES.dashboard,
   });
 
-  const todayCount = appointmentsData?.totalElements ?? 0;
+  const { data: pendingData, isLoading: pendingLoading } = useQuery({
+    queryKey: ["appointments", "specialist", specialistId, "pending"],
+    queryFn: () => listAppointmentsBySpecialist(specialistId, 0, 1, "WAITING_SPECIALIST_ACCEPTANCE"),
+    enabled: !!specialistId,
+    staleTime: STALE_TIMES.dashboard,
+  });
+
+  const { data: waitingReportData, isLoading: reportLoading } = useQuery({
+    queryKey: ["appointments", "specialist", specialistId, "waiting-report"],
+    queryFn: () => listAppointmentsBySpecialist(specialistId, 0, 1, "WAITING_REPORT"),
+    enabled: !!specialistId,
+    staleTime: STALE_TIMES.dashboard,
+  });
+
+  const acceptedCount = acceptedData?.totalElements ?? 0;
+  const pendingCount = pendingData?.totalElements ?? 0;
+  const reportsCount = waitingReportData?.totalElements ?? 0;
 
   return (
     <>
       <div className={styles.statsGrid}>
         <StatCard
           icon={<Stethoscope size={20} />}
-          value={todayCount}
+          value={acceptedCount}
           label={t("specialist.todaysAppointments")}
-          isLoading={isLoading}
+          isLoading={acceptedLoading}
           href="/appointments"
         />
         <StatCard
           icon={<Clock size={20} />}
-          value="--"
+          value={pendingCount}
           label={t("specialist.pendingRequests")}
-          href="/exam-requests"
+          isLoading={pendingLoading}
+          href="/appointments"
         />
         <StatCard
           icon={<FileText size={20} />}
-          value="--"
+          value={reportsCount}
           label={t("specialist.reportsToIssue")}
-          href="/reports"
+          isLoading={reportLoading}
+          href="/laudos"
         />
       </div>
 

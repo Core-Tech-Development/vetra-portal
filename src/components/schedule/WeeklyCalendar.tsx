@@ -78,7 +78,7 @@ export function WeeklyCalendar({
   const { t } = useTranslation(["schedule"]);
 
   const weekDays = useMemo(() => getWeekDays(weekStart), [weekStart]);
-  const today = useMemo(() => new Date(), []);
+  const today = new Date();
 
   const slotsByDay = useMemo(() => {
     const map = new Map<string, SlotResponse[]>();

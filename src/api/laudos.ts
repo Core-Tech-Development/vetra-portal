@@ -64,3 +64,21 @@ export async function getLaudoByAppointment(
   );
   return response.data;
 }
+
+export async function generateLaudoPdf(
+  laudoId: string
+): Promise<LaudoResponse> {
+  const response = await apiClient.post<LaudoResponse>(
+    `/laudos/${laudoId}/generate-pdf`
+  );
+  return response.data;
+}
+
+export async function getLaudoPdfDownloadUrl(
+  laudoId: string
+): Promise<string> {
+  const response = await apiClient.get<{ downloadUrl: string }>(
+    `/laudos/${laudoId}/pdf-download-url`
+  );
+  return response.data.downloadUrl;
+}

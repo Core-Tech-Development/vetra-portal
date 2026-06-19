@@ -76,7 +76,8 @@ export function CreateSlotDialog({
   const { t } = useTranslation(["schedule", "common"]);
   const { showToast } = useToast();
 
-  const today = new Date().toISOString().split("T")[0];
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
   const [activeTab, setActiveTab] = useState<string>("single");
 

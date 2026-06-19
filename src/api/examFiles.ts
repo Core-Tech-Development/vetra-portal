@@ -30,12 +30,12 @@ export async function listFiles(
 }
 
 export async function getDownloadUrl(fileId: string): Promise<string> {
-  const response = await apiClient.get<{ url: string }>(
-    `/exam-files/${fileId}/download-url`
+  const response = await apiClient.get<ExamFileResponse>(
+    `/files/${fileId}/download-url`
   );
-  return response.data.url;
+  return response.data.downloadUrl ?? "";
 }
 
 export async function deleteFile(fileId: string): Promise<void> {
-  await apiClient.delete(`/exam-files/${fileId}`);
+  await apiClient.delete(`/files/${fileId}`);
 }

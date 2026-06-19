@@ -39,11 +39,12 @@ export async function listAppointments(
 export async function listAppointmentsBySpecialist(
   specialistId: string,
   page = 0,
-  size = 20
+  size = 20,
+  status?: string
 ): Promise<PageResponse<AppointmentResponse>> {
   const response = await apiClient.get<PageResponse<AppointmentResponse>>(
     `/specialists/${specialistId}/appointments`,
-    { params: { page, size } }
+    { params: { page, size, status } }
   );
   return response.data;
 }

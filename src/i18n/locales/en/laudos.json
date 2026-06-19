@@ -73,9 +73,14 @@
       "recommendations": "Recommendations"
     },
     "issueLaudo": "Issue laudo",
+    "generatePdf": "Generate PDF",
+    "downloadPdf": "Download PDF",
     "toast": {
       "issued": "Laudo issued successfully.",
-      "issueFailed": "Failed to issue laudo."
+      "issueFailed": "Failed to issue laudo.",
+      "pdfGenerated": "PDF generated successfully.",
+      "pdfGenerateFailed": "Failed to generate PDF.",
+      "pdfDownloadFailed": "Failed to get PDF download link."
     },
     "error": {
       "title": "Failed to load laudo",

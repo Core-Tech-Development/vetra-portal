@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Trash2 } from "lucide-react";
-import { getLaudo, issueLaudo, deleteLaudo } from "../../api/laudos";
+import { Trash2, FileText, Download } from "lucide-react";
+import { getLaudo, issueLaudo, deleteLaudo, generateLaudoPdf, getLaudoPdfDownloadUrl } from "../../api/laudos";
 import { Button, Card, StatusBadge, Spinner, Dialog } from "../../components/ui";
 import { PageHeader, DetailSection, FieldDisplay } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
@@ -55,6 +55,27 @@ export function LaudoDetailPage() {
     onError: () => {
       showToast(t('laudos:deleteDialog.error'), 'error');
       setShowDeleteDialog(false);
+    },
+  });
+
+  const generatePdfMutation = useMutation({
+    mutationFn: () => generateLaudoPdf(id!),
+    onSuccess: () => {
+      showToast(t('laudos:detail.toast.pdfGenerated'), "success");
+      queryClient.invalidateQueries({ queryKey: ["laudo", id] });
+    },
+    onError: () => {
+      showToast(t('laudos:detail.toast.pdfGenerateFailed'), "error");
+    },
+  });
+
+  const downloadPdfMutation = useMutation({
+    mutationFn: () => getLaudoPdfDownloadUrl(id!),
+    onSuccess: (url) => {
+      window.open(url, "_blank");
+    },
+    onError: () => {
+      showToast(t('laudos:detail.toast.pdfDownloadFailed'), "error");
     },
   });
 
@@ -160,6 +181,30 @@ export function LaudoDetailPage() {
           >
             {t('laudos:detail.issueLaudo')}
           </Button>
+        </div>
+      )}
+
+      {laudo.status === "ISSUED" && (
+        <div className={styles.actionRow}>
+          {!laudo.pdfStorageKey && (
+            <Button
+              onClick={() => generatePdfMutation.mutate()}
+              isLoading={generatePdfMutation.isPending}
+              leftIcon={<FileText size={16} />}
+            >
+              {t('laudos:detail.generatePdf')}
+            </Button>
+          )}
+          {laudo.pdfStorageKey && (
+            <Button
+              variant="secondary"
+              onClick={() => downloadPdfMutation.mutate()}
+              isLoading={downloadPdfMutation.isPending}
+              leftIcon={<Download size={16} />}
+            >
+              {t('laudos:detail.downloadPdf')}
+            </Button>
+          )}
         </div>
       )}
 

@@ -73,9 +73,14 @@
       "recommendations": "Recomendações"
     },
     "issueLaudo": "Emitir laudo",
+    "generatePdf": "Gerar PDF",
+    "downloadPdf": "Baixar PDF",
     "toast": {
       "issued": "Laudo emitido com sucesso.",
-      "issueFailed": "Falha ao emitir laudo."
+      "issueFailed": "Falha ao emitir laudo.",
+      "pdfGenerated": "PDF gerado com sucesso.",
+      "pdfGenerateFailed": "Falha ao gerar PDF.",
+      "pdfDownloadFailed": "Falha ao obter link de download do PDF."
     },
     "error": {
       "title": "Falha ao carregar laudo",
