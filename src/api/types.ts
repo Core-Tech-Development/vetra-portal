@@ -236,6 +236,7 @@ export interface CreateBulkSlotsRequest {
   endTime: string;
   label?: string;
   timezone: string;
+  slotDurationMinutes?: number;
 }
 
 // === Appointment ===

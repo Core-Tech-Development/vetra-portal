@@ -19,6 +19,7 @@ import {
   TabList,
   Tab,
   TabPanel,
+  Dialog,
 } from "../../components/ui";
 import { PageHeader } from "../../components/patterns";
 import { useToast } from "../../components/ui/Toast";
@@ -51,6 +52,11 @@ function formatDateISO(date: Date): string {
   return `${y}-${m}-${d}`;
 }
 
+function formatSlotTime(isoString: string): string {
+  const d = new Date(isoString);
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
 export function SchedulePage() {
   const { t } = useTranslation(["schedule", "common"]);
   const { showToast } = useToast();
@@ -64,6 +70,9 @@ export function SchedulePage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogInitialDate, setDialogInitialDate] = useState<string | undefined>();
   const [dialogInitialHour, setDialogInitialHour] = useState<number | undefined>();
+
+  // Slot action dialog state
+  const [actionSlot, setActionSlot] = useState<SlotResponse | null>(null);
 
   const specialistId = localStorage.getItem("vetra_specialist_id") || "";
 
@@ -99,6 +108,7 @@ export function SchedulePage() {
     mutationFn: (id: string) => deleteSlot(id),
     onSuccess: () => {
       showToast(t("schedule:toast.slotDeleted"), "success");
+      setActionSlot(null);
       invalidateAll();
     },
     onError: () => showToast(t("schedule:toast.slotDeleteFailed"), "error"),
@@ -108,6 +118,7 @@ export function SchedulePage() {
     mutationFn: (id: string) => blockSlot(id),
     onSuccess: () => {
       showToast(t("schedule:toast.slotBlocked"), "success");
+      setActionSlot(null);
       invalidateAll();
     },
     onError: () => showToast(t("schedule:toast.slotBlockFailed"), "error"),
@@ -136,18 +147,9 @@ export function SchedulePage() {
     setDialogOpen(true);
   }, []);
 
-  const handleSlotClick = useCallback(
-    (slot: SlotResponse) => {
-      // For now, allow block/delete via confirmation
-      // Future: could open a detail dialog
-      if (slot.status === "AVAILABLE") {
-        if (window.confirm(t("common:actions.block") + "?")) {
-          blockMutation.mutate(slot.id);
-        }
-      }
-    },
-    [blockMutation, t]
-  );
+  const handleSlotClick = useCallback((slot: SlotResponse) => {
+    setActionSlot(slot);
+  }, []);
 
   const openCreateDialog = useCallback(() => {
     setDialogInitialDate(undefined);
@@ -259,7 +261,7 @@ export function SchedulePage() {
                         </div>
                       </div>
                       <div className={styles.slotActions}>
-                        {slot.status !== "BLOCKED" && (
+                        {slot.status === "AVAILABLE" && (
                           <Button
                             variant="secondary"
                             size="sm"
@@ -269,14 +271,16 @@ export function SchedulePage() {
                             {t("common:actions.block")}
                           </Button>
                         )}
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={() => deleteMutation.mutate(slot.id)}
-                          isLoading={deleteMutation.isPending}
-                        >
-                          {t("common:actions.delete")}
-                        </Button>
+                        {(slot.status === "AVAILABLE" || slot.status === "BLOCKED") && (
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() => deleteMutation.mutate(slot.id)}
+                            isLoading={deleteMutation.isPending}
+                          >
+                            {t("common:actions.delete")}
+                          </Button>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -322,6 +326,53 @@ export function SchedulePage() {
         initialHour={dialogInitialHour}
         onSuccess={handleDialogSuccess}
       />
+
+      {/* Slot action dialog */}
+      <Dialog
+        open={actionSlot !== null}
+        onClose={() => setActionSlot(null)}
+        title={t("schedule:slotActions.title")}
+        size="sm"
+      >
+        {actionSlot && (
+          <div className={styles.actionDialog}>
+            <div className={styles.actionSlotInfo}>
+              <span className={styles.actionSlotTime}>
+                {formatSlotTime(actionSlot.startAt)} &mdash;{" "}
+                {formatSlotTime(actionSlot.endAt)}
+              </span>
+              <StatusBadge status={actionSlot.status} />
+              {actionSlot.label && (
+                <span className={styles.slotLabelBadge}>{actionSlot.label}</span>
+              )}
+            </div>
+
+            <div className={styles.actionButtons}>
+              {actionSlot.status === "AVAILABLE" && (
+                <Button
+                  variant="secondary"
+                  onClick={() => blockMutation.mutate(actionSlot.id)}
+                  isLoading={blockMutation.isPending}
+                >
+                  {t("schedule:slotActions.block")}
+                </Button>
+              )}
+              {(actionSlot.status === "AVAILABLE" || actionSlot.status === "BLOCKED") && (
+                <Button
+                  variant="danger"
+                  onClick={() => deleteMutation.mutate(actionSlot.id)}
+                  isLoading={deleteMutation.isPending}
+                >
+                  {t("schedule:slotActions.delete")}
+                </Button>
+              )}
+              <Button variant="secondary" onClick={() => setActionSlot(null)}>
+                {t("common:actions.cancel")}
+              </Button>
+            </div>
+          </div>
+        )}
+      </Dialog>
     </div>
   );
 }

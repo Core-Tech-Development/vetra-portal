@@ -6,6 +6,8 @@ import type {
   SpecialistResponse,
   AddCoverageAreaRequest,
   CoverageAreaResponse,
+  CreateSpecialistPricingRequest,
+  SpecialistPricingResponse,
   PageResponse,
 } from "./types";
 
@@ -127,4 +129,16 @@ export async function toggleMyCoverageArea(areaId: string): Promise<CoverageArea
 
 export async function removeMyCoverageArea(areaId: string): Promise<void> {
   await apiClient.delete(`/specialist/profile/coverage-areas/${areaId}`);
+}
+
+// --- Specialist self-service pricing ---
+
+export async function getMyPricing(): Promise<SpecialistPricingResponse[]> {
+  const response = await apiClient.get<SpecialistPricingResponse[]>("/specialist/profile/pricing");
+  return response.data;
+}
+
+export async function upsertMyPricing(data: CreateSpecialistPricingRequest): Promise<SpecialistPricingResponse> {
+  const response = await apiClient.put<SpecialistPricingResponse>("/specialist/profile/pricing", data);
+  return response.data;
 }

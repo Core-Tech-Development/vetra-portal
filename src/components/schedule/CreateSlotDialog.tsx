@@ -25,44 +25,84 @@ const DAY_OPTIONS = [
   { value: "SUNDAY", key: "sun" },
 ] as const;
 
+const WEEKDAYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"];
+
+const DURATION_OPTIONS = [
+  { value: 30, label: "30 min" },
+  { value: 45, label: "45 min" },
+  { value: 60, label: "1h" },
+  { value: 90, label: "1h30" },
+  { value: 120, label: "2h" },
+] as const;
+
 function formatHour(hour: number): string {
   return `${String(hour).padStart(2, "0")}:00`;
+}
+
+function parseMinutes(time: string): number {
+  const [h, m] = time.split(":").map(Number);
+  return h * 60 + (m || 0);
 }
 
 function countRecurringSlots(
   startDate: string,
   endDate: string,
-  daysOfWeek: string[]
-): number {
-  if (!startDate || !endDate || daysOfWeek.length === 0) return 0;
+  daysOfWeek: string[],
+  startTime: string,
+  endTime: string,
+  slotDurationMinutes: number | null
+): { totalSlots: number; daysMatched: number; slotsPerDay: number } {
+  if (!startDate || !endDate || daysOfWeek.length === 0) {
+    return { totalSlots: 0, daysMatched: 0, slotsPerDay: 0 };
+  }
 
   const start = new Date(startDate + "T00:00:00");
   const end = new Date(endDate + "T00:00:00");
-  if (isNaN(start.getTime()) || isNaN(end.getTime()) || end < start) return 0;
+  if (isNaN(start.getTime()) || isNaN(end.getTime()) || end < start) {
+    return { totalSlots: 0, daysMatched: 0, slotsPerDay: 0 };
+  }
 
   const dayMap: Record<string, number> = {
-    SUNDAY: 0,
-    MONDAY: 1,
-    TUESDAY: 2,
-    WEDNESDAY: 3,
-    THURSDAY: 4,
-    FRIDAY: 5,
-    SATURDAY: 6,
+    SUNDAY: 0, MONDAY: 1, TUESDAY: 2, WEDNESDAY: 3,
+    THURSDAY: 4, FRIDAY: 5, SATURDAY: 6,
   };
 
   const selectedDayNumbers = daysOfWeek
     .map((d) => dayMap[d])
     .filter((n) => n !== undefined);
 
-  let count = 0;
+  let daysMatched = 0;
   const current = new Date(start);
   while (current <= end) {
     if (selectedDayNumbers.includes(current.getDay())) {
-      count++;
+      daysMatched++;
     }
     current.setDate(current.getDate() + 1);
   }
-  return count;
+
+  let slotsPerDay = 1;
+  if (slotDurationMinutes && startTime && endTime) {
+    const totalMinutes = parseMinutes(endTime) - parseMinutes(startTime);
+    if (totalMinutes > 0 && slotDurationMinutes > 0) {
+      slotsPerDay = Math.floor(totalMinutes / slotDurationMinutes);
+    }
+  }
+
+  return {
+    totalSlots: daysMatched * slotsPerDay,
+    daysMatched,
+    slotsPerDay,
+  };
+}
+
+function getErrorMessage(error: unknown): string | null {
+  if (error && typeof error === "object" && "response" in error) {
+    const response = (error as { response?: { data?: { detail?: string } } }).response;
+    if (response?.data?.detail) {
+      return response.data.detail;
+    }
+  }
+  return null;
 }
 
 export function CreateSlotDialog({
@@ -95,14 +135,25 @@ export function CreateSlotDialog({
   const [recurStartDate, setRecurStartDate] = useState(today);
   const [recurEndDate, setRecurEndDate] = useState("");
   const [recurDays, setRecurDays] = useState<string[]>([]);
-  const [recurStartTime, setRecurStartTime] = useState("");
-  const [recurEndTime, setRecurEndTime] = useState("");
-  const [recurTimezone] = useState("America/Sao_Paulo");
+  const [recurStartTime, setRecurStartTime] = useState("08:00");
+  const [recurEndTime, setRecurEndTime] = useState("18:00");
+  const detectedTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const [recurTimezone] = useState(detectedTimezone);
   const [recurLabel, setRecurLabel] = useState("");
+  const [slotDuration, setSlotDuration] = useState<number | null>(60);
+  const [bulkError, setBulkError] = useState<string | null>(null);
 
-  const previewCount = useMemo(
-    () => countRecurringSlots(recurStartDate, recurEndDate, recurDays),
-    [recurStartDate, recurEndDate, recurDays]
+  const preview = useMemo(
+    () =>
+      countRecurringSlots(
+        recurStartDate,
+        recurEndDate,
+        recurDays,
+        recurStartTime,
+        recurEndTime,
+        slotDuration
+      ),
+    [recurStartDate, recurEndDate, recurDays, recurStartTime, recurEndTime, slotDuration]
   );
 
   const singleMutation = useMutation({
@@ -120,14 +171,20 @@ export function CreateSlotDialog({
       resetAndClose();
       onSuccess();
     },
-    onError: () => {
-      showToast(t("schedule:toast.slotCreateFailed"), "error");
+    onError: (error) => {
+      const detail = getErrorMessage(error);
+      if (detail?.toLowerCase().includes("overlap")) {
+        showToast(t("schedule:toast.overlapError"), "error");
+      } else {
+        showToast(t("schedule:toast.slotCreateFailed"), "error");
+      }
     },
   });
 
   const bulkMutation = useMutation({
-    mutationFn: () =>
-      createBulkSlots(specialistId, {
+    mutationFn: () => {
+      setBulkError(null);
+      return createBulkSlots(specialistId, {
         startDate: recurStartDate,
         endDate: recurEndDate,
         daysOfWeek: recurDays,
@@ -135,7 +192,9 @@ export function CreateSlotDialog({
         endTime: recurEndTime,
         label: recurLabel || undefined,
         timezone: recurTimezone,
-      }),
+        slotDurationMinutes: slotDuration ?? undefined,
+      });
+    },
     onSuccess: (data) => {
       showToast(
         t("schedule:toast.bulkCreated", { count: data.length }),
@@ -144,8 +203,15 @@ export function CreateSlotDialog({
       resetAndClose();
       onSuccess();
     },
-    onError: () => {
-      showToast(t("schedule:toast.bulkCreateFailed"), "error");
+    onError: (error) => {
+      const detail = getErrorMessage(error);
+      if (detail?.toLowerCase().includes("overlap")) {
+        setBulkError(t("schedule:toast.overlapError"));
+      } else if (detail) {
+        setBulkError(detail);
+      } else {
+        setBulkError(t("schedule:toast.bulkCreateFailed"));
+      }
     },
   });
 
@@ -157,9 +223,11 @@ export function CreateSlotDialog({
     setRecurStartDate(today);
     setRecurEndDate("");
     setRecurDays([]);
-    setRecurStartTime("");
-    setRecurEndTime("");
+    setRecurStartTime("08:00");
+    setRecurEndTime("18:00");
     setRecurLabel("");
+    setSlotDuration(60);
+    setBulkError(null);
     setActiveTab("single");
     onClose();
   }
@@ -170,15 +238,48 @@ export function CreateSlotDialog({
     );
   }
 
+  function selectWeekdays() {
+    setRecurDays(WEEKDAYS);
+  }
+
+  function selectAllDays() {
+    setRecurDays(DAY_OPTIONS.map((d) => d.value));
+  }
+
+  function clearDays() {
+    setRecurDays([]);
+  }
+
+  const isAllWeekdays =
+    WEEKDAYS.every((d) => recurDays.includes(d)) &&
+    recurDays.length === WEEKDAYS.length;
+  const isAllDays = recurDays.length === 7;
+
+  // Validation
+  const singleTimeError =
+    singleStartTime && singleEndTime && singleStartTime >= singleEndTime
+      ? t("schedule:createSlot.timeError")
+      : null;
+
+  const recurTimeError =
+    recurStartTime && recurEndTime && recurStartTime >= recurEndTime
+      ? t("schedule:createSlot.timeError")
+      : null;
+
   const canSubmitSingle =
-    singleDate !== "" && singleStartTime !== "" && singleEndTime !== "";
+    singleDate !== "" &&
+    singleStartTime !== "" &&
+    singleEndTime !== "" &&
+    !singleTimeError;
+
   const canSubmitBulk =
     recurStartDate !== "" &&
     recurEndDate !== "" &&
     recurDays.length > 0 &&
     recurStartTime !== "" &&
     recurEndTime !== "" &&
-    previewCount > 0;
+    !recurTimeError &&
+    preview.totalSlots > 0;
 
   return (
     <Dialog
@@ -218,11 +319,16 @@ export function CreateSlotDialog({
               />
             </div>
 
+            {singleTimeError && (
+              <div className={styles.errorMessage}>{singleTimeError}</div>
+            )}
+
             <Input
               label={t("schedule:createSlot.label")}
               type="text"
               value={singleLabel}
               onChange={(e) => setSingleLabel(e.target.value)}
+              placeholder={t("schedule:createSlot.labelPlaceholder")}
             />
 
             <div className={styles.actions}>
@@ -242,6 +348,7 @@ export function CreateSlotDialog({
 
         <TabPanel value="recurring" activeValue={activeTab}>
           <div className={styles.form}>
+            {/* Date range */}
             <div className={styles.fieldRow}>
               <Input
                 label={t("schedule:createSlot.startDate")}
@@ -259,24 +366,56 @@ export function CreateSlotDialog({
               />
             </div>
 
+            {/* Days of week toggle buttons */}
             <div className={styles.daysSection}>
-              <span className={styles.daysLabel}>
-                {t("schedule:createSlot.daysOfWeek")}
-              </span>
+              <div className={styles.daysHeader}>
+                <span className={styles.daysLabel}>
+                  {t("schedule:createSlot.daysOfWeek")}
+                </span>
+                <div className={styles.daysShortcuts}>
+                  <button
+                    type="button"
+                    className={`${styles.shortcutBtn} ${isAllWeekdays ? styles.shortcutActive : ""}`}
+                    onClick={selectWeekdays}
+                  >
+                    {t("schedule:createSlot.weekdays")}
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.shortcutBtn} ${isAllDays ? styles.shortcutActive : ""}`}
+                    onClick={selectAllDays}
+                  >
+                    {t("schedule:createSlot.allDays")}
+                  </button>
+                  {recurDays.length > 0 && (
+                    <button
+                      type="button"
+                      className={styles.shortcutBtn}
+                      onClick={clearDays}
+                    >
+                      {t("schedule:createSlot.clearDays")}
+                    </button>
+                  )}
+                </div>
+              </div>
               <div className={styles.daysGrid}>
-                {DAY_OPTIONS.map((day) => (
-                  <label key={day.value} className={styles.dayCheckbox}>
-                    <input
-                      type="checkbox"
-                      checked={recurDays.includes(day.value)}
-                      onChange={() => toggleDay(day.value)}
-                    />
-                    {t(`schedule:days.${day.key}`)}
-                  </label>
-                ))}
+                {DAY_OPTIONS.map((day) => {
+                  const selected = recurDays.includes(day.value);
+                  return (
+                    <button
+                      key={day.value}
+                      type="button"
+                      className={`${styles.dayToggle} ${selected ? styles.dayToggleActive : ""}`}
+                      onClick={() => toggleDay(day.value)}
+                    >
+                      {t(`schedule:days.${day.key}`)}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
+            {/* Time range */}
             <div className={styles.fieldRow}>
               <Input
                 label={t("schedule:createSlot.startTime")}
@@ -292,25 +431,78 @@ export function CreateSlotDialog({
               />
             </div>
 
-            <Input
-              label={t("schedule:createSlot.timezone")}
-              type="text"
-              value={recurTimezone}
-              readOnly
-            />
+            {recurTimeError && (
+              <div className={styles.errorMessage}>{recurTimeError}</div>
+            )}
 
+            {/* Slot duration */}
+            <div className={styles.durationSection}>
+              <span className={styles.daysLabel}>
+                {t("schedule:createSlot.slotDuration")}
+              </span>
+              <div className={styles.durationGrid}>
+                {DURATION_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`${styles.durationBtn} ${slotDuration === opt.value ? styles.durationBtnActive : ""}`}
+                    onClick={() => setSlotDuration(opt.value)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  className={`${styles.durationBtn} ${slotDuration === null ? styles.durationBtnActive : ""}`}
+                  onClick={() => setSlotDuration(null)}
+                >
+                  {t("schedule:createSlot.fullWindow")}
+                </button>
+              </div>
+            </div>
+
+            {/* Label */}
             <Input
               label={t("schedule:createSlot.label")}
               type="text"
               value={recurLabel}
               onChange={(e) => setRecurLabel(e.target.value)}
+              placeholder={t("schedule:createSlot.labelPlaceholder")}
             />
 
-            <div className={styles.preview}>
-              {previewCount > 0
-                ? t("schedule:createSlot.preview", { count: previewCount })
-                : t("schedule:createSlot.previewZero")}
+            {/* Timezone info */}
+            <div className={styles.timezoneInfo}>
+              {t("schedule:createSlot.timezone")}: {recurTimezone}
             </div>
+
+            {/* Preview */}
+            <div
+              className={`${styles.preview} ${preview.totalSlots > 0 ? styles.previewActive : ""}`}
+            >
+              {preview.totalSlots > 0 ? (
+                <>
+                  <span className={styles.previewCount}>
+                    {preview.totalSlots}
+                  </span>
+                  <span className={styles.previewText}>
+                    {t("schedule:createSlot.previewDetail", {
+                      total: preview.totalSlots,
+                      perDay: preview.slotsPerDay,
+                      days: preview.daysMatched,
+                    })}
+                  </span>
+                </>
+              ) : (
+                <span className={styles.previewText}>
+                  {t("schedule:createSlot.previewZero")}
+                </span>
+              )}
+            </div>
+
+            {/* Error message */}
+            {bulkError && (
+              <div className={styles.errorMessage}>{bulkError}</div>
+            )}
 
             <div className={styles.actions}>
               <Button variant="secondary" onClick={resetAndClose}>

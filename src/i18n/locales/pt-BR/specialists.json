@@ -108,7 +108,8 @@
       "professionalInformation": "Informações profissionais",
       "personalInformation": "Informações pessoais",
       "locationMobility": "Localização e mobilidade",
-      "coverageAreas": "Áreas de cobertura"
+      "coverageAreas": "Áreas de cobertura",
+      "pricing": "Preços dos exames"
     },
     "fields": {
       "email": "E-mail",
@@ -159,7 +160,14 @@
       "areaToggled": "Status da área de cobertura atualizado.",
       "areaToggleFailed": "Falha ao atualizar área de cobertura.",
       "areaRemoved": "Área de cobertura removida.",
-      "areaRemoveFailed": "Falha ao remover área de cobertura."
+      "areaRemoveFailed": "Falha ao remover área de cobertura.",
+      "pricingUpdated": "Preço do exame atualizado.",
+      "pricingUpdateFailed": "Falha ao atualizar preço do exame.",
+      "pricingInvalidValue": "Valor inválido. Informe um valor positivo (ex: 150,00)."
+    },
+    "pricing": {
+      "configured": "Configurado",
+      "notConfigured": "Não configurado"
     },
     "error": {
       "title": "Falha ao carregar perfil",

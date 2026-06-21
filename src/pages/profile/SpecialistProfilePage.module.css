@@ -141,6 +141,67 @@
   margin-top: var(--space-5);
 }
 
+/* Pricing section */
+.pricingList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.pricingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.pricingInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: 1;
+  min-width: 0;
+}
+
+.pricingExamName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.pricingInput {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.pricingCurrency {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.pricingField {
+  width: 100px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  background-color: var(--color-surface);
+  text-align: right;
+}
+
+.pricingField:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(31, 111, 91, 0.15);
+}
+
 @media (max-width: 640px) {
   .formRow {
     grid-template-columns: 1fr;
@@ -158,5 +219,15 @@
   .areaTable th:nth-child(3),
   .areaTable td:nth-child(3) {
     display: none;
+  }
+
+  .pricingRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+  }
+
+  .pricingInput {
+    justify-content: flex-end;
   }
 }

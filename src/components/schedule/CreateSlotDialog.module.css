@@ -19,7 +19,14 @@
 .daysSection {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
+}
+
+.daysHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
 }
 
 .daysLabel {
@@ -28,38 +35,167 @@
   color: var(--color-text-secondary);
 }
 
-/* Day-of-week checkboxes */
+.daysShortcuts {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.shortcutBtn {
+  padding: 2px var(--space-2);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+}
+
+.shortcutBtn:hover {
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-primary);
+}
+
+.shortcutActive {
+  background-color: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+.shortcutActive:hover {
+  background-color: var(--color-primary-hover);
+  color: #fff;
+}
+
+/* Day toggle buttons */
 .daysGrid {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--space-1);
   flex-wrap: wrap;
 }
 
-.dayCheckbox {
+.dayToggle {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  justify-content: center;
+  min-width: 44px;
+  padding: var(--space-2) var(--space-2);
   font-size: var(--font-size-sm);
-  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  transition: all 0.15s ease;
   user-select: none;
+  flex: 1;
 }
 
-.dayCheckbox input[type="checkbox"] {
-  accent-color: var(--color-primary);
-  width: 1rem;
-  height: 1rem;
+.dayToggle:hover {
+  background-color: var(--color-surface-muted);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.dayToggleActive {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.dayToggleActive:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: #fff;
+}
+
+/* Slot duration section */
+.durationSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.durationGrid {
+  display: flex;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+
+.durationBtn {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.durationBtn:hover {
+  background-color: var(--color-surface-muted);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.durationBtnActive {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.durationBtnActive:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: #fff;
+}
+
+/* Timezone info */
+.timezoneInfo {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-surface-muted);
+  border-radius: var(--radius-sm);
 }
 
 /* Preview count */
 .preview {
-  padding: var(--space-3);
+  padding: var(--space-3) var(--space-4);
   background-color: var(--color-surface-muted);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.previewActive {
+  border-color: var(--color-primary);
+  background-color: rgba(31, 111, 91, 0.06);
+}
+
+.previewCount {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.previewText {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
 }
 
 /* Actions */
@@ -74,4 +210,8 @@
 .errorMessage {
   font-size: var(--font-size-sm);
   color: var(--color-danger);
+  padding: var(--space-2) var(--space-3);
+  background-color: rgba(180, 35, 24, 0.06);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(180, 35, 24, 0.15);
 }

@@ -9,7 +9,10 @@ import {
   addMyCoverageArea,
   toggleMyCoverageArea,
   removeMyCoverageArea,
+  getMyPricing,
+  upsertMyPricing,
 } from "../../api/specialists";
+import type { SpecialistPricingResponse } from "../../api/types";
 import {
   Button,
   Card,
@@ -28,6 +31,12 @@ import { useToast } from "../../components/ui/Toast";
 import { formatDate } from "../../i18n/formatting";
 import { STALE_TIMES } from "../../config/queryConfig";
 import styles from "./SpecialistProfilePage.module.css";
+
+const EXAM_TYPES = [
+  "ABDOMINAL_ULTRASOUND",
+  "GESTATIONAL_ULTRASOUND",
+  "MUSCULOSKELETAL_ULTRASOUND",
+] as const;
 
 const BRAZILIAN_STATES = [
   { value: "AC", label: "AC" },
@@ -81,6 +90,7 @@ export function SpecialistProfilePage() {
   const [areaState, setAreaState] = useState("");
   const [areaRadius, setAreaRadius] = useState("");
   const [removeAreaId, setRemoveAreaId] = useState<string | null>(null);
+  const [pricingInputs, setPricingInputs] = useState<Record<string, string>>({});
 
   const {
     data: profile,
@@ -97,6 +107,12 @@ export function SpecialistProfilePage() {
     queryKey: ["my-coverage-areas"],
     queryFn: getMyCoverageAreas,
     staleTime: STALE_TIMES.static,
+  });
+
+  const { data: pricing, isLoading: pricingLoading } = useQuery({
+    queryKey: ["my-pricing"],
+    queryFn: getMyPricing,
+    staleTime: STALE_TIMES.list,
   });
 
   const personalForm = useForm<PersonalInfoForm>();
@@ -169,6 +185,53 @@ export function SpecialistProfilePage() {
       setRemoveAreaId(null);
     },
   });
+
+  const upsertPricingMutation = useMutation({
+    mutationFn: upsertMyPricing,
+    onSuccess: () => {
+      showToast(t('specialists:profile.toast.pricingUpdated'), "success");
+      queryClient.invalidateQueries({ queryKey: ["my-pricing"] });
+    },
+    onError: () => {
+      showToast(t('specialists:profile.toast.pricingUpdateFailed'), "error");
+    },
+  });
+
+  useEffect(() => {
+    if (pricing) {
+      const inputs: Record<string, string> = {};
+      for (const p of pricing) {
+        inputs[p.examType] = formatCentsToReais(p.priceCents);
+      }
+      setPricingInputs(inputs);
+    }
+  }, [pricing]);
+
+  function formatCentsToReais(cents: number): string {
+    return (cents / 100).toFixed(2).replace(".", ",");
+  }
+
+  function parseReaisToCents(value: string): number | null {
+    const cleaned = value.replace(/\s/g, "").replace(",", ".");
+    const num = parseFloat(cleaned);
+    if (isNaN(num) || num <= 0) return null;
+    return Math.round(num * 100);
+  }
+
+  function handlePricingSave(examType: string) {
+    const value = pricingInputs[examType];
+    if (!value) return;
+    const cents = parseReaisToCents(value);
+    if (cents === null) {
+      showToast(t('specialists:profile.toast.pricingInvalidValue'), "error");
+      return;
+    }
+    upsertPricingMutation.mutate({ examType, priceCents: cents });
+  }
+
+  function getPricingForExamType(examType: string): SpecialistPricingResponse | undefined {
+    return pricing?.find((p) => p.examType === examType);
+  }
 
   const handlePersonalSubmit = personalForm.handleSubmit((data) => {
     if (!profile) return;
@@ -450,6 +513,68 @@ export function SpecialistProfilePage() {
                 ))}
               </tbody>
             </table>
+          )}
+        </Card>
+      </div>
+
+      <div className={styles.section}>
+        <Card title={t('specialists:profile.sections.pricing')}>
+          {pricingLoading && (
+            <div className={styles.areasLoadingContainer}>
+              <Spinner />
+            </div>
+          )}
+
+          {!pricingLoading && (
+            <div className={styles.pricingList}>
+              {EXAM_TYPES.map((examType) => {
+                const existing = getPricingForExamType(examType);
+                const inputValue = pricingInputs[examType] ?? "";
+                return (
+                  <div key={examType} className={styles.pricingRow}>
+                    <div className={styles.pricingInfo}>
+                      <span className={styles.pricingExamName}>
+                        {t(`specialists:create.specialties.${examType}`)}
+                      </span>
+                      {existing && (
+                        <Badge variant="success">
+                          {t('specialists:profile.pricing.configured')}
+                        </Badge>
+                      )}
+                      {!existing && (
+                        <Badge variant="neutral">
+                          {t('specialists:profile.pricing.notConfigured')}
+                        </Badge>
+                      )}
+                    </div>
+                    <div className={styles.pricingInput}>
+                      <span className={styles.pricingCurrency}>R$</span>
+                      <input
+                        className={styles.pricingField}
+                        type="text"
+                        inputMode="decimal"
+                        placeholder="0,00"
+                        value={inputValue}
+                        onChange={(e) =>
+                          setPricingInputs((prev) => ({
+                            ...prev,
+                            [examType]: e.target.value,
+                          }))
+                        }
+                      />
+                      <Button
+                        size="sm"
+                        onClick={() => handlePricingSave(examType)}
+                        isLoading={upsertPricingMutation.isPending}
+                        disabled={!inputValue.trim()}
+                      >
+                        {t('common:actions.save')}
+                      </Button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           )}
         </Card>
       </div>
